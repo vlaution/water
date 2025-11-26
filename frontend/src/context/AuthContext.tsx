@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { api } from '../config/api';
 
 interface User {
     id: string;
@@ -42,7 +43,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const loadUser = async (authToken: string) => {
         try {
-            const response = await fetch('http://localhost:8000/auth/me', {
+            const response = await fetch(api.url(api.endpoints.auth.me), {
                 headers: {
                     'Authorization': `Bearer ${authToken}`
                 }
@@ -64,7 +65,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     const login = async (email: string, password: string) => {
-        const response = await fetch('http://localhost:8000/auth/login', {
+        const response = await fetch(api.url(api.endpoints.auth.login), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -84,7 +85,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     const signup = async (email: string, password: string, name: string) => {
-        const response = await fetch('http://localhost:8000/auth/signup', {
+        const response = await fetch(api.url(api.endpoints.auth.signup), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
