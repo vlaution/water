@@ -13,7 +13,9 @@ def startup_event():
     init_db()
 
 # Configure CORS with environment variable support
-frontend_url = os.getenv("FRONTEND_URL", "")
+frontend_url = os.getenv("FRONTEND_URL", "").rstrip("/")
+print(f"Allowed Frontend URL: {frontend_url}")
+
 allowed_origins = [
     "http://localhost:5173",
     "http://localhost:5174", 

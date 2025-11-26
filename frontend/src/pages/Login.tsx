@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
+import { ConnectivityTest } from '../components/ConnectivityTest';
 
 export const Login: React.FC = () => {
     const [email, setEmail] = useState('');
@@ -85,6 +86,10 @@ export const Login: React.FC = () => {
                         Sign up
                     </Link>
                 </p>
+
+                <div className="mt-8 pt-6 border-t border-gray-200">
+                    <ConnectivityTest />
+                </div>
             </div>
         </div>
     );

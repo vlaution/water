@@ -2,6 +2,7 @@
 // Automatically uses the correct backend URL based on environment
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+console.log('API Configured URL:', API_URL);
 
 export const api = {
     baseURL: API_URL,
