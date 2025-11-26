@@ -1,6 +1,7 @@
 from backend.calculations.transformer import DataTransformer
 from typing import Dict, Any, Optional, List
 from backend.calculations.models import ConfidenceScore, StrategicAlert, ActionItem, SensitivityInput
+from backend.parser.models import WorkbookData
 
 class ValuationEngine:
     def __init__(self, workbook_data: Optional[WorkbookData] = None, mappings: Optional[Dict[str, str]] = None):

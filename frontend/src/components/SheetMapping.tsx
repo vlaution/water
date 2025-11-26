@@ -1,9 +1,20 @@
-interface SheetMappingProps {
-    workbookData: WorkbookData;
-    onConfirm: (mappings: any) => void;
+import React, { useState } from 'react';
+
+interface WorkbookData {
+    file_id: string;
+    sheets: Record<string, {
+        headers: string[];
+        rows: Record<string, any>[];
+    }>;
 }
 
-export const SheetMapping: React.FC<SheetMappingProps> = ({ workbookData, onConfirm }) => {
+interface SheetMappingProps {
+    workbookData: WorkbookData;
+    onConfirm: (mappings: Record<string, string>) => Promise<void>;
+    isLoading: boolean;
+}
+
+export const SheetMapping: React.FC<SheetMappingProps> = ({ workbookData, onConfirm, isLoading }) => {
     const [mappings, setMappings] = useState<Record<string, string>>({});
     const [activeSheet, setActiveSheet] = useState<string>(Object.keys(workbookData.sheets)[0]);
 
@@ -93,9 +104,10 @@ export const SheetMapping: React.FC<SheetMappingProps> = ({ workbookData, onConf
             <div className="mt-8 flex justify-end">
                 <button
                     onClick={() => onConfirm(mappings)}
-                    className="px-8 py-3 bg-system-blue text-white rounded-xl font-medium shadow-lg hover:bg-blue-600 transition-all transform active:scale-95"
+                    disabled={isLoading}
+                    className="px-8 py-3 bg-system-blue text-white rounded-xl font-medium shadow-lg hover:bg-blue-600 transition-all transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                    Confirm Mappings
+                    {isLoading ? 'Processing...' : 'Confirm Mappings'}
                 </button>
             </div>
         </div>

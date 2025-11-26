@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 
 interface ManualEntryFormProps {
-    onSubmit: (data: any) => void;
+    onSubmit: (data: any) => Promise<void>;
+    isLoading: boolean;
 }
 
-export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit }) => {
+export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLoading }) => {
     const [activeMethod, setActiveMethod] = useState<'dcf' | 'gpc' | 'fcfe' | 'precedent' | 'anav' | 'weights'>('dcf');
     const [formData, setFormData] = useState<{
         company_name: string;
@@ -206,8 +207,8 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit }) =>
                                 type="button"
                                 onClick={() => setActiveMethod(method as any)}
                                 className={`px-6 py-2 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap ${activeMethod === method
-                                        ? 'bg-white text-gray-900 shadow-sm scale-100'
-                                        : 'text-gray-500 hover:text-gray-800 hover:bg-white/30'
+                                    ? 'bg-white text-gray-900 shadow-sm scale-100'
+                                    : 'text-gray-500 hover:text-gray-800 hover:bg-white/30'
                                     }`}
                             >
                                 {method === 'dcf' ? 'DCF (FCFF)' :
@@ -754,9 +755,10 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit }) =>
                 <div className="flex justify-end pt-4">
                     <button
                         type="submit"
-                        className="glass-button-primary px-8 py-3 text-lg shadow-xl shadow-blue-500/20 hover:shadow-blue-500/40"
+                        disabled={isLoading}
+                        className="glass-button-primary px-8 py-3 text-lg shadow-xl shadow-blue-500/20 hover:shadow-blue-500/40 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        Calculate Valuation
+                        {isLoading ? 'Calculating...' : 'Calculate Valuation'}
                     </button>
                 </div>
             </form>

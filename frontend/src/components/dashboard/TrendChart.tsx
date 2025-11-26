@@ -6,9 +6,7 @@ import {
     YAxis,
     CartesianGrid,
     Tooltip,
-    Legend,
-    ResponsiveContainer,
-    Area
+    ResponsiveContainer
 } from 'recharts';
 
 interface TrendChartProps {

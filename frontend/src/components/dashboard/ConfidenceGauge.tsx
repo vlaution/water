@@ -7,16 +7,13 @@ interface ConfidenceGaugeProps {
 export const ConfidenceGauge: React.FC<ConfidenceGaugeProps> = ({ score }) => {
     // Determine color based on score
     let colorClass = 'text-system-red';
-    let bgClass = 'bg-red-500';
     let label = 'High Risk';
 
     if (score >= 80) {
         colorClass = 'text-system-green';
-        bgClass = 'bg-green-500';
         label = 'High Confidence';
     } else if (score >= 50) {
         colorClass = 'text-system-orange';
-        bgClass = 'bg-orange-500';
         label = 'Medium Confidence';
     }
 
