@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { api } from './config/api';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { Login } from './pages/Login';
@@ -53,7 +54,7 @@ function ProtectedApp() {
 
     setIsLoading(true);
     try {
-      const response = await fetch(`http://localhost:8000/run/${workbookData.file_id}`, {
+      const response = await fetch(api.url(`/run/${workbookData.file_id}`), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -80,7 +81,7 @@ function ProtectedApp() {
   const handleManualSubmit = async (valuationInput: any) => {
     setIsLoading(true);
     try {
-      const response = await fetch(`http://localhost:8000/calculate`, {
+      const response = await fetch(api.url('/calculate'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -90,7 +91,8 @@ function ProtectedApp() {
       });
 
       if (!response.ok) {
-        throw new Error('Valuation calculation failed');
+        const errorData = await response.json().catch(() => ({ detail: 'Unknown error' }));
+        throw new Error(errorData.detail || 'Valuation calculation failed');
       }
 
       const data = await response.json();
@@ -98,7 +100,7 @@ function ProtectedApp() {
       setStep('dashboard');
     } catch (error) {
       console.error('Error during manual valuation:', error);
-      alert('Failed to calculate valuation. Please try again.');
+      alert(`Failed to calculate valuation: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsLoading(false);
     }
@@ -107,7 +109,7 @@ function ProtectedApp() {
   const handleSelectRun = async (runId: string) => {
     setIsLoading(true);
     try {
-      const response = await fetch(`http://localhost:8000/runs/${runId}`, {
+      const response = await fetch(api.url(`/runs/${runId}`), {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
