@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-py"
+  interface = "sync"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  password      String
+  name          String
+  createdAt     DateTime       @default(now())
+  runs          ValuationRun[]
+}
+
+model ValuationRun {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  companyName String
+  mode        String
+  inputData   String
+  results     String
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+}

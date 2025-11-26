@@ -1,0 +1,3543 @@
+{
+  "sheets": {
+    "Cover": {
+      "name": "Cover",
+      "headers": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "rows": []
+    },
+    "Tab 1. User Input>>": {
+      "name": "Tab 1. User Input>>",
+      "headers": [],
+      "rows": []
+    },
+    "Flow": {
+      "name": "Flow",
+      "headers": [
+        "",
+        "",
+        "high_level_flow",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "outputs",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "rows": [
+        {
+          "high_level_flow": "Basic inputs as mentioned in the Inp_1 sheet",
+          "outputs": "Football chart showing value range of all methods"
+        },
+        {
+          "high_level_flow": "Qualitative inputs - To be added",
+          "outputs": "EV - Equity Value Bridge"
+        },
+        {
+          "high_level_flow": "Upload the GPC and GTM input sheets",
+          "outputs": "WACC computation"
+        },
+        {
+          "high_level_flow": "Select GPCs",
+          "outputs": "Simplified DCF sheet"
+        },
+        {
+          "high_level_flow": "Select GTMs",
+          "outputs": null
+        },
+        {
+          "high_level_flow": "Financials - Upload via Excel, input directly on the platform, or our estimates",
+          "outputs": null
+        },
+        {
+          "high_level_flow": "Input funding details",
+          "outputs": "Ask Graphics"
+        },
+        {
+          "high_level_flow": "Football chart",
+          "outputs": "HEX code colours"
+        },
+        {
+          "high_level_flow": null,
+          "outputs": "Fonts"
+        },
+        {
+          "high_level_flow": "Changes:",
+          "outputs": "Font size"
+        },
+        {
+          "high_level_flow": "Qualitative assessments to determine the stage of development and CSRP",
+          "outputs": null
+        },
+        {
+          "high_level_flow": "Make sure to add Business Description in the Screening output sheet",
+          "outputs": null
+        },
+        {
+          "high_level_flow": "Flexibility for the Year end",
+          "outputs": null
+        },
+        {
+          "high_level_flow": "Upload options for financials - To be finalized",
+          "outputs": null
+        },
+        {
+          "high_level_flow": "If the valuation date is end of the year, one column in the IS sheet will reduce",
+          "outputs": null
+        },
+        {
+          "high_level_flow": "Upper and Lower limit for the multiples - Add that as an option",
+          "outputs": null
+        },
+        {
+          "high_level_flow": "Reference images",
+          "outputs": null
+        },
+        {
+          "high_level_flow": "Financials ",
+          "outputs": null
+        },
+        {
+          "high_level_flow": "Qualitative inputs",
+          "outputs": null
+        },
+        {
+          "high_level_flow": null,
+          "outputs": null
+        },
+        {
+          "high_level_flow": null,
+          "outputs": null
+        },
+        {
+          "high_level_flow": null,
+          "outputs": null
+        },
+        {
+          "high_level_flow": null,
+          "outputs": null
+        },
+        {
+          "high_level_flow": null,
+          "outputs": null
+        },
+        {
+          "high_level_flow": null,
+          "outputs": null
+        },
+        {
+          "high_level_flow": null,
+          "outputs": null
+        },
+        {
+          "high_level_flow": null,
+          "outputs": null
+        },
+        {
+          "high_level_flow": null,
+          "outputs": null
+        },
+        {
+          "high_level_flow": null,
+          "outputs": null
+        },
+        {
+          "high_level_flow": null,
+          "outputs": null
+        },
+        {
+          "high_level_flow": null,
+          "outputs": null
+        },
+        {
+          "high_level_flow": null,
+          "outputs": null
+        },
+        {
+          "high_level_flow": null,
+          "outputs": null
+        },
+        {
+          "high_level_flow": null,
+          "outputs": null
+        },
+        {
+          "high_level_flow": null,
+          "outputs": null
+        },
+        {
+          "high_level_flow": null,
+          "outputs": null
+        },
+        {
+          "high_level_flow": null,
+          "outputs": null
+        },
+        {
+          "high_level_flow": null,
+          "outputs": null
+        },
+        {
+          "high_level_flow": "Screened GPCs",
+          "outputs": null
+        },
+        {
+          "high_level_flow": null,
+          "outputs": null
+        },
+        {
+          "high_level_flow": null,
+          "outputs": null
+        },
+        {
+          "high_level_flow": null,
+          "outputs": null
+        },
+        {
+          "high_level_flow": null,
+          "outputs": null
+        },
+        {
+          "high_level_flow": null,
+          "outputs": null
+        },
+        {
+          "high_level_flow": null,
+          "outputs": null
+        },
+        {
+          "high_level_flow": null,
+          "outputs": null
+        },
+        {
+          "high_level_flow": null,
+          "outputs": null
+        },
+        {
+          "high_level_flow": null,
+          "outputs": null
+        }
+      ]
+    },
+    "Inp_1": {
+      "name": "Inp_1",
+      "headers": [
+        "",
+        "step_1_company_specific_details_general_information",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "rows": [
+        {
+          "step_1_company_specific_details_general_information": "Company Name"
+        },
+        {
+          "step_1_company_specific_details_general_information": "Valuation Date"
+        },
+        {
+          "step_1_company_specific_details_general_information": "Financial Year End"
+        },
+        {
+          "step_1_company_specific_details_general_information": "Currency"
+        },
+        {
+          "step_1_company_specific_details_general_information": "Tax Rate"
+        },
+        {
+          "step_1_company_specific_details_general_information": "Geography"
+        },
+        {
+          "step_1_company_specific_details_general_information": "Global"
+        },
+        {
+          "step_1_company_specific_details_general_information": "USA"
+        },
+        {
+          "step_1_company_specific_details_general_information": "Europe"
+        },
+        {
+          "step_1_company_specific_details_general_information": "UK"
+        },
+        {
+          "step_1_company_specific_details_general_information": "MENA"
+        },
+        {
+          "step_1_company_specific_details_general_information": "Asian"
+        },
+        {
+          "step_1_company_specific_details_general_information": "India"
+        },
+        {
+          "step_1_company_specific_details_general_information": "Australia"
+        },
+        {
+          "step_1_company_specific_details_general_information": "Others"
+        },
+        {
+          "step_1_company_specific_details_general_information": "Industry"
+        },
+        {
+          "step_1_company_specific_details_general_information": "Communication services"
+        },
+        {
+          "step_1_company_specific_details_general_information": "Consumer discretionary"
+        },
+        {
+          "step_1_company_specific_details_general_information": "Consumer staples"
+        },
+        {
+          "step_1_company_specific_details_general_information": "Energy"
+        },
+        {
+          "step_1_company_specific_details_general_information": "Financial"
+        },
+        {
+          "step_1_company_specific_details_general_information": "Healthcare"
+        },
+        {
+          "step_1_company_specific_details_general_information": "Industrials"
+        },
+        {
+          "step_1_company_specific_details_general_information": "Information Technology"
+        },
+        {
+          "step_1_company_specific_details_general_information": "Materials"
+        },
+        {
+          "step_1_company_specific_details_general_information": "Real Estate"
+        },
+        {
+          "step_1_company_specific_details_general_information": "Utilities"
+        },
+        {
+          "step_1_company_specific_details_general_information": "Public Compay"
+        },
+        {
+          "step_1_company_specific_details_general_information": "Keywords"
+        }
+      ]
+    },
+    "Inp_2": {
+      "name": "Inp_2",
+      "headers": [
+        "",
+        "step_2_company_specific_details_financial_information",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "rows": [
+        {
+          "step_2_company_specific_details_financial_information": "Summary Income Statement (USD)"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Months"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Audited/provisional/forecast"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Revenues"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Revenue growth"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Cost of Sales"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Gross Profit"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Gross Profit margin"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Operating Costs"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "EBITDA"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "EBITDA margin"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Depreciation and Amortization"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Operating EBIT"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Operating EBIT margin"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Interest & Finance Costs"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "PBT"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "PBT margin"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Income Tax"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Net Income"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Net Income margin"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Summary Balance Sheet (USD)"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Audited/provisional/forecast"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Cash & Cash Equivalents"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Trade Receivables"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Prepaid Expenses/ Advances"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Inventory"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Other Current Assets"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Current Assets"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Fixed Assets (Net)"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Other Operating Assets"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Short-term Investments"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Long-term Investments"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Investments"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Total Assets"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Trade Payables"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Accrued Expenses"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Other Current Liabilities"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Current Liabilities"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "End of Service Benefits (Pension)"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Lease Liabilities"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Other Operating Liabilities"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Debt"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Paid in Capital"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Other Reserves and Surplus"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Shareholders' Equity"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Total Equity and Liabilities"
+        },
+        {
+          "step_2_company_specific_details_financial_information": "Error Check"
+        }
+      ]
+    },
+    "Inp_3": {
+      "name": "Inp_3",
+      "headers": [
+        "",
+        "step_3_company_specific_details_funding_information",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "rows": [
+        {
+          "step_3_company_specific_details_funding_information": "Cash raised till date"
+        },
+        {
+          "step_3_company_specific_details_funding_information": "Cash raised through common stock"
+        },
+        {
+          "step_3_company_specific_details_funding_information": "Series seed Funding"
+        },
+        {
+          "step_3_company_specific_details_funding_information": "Series Preferred A Funding"
+        },
+        {
+          "step_3_company_specific_details_funding_information": "Series Preferred B Funding"
+        },
+        {
+          "step_3_company_specific_details_funding_information": "Series Preferred C & above Funding"
+        },
+        {
+          "step_3_company_specific_details_funding_information": "Funding raised through Convertible Notes"
+        },
+        {
+          "step_3_company_specific_details_funding_information": "Funding raised through SAFEs"
+        },
+        {
+          "step_3_company_specific_details_funding_information": "Funding raised through External sources"
+        },
+        {
+          "step_3_company_specific_details_funding_information": "Total cash raised till date"
+        },
+        {
+          "step_3_company_specific_details_funding_information": "Particulars"
+        },
+        {
+          "step_3_company_specific_details_funding_information": "Equity"
+        },
+        {
+          "step_3_company_specific_details_funding_information": "Debt"
+        }
+      ]
+    },
+    "Inp_4": {
+      "name": "Inp_4",
+      "headers": [
+        "",
+        "step_4_weighted_average_cost_of_capital_wacc",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "rows": [
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": "Weighted average Cost of Capital (WACC)"
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": "Please tick one option only"
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        },
+        {
+          "step_4_weighted_average_cost_of_capital_wacc": null
+        }
+      ]
+    },
+    "Tab 2. Valuation>>": {
+      "name": "Tab 2. Valuation>>",
+      "headers": [],
+      "rows": []
+    },
+    "Method_Selc": {
+      "name": "Method_Selc",
+      "headers": [
+        "",
+        "",
+        "",
+        "",
+        "do_not_delete_this_column",
+        "",
+        "do_not_delete_this_column",
+        ""
+      ],
+      "rows": [
+        {
+          "do_not_delete_this_column": "Filter"
+        },
+        {
+          "do_not_delete_this_column": null
+        },
+        {
+          "do_not_delete_this_column": 1
+        },
+        {
+          "do_not_delete_this_column": 1
+        },
+        {
+          "do_not_delete_this_column": 1
+        },
+        {
+          "do_not_delete_this_column": 1
+        },
+        {
+          "do_not_delete_this_column": null
+        },
+        {
+          "do_not_delete_this_column": 1
+        },
+        {
+          "do_not_delete_this_column": 1
+        },
+        {
+          "do_not_delete_this_column": null
+        },
+        {
+          "do_not_delete_this_column": 1
+        },
+        {
+          "do_not_delete_this_column": 1
+        }
+      ]
+    },
+    "GPC": {
+      "name": "GPC",
+      "headers": [
+        "guideline_public_companies_method",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "rows": [
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        },
+        {
+          "guideline_public_companies_method": null
+        }
+      ]
+    },
+    "Exit_M": {
+      "name": "Exit_M",
+      "headers": [
+        "exit_multiple",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "rows": [
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        },
+        {
+          "exit_multiple": null
+        }
+      ]
+    },
+    "GTM": {
+      "name": "GTM",
+      "headers": [
+        "guideline_transaction_multiple_method",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "rows": [
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        },
+        {
+          "guideline_transaction_multiple_method": null
+        }
+      ]
+    },
+    "IC": {
+      "name": "IC",
+      "headers": [
+        "invested_capital_multiple_method",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "rows": [
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        }
+      ]
+    },
+    "RCM": {
+      "name": "RCM",
+      "headers": [
+        "replacement_cost_method",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "rows": [
+        {
+          "replacement_cost_method": null
+        },
+        {
+          "replacement_cost_method": null
+        },
+        {
+          "replacement_cost_method": null
+        },
+        {
+          "replacement_cost_method": null
+        },
+        {
+          "replacement_cost_method": null
+        },
+        {
+          "replacement_cost_method": null
+        },
+        {
+          "replacement_cost_method": null
+        },
+        {
+          "replacement_cost_method": null
+        },
+        {
+          "replacement_cost_method": null
+        },
+        {
+          "replacement_cost_method": null
+        }
+      ]
+    },
+    "ANAV": {
+      "name": "ANAV",
+      "headers": [
+        "adjusted_net_assets_value_method",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "rows": [
+        {
+          "adjusted_net_assets_value_method": null
+        },
+        {
+          "adjusted_net_assets_value_method": null
+        },
+        {
+          "adjusted_net_assets_value_method": null
+        },
+        {
+          "adjusted_net_assets_value_method": null
+        },
+        {
+          "adjusted_net_assets_value_method": null
+        },
+        {
+          "adjusted_net_assets_value_method": null
+        },
+        {
+          "adjusted_net_assets_value_method": null
+        },
+        {
+          "adjusted_net_assets_value_method": null
+        },
+        {
+          "adjusted_net_assets_value_method": null
+        },
+        {
+          "adjusted_net_assets_value_method": null
+        },
+        {
+          "adjusted_net_assets_value_method": null
+        },
+        {
+          "adjusted_net_assets_value_method": null
+        },
+        {
+          "adjusted_net_assets_value_method": null
+        },
+        {
+          "adjusted_net_assets_value_method": null
+        },
+        {
+          "adjusted_net_assets_value_method": null
+        },
+        {
+          "adjusted_net_assets_value_method": null
+        },
+        {
+          "adjusted_net_assets_value_method": null
+        },
+        {
+          "adjusted_net_assets_value_method": null
+        },
+        {
+          "adjusted_net_assets_value_method": null
+        },
+        {
+          "adjusted_net_assets_value_method": null
+        },
+        {
+          "adjusted_net_assets_value_method": null
+        }
+      ]
+    },
+    "DCF_FCFF": {
+      "name": "DCF_FCFF",
+      "headers": [
+        "discounted_cashflow_method_fcff",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "rows": [
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        },
+        {
+          "discounted_cashflow_method_fcff": null
+        }
+      ]
+    },
+    "DCF_FCFE": {
+      "name": "DCF_FCFE",
+      "headers": [
+        "discounted_cashflow_method_fcfe",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "rows": [
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        },
+        {
+          "discounted_cashflow_method_fcfe": null
+        }
+      ]
+    },
+    "Tab 3. Val Summary>>": {
+      "name": "Tab 3. Val Summary>>",
+      "headers": [],
+      "rows": []
+    },
+    "ValSum ": {
+      "name": "ValSum ",
+      "headers": [
+        "",
+        "valuation_summary_of_abc_fintech_inc_as_on_30jun2024",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "rows": [
+        {
+          "valuation_summary_of_abc_fintech_inc_as_on_30jun2024": "S No."
+        },
+        {
+          "valuation_summary_of_abc_fintech_inc_as_on_30jun2024": 1
+        },
+        {
+          "valuation_summary_of_abc_fintech_inc_as_on_30jun2024": 2
+        },
+        {
+          "valuation_summary_of_abc_fintech_inc_as_on_30jun2024": 3
+        },
+        {
+          "valuation_summary_of_abc_fintech_inc_as_on_30jun2024": 4
+        },
+        {
+          "valuation_summary_of_abc_fintech_inc_as_on_30jun2024": 5
+        },
+        {
+          "valuation_summary_of_abc_fintech_inc_as_on_30jun2024": 6
+        },
+        {
+          "valuation_summary_of_abc_fintech_inc_as_on_30jun2024": 7
+        },
+        {
+          "valuation_summary_of_abc_fintech_inc_as_on_30jun2024": 8
+        },
+        {
+          "valuation_summary_of_abc_fintech_inc_as_on_30jun2024": null
+        },
+        {
+          "valuation_summary_of_abc_fintech_inc_as_on_30jun2024": null
+        },
+        {
+          "valuation_summary_of_abc_fintech_inc_as_on_30jun2024": null
+        },
+        {
+          "valuation_summary_of_abc_fintech_inc_as_on_30jun2024": null
+        },
+        {
+          "valuation_summary_of_abc_fintech_inc_as_on_30jun2024": null
+        }
+      ]
+    },
+    "Backend Input>>": {
+      "name": "Backend Input>>",
+      "headers": [],
+      "rows": []
+    },
+    "GPC Input": {
+      "name": "GPC Input",
+      "headers": [
+        "",
+        "unit",
+        "_in_millions",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "rows": [
+        {
+          "unit": null,
+          "_in_millions": null
+        },
+        {
+          "unit": "S No.",
+          "_in_millions": "S&P Tikcer"
+        },
+        {
+          "unit": null,
+          "_in_millions": null
+        },
+        {
+          "unit": ".",
+          "_in_millions": "."
+        },
+        {
+          "unit": 1,
+          "_in_millions": "Company 1 Ticker"
+        },
+        {
+          "unit": 2,
+          "_in_millions": "Company 2 Ticker"
+        },
+        {
+          "unit": 3,
+          "_in_millions": "Company 3 Ticker"
+        },
+        {
+          "unit": 4,
+          "_in_millions": "Company 4 Ticker"
+        },
+        {
+          "unit": 5,
+          "_in_millions": "Company 5 Ticker"
+        },
+        {
+          "unit": 6,
+          "_in_millions": "Company 6 Ticker"
+        },
+        {
+          "unit": 7,
+          "_in_millions": "Company 7 Ticker"
+        },
+        {
+          "unit": 8,
+          "_in_millions": "Company 8 Ticker"
+        },
+        {
+          "unit": 9,
+          "_in_millions": "Company 9 Ticker"
+        },
+        {
+          "unit": 10,
+          "_in_millions": "Company 10 Ticker"
+        },
+        {
+          "unit": 11,
+          "_in_millions": "Company 11 Ticker"
+        },
+        {
+          "unit": 12,
+          "_in_millions": "Company 12 Ticker"
+        },
+        {
+          "unit": 13,
+          "_in_millions": "Company 13 Ticker"
+        },
+        {
+          "unit": 14,
+          "_in_millions": "Company 14 Ticker"
+        },
+        {
+          "unit": 15,
+          "_in_millions": "Company 15 Ticker"
+        },
+        {
+          "unit": 16,
+          "_in_millions": "Company 16 Ticker"
+        },
+        {
+          "unit": 17,
+          "_in_millions": "Company 17 Ticker"
+        },
+        {
+          "unit": 18,
+          "_in_millions": "Company 18 Ticker"
+        },
+        {
+          "unit": 19,
+          "_in_millions": "Company 19 Ticker"
+        },
+        {
+          "unit": 20,
+          "_in_millions": "Company 20 Ticker"
+        },
+        {
+          "unit": null,
+          "_in_millions": null
+        },
+        {
+          "unit": null,
+          "_in_millions": null
+        },
+        {
+          "unit": null,
+          "_in_millions": null
+        },
+        {
+          "unit": null,
+          "_in_millions": null
+        }
+      ]
+    },
+    "IC Input": {
+      "name": "IC Input",
+      "headers": [
+        "invested_capital_multiple_method",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "rows": [
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        },
+        {
+          "invested_capital_multiple_method": null
+        }
+      ]
+    },
+    "Back_end_links": {
+      "name": "Back_end_links",
+      "headers": [
+        "do_not_delete_this_tab",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "rows": [
+        {
+          "do_not_delete_this_tab": "Valuation Approach"
+        },
+        {
+          "do_not_delete_this_tab": "Market Approach"
+        },
+        {
+          "do_not_delete_this_tab": "Market Approach"
+        },
+        {
+          "do_not_delete_this_tab": "Market Approach"
+        },
+        {
+          "do_not_delete_this_tab": "Market Approach"
+        },
+        {
+          "do_not_delete_this_tab": "Cost Approach"
+        },
+        {
+          "do_not_delete_this_tab": "Cost Approach"
+        },
+        {
+          "do_not_delete_this_tab": "Income Approach"
+        },
+        {
+          "do_not_delete_this_tab": "Income Approach"
+        },
+        {
+          "do_not_delete_this_tab": "Terminal value calcuation methods"
+        },
+        {
+          "do_not_delete_this_tab": "Gordon Growth Model (GGM)"
+        },
+        {
+          "do_not_delete_this_tab": "H-Model"
+        },
+        {
+          "do_not_delete_this_tab": "Exit Multiple Method"
+        },
+        {
+          "do_not_delete_this_tab": "Multiplier Working"
+        },
+        {
+          "do_not_delete_this_tab": "USD"
+        },
+        {
+          "do_not_delete_this_tab": "Revenue"
+        },
+        {
+          "do_not_delete_this_tab": "Gross Profit"
+        },
+        {
+          "do_not_delete_this_tab": "EBITDA"
+        },
+        {
+          "do_not_delete_this_tab": "Net Income"
+        },
+        {
+          "do_not_delete_this_tab": "Exit Date"
+        },
+        {
+          "do_not_delete_this_tab": "Year fraction"
+        },
+        {
+          "do_not_delete_this_tab": "PV factor"
+        },
+        {
+          "do_not_delete_this_tab": "Discount rate"
+        },
+        {
+          "do_not_delete_this_tab": "USD"
+        },
+        {
+          "do_not_delete_this_tab": "Present Value of Revenue"
+        },
+        {
+          "do_not_delete_this_tab": "Present Value of Gross Profit"
+        },
+        {
+          "do_not_delete_this_tab": "Present Value of EBITDA"
+        },
+        {
+          "do_not_delete_this_tab": "Present Value of Net Income"
+        },
+        {
+          "do_not_delete_this_tab": "USD"
+        },
+        {
+          "do_not_delete_this_tab": "Cash"
+        },
+        {
+          "do_not_delete_this_tab": "Short-term Invetsements"
+        },
+        {
+          "do_not_delete_this_tab": "Debt"
+        }
+      ]
+    },
+    "WC & Capex": {
+      "name": "WC & Capex",
+      "headers": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "rows": []
+    },
+    "Tab 4. Upload Sheets>>": {
+      "name": "Tab 4. Upload Sheets>>",
+      "headers": [],
+      "rows": []
+    },
+    "GPC Input Sheet": {
+      "name": "GPC Input Sheet",
+      "headers": [
+        "",
+        "",
+        "input_sheet",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "rows": [
+        {
+          "input_sheet": "Instructions to refresh the data"
+        },
+        {
+          "input_sheet": "Please put information on the blue highlighted cells."
+        },
+        {
+          "input_sheet": "Do not insert or delete rows or columns in this sheet. You need to simply enter data"
+        },
+        {
+          "input_sheet": "Select the year for Beta R2 selection and enter RFR data"
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": "Copy Below Table and Paste here as value"
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": "NasdaqGS:DBX"
+        },
+        {
+          "input_sheet": "XTRA:FAA"
+        },
+        {
+          "input_sheet": "ENXTPA:ITE"
+        },
+        {
+          "input_sheet": "ASX:AR9"
+        },
+        {
+          "input_sheet": "AIM:GETB"
+        },
+        {
+          "input_sheet": "TSE:5033"
+        },
+        {
+          "input_sheet": "NYSE:SMAR"
+        },
+        {
+          "input_sheet": "NasdaqGS:DOCU"
+        },
+        {
+          "input_sheet": "SHSE:688095"
+        },
+        {
+          "input_sheet": "NYSE:BOX"
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": "Ticker"
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": "NasdaqGS:DBX"
+        },
+        {
+          "input_sheet": "XTRA:FAA"
+        },
+        {
+          "input_sheet": "ENXTPA:ITE"
+        },
+        {
+          "input_sheet": "ASX:AR9"
+        },
+        {
+          "input_sheet": "AIM:GETB"
+        },
+        {
+          "input_sheet": "TSE:5033"
+        },
+        {
+          "input_sheet": "NYSE:SMAR"
+        },
+        {
+          "input_sheet": "NasdaqGS:DOCU"
+        },
+        {
+          "input_sheet": "SHSE:688095"
+        },
+        {
+          "input_sheet": "NYSE:BOX"
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": "Ticker"
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": "NasdaqGS:DBX"
+        },
+        {
+          "input_sheet": "XTRA:FAA"
+        },
+        {
+          "input_sheet": "ENXTPA:ITE"
+        },
+        {
+          "input_sheet": "ASX:AR9"
+        },
+        {
+          "input_sheet": "AIM:GETB"
+        },
+        {
+          "input_sheet": "TSE:5033"
+        },
+        {
+          "input_sheet": "NYSE:SMAR"
+        },
+        {
+          "input_sheet": "NasdaqGS:DOCU"
+        },
+        {
+          "input_sheet": "SHSE:688095"
+        },
+        {
+          "input_sheet": "NYSE:BOX"
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": 0
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        },
+        {
+          "input_sheet": null
+        }
+      ]
+    },
+    "GTM Input": {
+      "name": "GTM Input",
+      "headers": [
+        "",
+        "unit",
+        "_in_millions",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "rows": [
+        {
+          "unit": "S No.",
+          "_in_millions": "S&P Transaction ID"
+        },
+        {
+          "unit": 1,
+          "_in_millions": "S&PABC000001223"
+        },
+        {
+          "unit": 2,
+          "_in_millions": "S&PABC000001223"
+        },
+        {
+          "unit": 3,
+          "_in_millions": "S&PABC000001223"
+        },
+        {
+          "unit": 4,
+          "_in_millions": "S&PABC000001223"
+        },
+        {
+          "unit": 5,
+          "_in_millions": "S&PABC000001223"
+        },
+        {
+          "unit": 6,
+          "_in_millions": "S&PABC000001223"
+        },
+        {
+          "unit": 7,
+          "_in_millions": "S&PABC000001223"
+        },
+        {
+          "unit": 8,
+          "_in_millions": "S&PABC000001223"
+        },
+        {
+          "unit": 9,
+          "_in_millions": "S&PABC000001223"
+        },
+        {
+          "unit": 10,
+          "_in_millions": "S&PABC000001223"
+        },
+        {
+          "unit": 11,
+          "_in_millions": "S&PABC000001223"
+        },
+        {
+          "unit": 12,
+          "_in_millions": "S&PABC000001223"
+        },
+        {
+          "unit": 13,
+          "_in_millions": "S&PABC000001223"
+        },
+        {
+          "unit": 14,
+          "_in_millions": "S&PABC000001223"
+        },
+        {
+          "unit": 15,
+          "_in_millions": "S&PABC000001223"
+        },
+        {
+          "unit": 16,
+          "_in_millions": "S&PABC000001223"
+        },
+        {
+          "unit": 17,
+          "_in_millions": "S&PABC000001223"
+        },
+        {
+          "unit": 18,
+          "_in_millions": "S&PABC000001223"
+        },
+        {
+          "unit": 19,
+          "_in_millions": "S&PABC000001223"
+        },
+        {
+          "unit": 20,
+          "_in_millions": "S&PABC000001223"
+        }
+      ]
+    }
+  }
+}

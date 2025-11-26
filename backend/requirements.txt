@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+pandas
+openpyxl
+pydantic
+python-multipart
+reportlab
+python-docx
+python-pptx
+sqlalchemy
+python-jose[cryptography]
+passlib[argon2]
+argon2-cffi

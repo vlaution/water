@@ -1,0 +1,218 @@
+import { useState } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { Login } from './pages/Login';
+import { Signup } from './pages/Signup';
+import { FileUpload } from './components/FileUpload';
+import { SheetMapping } from './components/SheetMapping';
+import { ResultsDashboard } from './components/ResultsDashboard';
+import { ModeSelection } from './components/ModeSelection';
+import { ManualEntryForm } from './components/ManualEntryForm';
+import { RecentRuns } from './components/RecentRuns';
+import { DashboardHome } from './components/DashboardHome';
+
+function ProtectedApp() {
+  const { user, loading, token, logout } = useAuth();
+  const [step, setStep] = useState<'mode-selection' | 'upload' | 'mapping' | 'manual-entry' | 'dashboard' | 'dashboard-home'>('mode-selection');
+  const [workbookData, setWorkbookData] = useState<any>(null);
+  const [results, setResults] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-lg text-gray-600">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  const handleModeSelect = (mode: 'upload' | 'manual' | 'dashboard') => {
+    if (mode === 'upload') {
+      setStep('upload');
+    } else if (mode === 'manual') {
+      setStep('manual-entry');
+    } else {
+      setStep('dashboard-home');
+    }
+  };
+
+  const handleUploadSuccess = (data: any) => {
+    setWorkbookData(data);
+    setStep('mapping');
+  };
+
+  const handleMappingConfirm = async (mappings: Record<string, string>) => {
+    if (!workbookData?.file_id) {
+      alert('No file  ID found. Please upload again.');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await fetch(`http://localhost:8000/run/${workbookData.file_id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ mappings }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Valuation run failed');
+      }
+
+      const data = await response.json();
+      setResults(data);
+      setStep('dashboard');
+    } catch (error) {
+      console.error('Error running valuation:', error);
+      alert('Failed to calculate valuation. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleManualSubmit = async (valuationInput: any) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`http://localhost:8000/calculate`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(valuationInput),
+      });
+
+      if (!response.ok) {
+        throw new Error('Valuation calculation failed');
+      }
+
+      const data = await response.json();
+      setResults(data.results);
+      setStep('dashboard');
+    } catch (error) {
+      console.error('Error during manual valuation:', error);
+      alert('Failed to calculate valuation. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSelectRun = async (runId: string) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`http://localhost:8000/runs/${runId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error('Failed to fetch run');
+      }
+      const data = await response.json();
+      setResults(data.results);
+      setStep('dashboard');
+    } catch (error) {
+      console.error('Error loading run:', error);
+      alert('Failed to load run. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen font-sans text-gray-900">
+      <div className="flex">
+        {/* Sidebar */}
+        {step !== 'mode-selection' && (
+          <aside className="w-80 min-h-screen bg-white/40 backdrop-blur-xl border-r border-white/20 p-6 shadow-glass z-10">
+            <div className="mb-8">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 bg-system-blue rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                </div>
+                <h1 className="text-xl font-bold tracking-tight text-gray-900">Valuation</h1>
+              </div>
+              <div className="flex flex-col gap-2">
+                <button
+                  onClick={() => setStep('mode-selection')}
+                  className="glass-button w-full flex items-center  justify-center gap-2 text-sm"
+                >
+                  <span>←</span> New Valuation
+                </button>
+                <button
+                  onClick={logout}
+                  className="glass-button w-full flex items-center justify-center gap-2 text-sm bg-red-50 hover:bg-red-100"
+                >
+                  Logout ({user.name})
+                </button>
+              </div>
+            </div>
+            <RecentRuns onSelectRun={handleSelectRun} token={token} />
+          </aside>
+        )}
+
+        {/* Main Content */}
+        <main className={`flex-1 p-8 ${step === 'mode-selection' ? 'max-w-6xl mx-auto' : ''}`}>
+          {step === 'mode-selection' && (
+            <header className="mb-12 flex items-center justify-between animate-fade-in-up">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-system-blue rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/30">
+                  <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                </div>
+                <h1 className="text-4xl font-bold tracking-tight text-gray-900">Valuation</h1>
+              </div>
+              <button
+                onClick={logout}
+                className="glass-button text-sm"
+              >
+                Logout ({user.name})
+              </button>
+            </header>
+          )}
+
+          {step === 'mode-selection' && <ModeSelection onSelectMode={handleModeSelect} />}
+          {step === 'upload' && <FileUpload onUploadSuccess={handleUploadSuccess} />}
+          {step === 'mapping' && (
+            <SheetMapping
+              workbookData={workbookData}
+              onConfirm={handleMappingConfirm}
+              isLoading={isLoading}
+            />
+          )}
+          {step === 'manual-entry' && (
+            <ManualEntryForm onSubmit={handleManualSubmit} isLoading={isLoading} />
+          )}
+          {step === 'dashboard' && <ResultsDashboard results={results} runId={results?.run_id} />}
+          {step === 'dashboard-home' && <DashboardHome onSelectRun={handleSelectRun} token={token} />}
+        </main>
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/*" element={<ProtectedApp />} />
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
+  );
+}
+
+export default App;
