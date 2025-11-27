@@ -30,7 +30,7 @@ export const ConfidenceGauge: React.FC<ConfidenceGaugeProps> = ({ score }) => {
 
                 {/* Colored Arc (using clip-path or rotation trick) */}
                 <div
-                    className={`absolute top-0 left-0 w-40 h-40 rounded-full border-[12px] border-current ${colorClass} box-border origin-bottom transition-transform duration-1000 ease-out`}
+                    className={`absolute top-0 left-0 w-40 h-40 rounded-full border-[12px] border-current ${colorClass} box-border origin-center transition-transform duration-1000 ease-out`}
                     style={{
                         transform: `rotate(${rotation - 180}deg)`,
                         clipPath: 'polygon(0 0, 100% 0, 100% 50%, 0 50%)' // Only show top half
