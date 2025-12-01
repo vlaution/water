@@ -59,7 +59,6 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onUploadSuccess }) => {
                     id="file-upload"
                 />
                 <label htmlFor="file-upload" className="cursor-pointer flex flex-col items-center">
-                    <span className="text-4xl mb-2 group-hover:scale-110 transition-transform">📄</span>
                     <span className="text-gray-600 font-medium">{file ? file.name : "Click to select file"}</span>
                     <span className="text-gray-400 text-sm mt-1">.xlsx or .xlsm</span>
                 </label>
@@ -69,8 +68,8 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onUploadSuccess }) => {
                 onClick={handleUpload}
                 disabled={!file || uploading}
                 className={`w-full py-3 rounded-xl font-medium text-white transition-all transform active:scale-95 ${!file || uploading
-                        ? 'bg-gray-300 cursor-not-allowed'
-                        : 'bg-system-blue hover:bg-blue-600 shadow-lg hover:shadow-blue-500/30'
+                    ? 'bg-gray-300 cursor-not-allowed'
+                    : 'bg-system-blue hover:bg-blue-600 shadow-lg hover:shadow-blue-500/30'
                     }`}
             >
                 {uploading ? 'Uploading...' : 'Start Processing'}

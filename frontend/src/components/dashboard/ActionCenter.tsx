@@ -1,4 +1,5 @@
 import React from 'react';
+import { AuditAlert, type AuditIssue } from './AuditAlert';
 
 interface ActionItem {
     id: string;
@@ -8,13 +9,20 @@ interface ActionItem {
 
 interface ActionCenterProps {
     actions: ActionItem[];
+    auditIssues?: AuditIssue[];
     onGenerateReport: (type: 'pdf' | 'excel' | 'word' | 'ppt') => void;
 }
 
-export const ActionCenter: React.FC<ActionCenterProps> = ({ actions, onGenerateReport }) => {
+export const ActionCenter: React.FC<ActionCenterProps> = ({ actions, auditIssues, onGenerateReport }) => {
     return (
         <div className="glass-panel p-6 h-full flex flex-col">
             <h3 className="text-sm font-semibold text-gray-900 mb-4">Action Center</h3>
+
+            {auditIssues && auditIssues.length > 0 && (
+                <div className="mb-6">
+                    <AuditAlert issues={auditIssues} />
+                </div>
+            )}
 
             <div className="flex-1 mb-6">
                 <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Pending Tasks</h4>

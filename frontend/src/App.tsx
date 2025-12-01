@@ -64,10 +64,23 @@ function ProtectedApp() {
       });
 
       if (!response.ok) {
+        const errorData = await response.json();
+        if (errorData.type === 'validation_error') {
+          const messages = errorData.details.map((d: any) => `${d.severity.toUpperCase()}: ${d.message}`).join('\n');
+          alert(`Validation Errors:\n${messages}`);
+          return;
+        }
         throw new Error('Valuation run failed');
       }
 
       const data = await response.json();
+
+      // Check for warnings in successful response
+      if (data.validation_warnings && data.validation_warnings.length > 0) {
+        const warnings = data.validation_warnings.map((w: any) => `WARNING: ${w.message}`).join('\n');
+        alert(`Valuation completed with warnings:\n${warnings}`);
+      }
+
       setResults(data);
       setStep('dashboard');
     } catch (error) {
@@ -92,10 +105,21 @@ function ProtectedApp() {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({ detail: 'Unknown error' }));
+        if (errorData.type === 'validation_error') {
+          const messages = errorData.details.map((d: any) => `${d.severity.toUpperCase()}: ${d.message}`).join('\n');
+          alert(`Validation Errors:\n${messages}`);
+          return;
+        }
         throw new Error(errorData.detail || 'Valuation calculation failed');
       }
 
       const data = await response.json();
+
+      if (data.results && data.results.validation_warnings && data.results.validation_warnings.length > 0) {
+        const warnings = data.results.validation_warnings.map((w: any) => `WARNING: ${w.message}`).join('\n');
+        alert(`Valuation completed with warnings:\n${warnings}`);
+      }
+
       setResults(data.results);
       setStep('dashboard');
     } catch (error) {
