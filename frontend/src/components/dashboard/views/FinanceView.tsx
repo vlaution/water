@@ -1,5 +1,5 @@
 import React from 'react';
-import { DollarSign, Percent, BarChart3 } from 'lucide-react';
+
 
 interface FinanceViewProps {
     data: any;

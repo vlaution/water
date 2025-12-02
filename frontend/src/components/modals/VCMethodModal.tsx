@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Calculator, TrendingUp, AlertTriangle, Info } from 'lucide-react';
+import { X, Calculator, TrendingUp, AlertTriangle } from 'lucide-react';
 
 interface VCMethodModalProps {
     isOpen: boolean;
