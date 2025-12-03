@@ -5,33 +5,11 @@ from enum import Enum
 
 # ... (existing imports)
 
-class MethodWeights(BaseModel):
-    dcf: float = 0.4
-    fcfe: float = 0.0
-    gpc: float = 0.3
-    precedent: float = 0.3
-    anav: float = 0.0
-    lbo: float = 0.0
 
-class ReturnType(str, Enum):
-    MULTIPLE = "multiple"
-    IRR = "irr"
 
-class VCMethodInput(BaseModel):
-    investment_amount: float = Field(gt=0)
-    target_return_type: ReturnType
-    target_return: float = Field(gt=0)
-    exit_year: int = Field(gt=0, le=10)
-    exit_metric: str = Field("revenue")
-    projected_exit_metric: float = Field(ge=0)
-    exit_multiple: float = Field(gt=0)
-    current_shares: float = Field(gt=0)
 
-class AuditIssue(BaseModel):
-    field: str
-    value: Any
-    message: str
-    severity: str # "error", "warning", "info"
+
+
 
 class ValidationErrorDetail(BaseModel):
     field: str
@@ -43,31 +21,9 @@ class ValidationErrorResponse(BaseModel):
     type: str = "validation_error"
     details: List[ValidationErrorDetail]
 
-class VCMethodResult(BaseModel):
-    pre_money_valuation: float
-    post_money_valuation: float
-    ownership_required: float
-    new_shares_issued: float
-    implied_share_price: float
-    exit_value: float
-    audit_issues: List[AuditIssue] = []
 
-class ValuationInput(BaseModel):
-    company_name: str
-    currency: str = "USD"
-    dcf_input: Optional[DCFInput] = None
-    gpc_input: Optional[GPCInput] = None
-    dcfe_input: Optional[DCFEInput] = None
-    precedent_transactions_input: Optional[PrecedentTransactionsInput] = None
-    lbo_input: Optional[LBOInput] = None
-    anav_input: Optional[ANAVInput] = None
-    scenarios: Optional[List[ScenarioInput]] = None
-    sensitivity_analysis: Optional[SensitivityInput] = None
-    method_weights: Optional[MethodWeights] = None
-    vc_method_input: Optional[VCMethodInput] = None
-    reporting_date: str = "2023-12-31"
-    year: int
-    value: float
+
+
 
 class HistoricalFinancials(BaseModel):
     years: List[int]
