@@ -70,7 +70,7 @@ try:
     
     if response.status_code == 200:
         result = response.json()
-        print("\n✅ Phase 7 Calculation Successful!")
+        print("\nPhase 7 Calculation Successful!")
         print(f"\nEnterprise Value: ${result['enterprise_value']:,.2f}")
         print(f"Equity Value: ${result['equity_value']:,.2f}")
         
@@ -99,7 +99,7 @@ try:
             print(f"  FCFF:    {[round(x, 1) for x in details.get('fcff', [])[:3]]}")
 
     else:
-        print(f"\n❌ Error: {response.status_code}")
+        print(f"\nError: {response.status_code}")
         print(response.text)
 except Exception as e:
-    print(f"\n❌ Exception: {e}")
+    print(f"\nException: {e}")

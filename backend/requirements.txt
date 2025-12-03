@@ -13,3 +13,6 @@ passlib[argon2]
 argon2-cffi
 email-validator
 numpy>=1.24.0
+slowapi
+requests
+redis

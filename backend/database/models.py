@@ -26,6 +26,15 @@ class ValuationRun(Base):
     results = Column(Text, nullable=False)  # JSON string
     user_id = Column(Integer, nullable=True)  # Foreign key to User (nullable for migration)
 
+class UserDashboardConfig(Base):
+    __tablename__ = "user_dashboard_configs"
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, nullable=False, unique=True) # Ideally ForeignKey("users.id") but keeping simple to avoid circular deps if any, though standard is FK. Let's add FK.
+    config_json = Column(Text, nullable=False)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+
 # Database setup
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./valuation_v2.db")
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False} if "sqlite" in DATABASE_URL else {})

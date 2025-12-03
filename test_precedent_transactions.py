@@ -46,7 +46,7 @@ try:
     
     if response.status_code == 200:
         result = response.json()
-        print("\n✅ Precedent Transactions Calculation Successful!")
+        print("\nPrecedent Transactions Calculation Successful!")
         print(f"\nEnterprise Value: ${result['enterprise_value']:,.2f}")
         print(f"Equity Value: ${result['equity_value']:,.2f}")
         print(f"\nMethods Used:")
@@ -61,7 +61,7 @@ try:
             ev_ebitda = txn['deal_value'] / txn['ebitda']
             print(f"{txn['target_name']}: EV/Rev={ev_rev:.2f}x, EV/EBITDA={ev_ebitda:.2f}x")
     else:
-        print(f"\n❌ Error: {response.status_code}")
+        print(f"\nError: {response.status_code}")
         print(response.text)
 except Exception as e:
-    print(f"\n❌ Exception: {e}")
+    print(f"\nException: {e}")

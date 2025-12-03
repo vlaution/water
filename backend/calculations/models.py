@@ -1,7 +1,71 @@
-from pydantic import BaseModel
-from typing import List, Optional, Dict
+from pydantic import BaseModel, Field
+from typing import List, Optional, Dict, Any
+from backend.calculations.benchmarking_models import CompanyMetrics
+from enum import Enum
 
-class FinancialMetric(BaseModel):
+# ... (existing imports)
+
+class MethodWeights(BaseModel):
+    dcf: float = 0.4
+    fcfe: float = 0.0
+    gpc: float = 0.3
+    precedent: float = 0.3
+    anav: float = 0.0
+    lbo: float = 0.0
+
+class ReturnType(str, Enum):
+    MULTIPLE = "multiple"
+    IRR = "irr"
+
+class VCMethodInput(BaseModel):
+    investment_amount: float = Field(gt=0)
+    target_return_type: ReturnType
+    target_return: float = Field(gt=0)
+    exit_year: int = Field(gt=0, le=10)
+    exit_metric: str = Field("revenue")
+    projected_exit_metric: float = Field(ge=0)
+    exit_multiple: float = Field(gt=0)
+    current_shares: float = Field(gt=0)
+
+class AuditIssue(BaseModel):
+    field: str
+    value: Any
+    message: str
+    severity: str # "error", "warning", "info"
+
+class ValidationErrorDetail(BaseModel):
+    field: str
+    value: Any
+    message: str
+    severity: str  # "error", "warning"
+
+class ValidationErrorResponse(BaseModel):
+    type: str = "validation_error"
+    details: List[ValidationErrorDetail]
+
+class VCMethodResult(BaseModel):
+    pre_money_valuation: float
+    post_money_valuation: float
+    ownership_required: float
+    new_shares_issued: float
+    implied_share_price: float
+    exit_value: float
+    audit_issues: List[AuditIssue] = []
+
+class ValuationInput(BaseModel):
+    company_name: str
+    currency: str = "USD"
+    dcf_input: Optional[DCFInput] = None
+    gpc_input: Optional[GPCInput] = None
+    dcfe_input: Optional[DCFEInput] = None
+    precedent_transactions_input: Optional[PrecedentTransactionsInput] = None
+    lbo_input: Optional[LBOInput] = None
+    anav_input: Optional[ANAVInput] = None
+    scenarios: Optional[List[ScenarioInput]] = None
+    sensitivity_analysis: Optional[SensitivityInput] = None
+    method_weights: Optional[MethodWeights] = None
+    vc_method_input: Optional[VCMethodInput] = None
+    reporting_date: str = "2023-12-31"
     year: int
     value: float
 
@@ -13,6 +77,28 @@ class HistoricalFinancials(BaseModel):
     net_income: List[float]
     capex: List[float]
     nwc: List[float]
+    
+    # Balance Sheet & Cash Flow Items for Benchmarking
+    total_assets: Optional[List[float]] = None
+    total_equity: Optional[List[float]] = None
+    total_debt: Optional[List[float]] = None
+    current_assets: Optional[List[float]] = None
+    current_liabilities: Optional[List[float]] = None
+    cash_and_equivalents: Optional[List[float]] = None
+    inventory: Optional[List[float]] = None
+    receivables: Optional[List[float]] = None
+    
+    # Calculated Metrics
+    metrics: Optional[CompanyMetrics] = None
+    
+    # Company Profile
+    company_name: Optional[str] = None
+    industry: Optional[str] = None
+    sector: Optional[str] = None
+    description: Optional[str] = None
+    address: Optional[str] = None
+    employees: Optional[int] = None
+    fiscal_year_end: Optional[str] = None
 
 class WorkingCapitalAssumptions(BaseModel):
     dso: float = 45.0  # Days Sales Outstanding
@@ -29,6 +115,7 @@ class ProjectionAssumptions(BaseModel):
     terminal_growth_rate: float
     terminal_exit_multiple: Optional[float] = None
     depreciation_rate: float = 0.03  # Depreciation as % of Revenue
+    capex_percent_revenue: Optional[float] = None # CapEx as % of Revenue
     working_capital: Optional[WorkingCapitalAssumptions] = None
 
 class DCFInput(BaseModel):
@@ -145,6 +232,35 @@ class MethodWeights(BaseModel):
     anav: float = 0.0
     lbo: float = 0.0
 
+class ReturnType(str, Enum):
+    MULTIPLE = "multiple"
+    IRR = "irr"
+
+class VCMethodInput(BaseModel):
+    investment_amount: float = Field(gt=0)
+    target_return_type: ReturnType
+    target_return: float = Field(gt=0)
+    exit_year: int = Field(gt=0, le=10)
+    exit_metric: str = Field("revenue")
+    projected_exit_metric: float = Field(ge=0)
+    exit_multiple: float = Field(gt=0)
+    current_shares: float = Field(gt=0)
+
+class AuditIssue(BaseModel):
+    field: str
+    value: Any
+    message: str
+    severity: str # "error", "warning", "info"
+
+class VCMethodResult(BaseModel):
+    pre_money_valuation: float
+    post_money_valuation: float
+    ownership_required: float
+    new_shares_issued: float
+    implied_share_price: float
+    exit_value: float
+    audit_issues: List[AuditIssue] = []
+
 class ValuationInput(BaseModel):
     company_name: str
     currency: str = "USD"
@@ -157,6 +273,8 @@ class ValuationInput(BaseModel):
     scenarios: Optional[List[ScenarioInput]] = None
     sensitivity_analysis: Optional[SensitivityInput] = None
     method_weights: Optional[MethodWeights] = None
+    vc_method_input: Optional[VCMethodInput] = None
+    reporting_date: str = "2023-12-31"
 
 class ConfidenceScore(BaseModel):
     score: float  # 0-100
@@ -174,3 +292,49 @@ class ActionItem(BaseModel):
     task: str
     status: str  # "urgent", "pending", "completed"
     priority: str  # "high", "medium", "low"
+
+class ScenarioConfig(BaseModel):
+    name: str
+    probability: float
+    assumptions: ValuationInput
+
+class PWSARequest(BaseModel):
+    scenarios: List[ScenarioConfig]
+
+class ScenarioResult(BaseModel):
+    name: str
+    value: float
+    probability: float
+
+class RiskMetrics(BaseModel):
+    var_95: float
+    upside_potential: float
+    standard_deviation: float
+
+class PWSAResult(BaseModel):
+    probability_weighted_value: float
+    scenario_results: List[ScenarioResult]
+    risk_metrics: RiskMetrics
+
+class MarketAssumptions(BaseModel):
+    risk_free_rate: float
+    beta: float
+    market_risk_premium: float = 0.055
+    cost_of_debt: float
+    cost_of_equity: float
+    wacc: float
+
+
+
+class ScenarioChange(BaseModel):
+    field: str
+    old_value: Any
+    new_value: Any
+
+class GenerateScenarioResponse(BaseModel):
+    base_assumptions: Dict[str, Any]
+    generated_assumptions: Dict[str, Any]
+    changes: List[ScenarioChange]
+    explanation: str
+    scenario_name: str
+

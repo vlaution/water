@@ -5,7 +5,13 @@ from backend.api import auth_routes
 from backend.database.models import init_db
 import os
 
+from slowapi.errors import RateLimitExceeded
+from slowapi import _rate_limit_exceeded_handler
+from backend.utils.limiter import limiter
+
 app = FastAPI()
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # Initialize database on startup
 @app.on_event("startup")

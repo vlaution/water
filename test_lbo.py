@@ -29,7 +29,7 @@ try:
     
     if response.status_code == 200:
         result = response.json()
-        print("\n✅ LBO Calculation Successful!")
+        print("\nLBO Calculation Successful!")
         print(f"\nEnterprise Value: ${result['enterprise_value']:,.2f}")
         print(f"Equity Value: ${result['equity_value']:,.2f}")
         print(f"\nMethods Used:")
@@ -46,7 +46,7 @@ try:
         print(f"Debt: ${debt}M ({data['lbo_input']['debt_percentage']*100}%)")
         print(f"Equity Investment: ${equity}M ({(1-data['lbo_input']['debt_percentage'])*100}%)")
     else:
-        print(f"\n❌ Error: {response.status_code}")
+        print(f"\nError: {response.status_code}")
         print(response.text)
 except Exception as e:
-    print(f"\n❌ Exception: {e}")
+    print(f"\nException: {e}")

@@ -45,7 +45,7 @@ try:
     
     if response.status_code == 200:
         result = response.json()
-        print("\n✅ FCFE Calculation Successful!")
+        print("\nFCFE Calculation Successful!")
         print(f"\nEnterprise Value: ${result['enterprise_value']:,.2f}")
         print(f"Equity Value: ${result['equity_value']:,.2f}")
         print(f"\nMethods Used:")
@@ -53,7 +53,7 @@ try:
             print(f"  - {method}: ${details['value']:,.2f} (weight: {details['weight']*100}%)")
         print(f"\nRun ID: {result.get('run_id', 'N/A')}")
     else:
-        print(f"\n❌ Error: {response.status_code}")
+        print(f"\nError: {response.status_code}")
         print(response.text)
 except Exception as e:
-    print(f"\n❌ Exception: {e}")
+    print(f"\nException: {e}")

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { SkeletonCard } from './dashboard/SkeletonCard';
 import { Settings, Check } from 'lucide-react';
 import { ExecutiveView } from './dashboard/views/ExecutiveView';
+import { OverviewView } from './dashboard/views/OverviewView';
 import { FinanceView } from './dashboard/views/FinanceView';
 import { StrategyView } from './dashboard/views/StrategyView';
 import { InvestorView } from './dashboard/views/InvestorView';
@@ -23,7 +24,7 @@ interface DashboardHomeProps {
 export const DashboardHome: React.FC<DashboardHomeProps> = ({ onSelectRun, token }) => {
     const [latestRun, setLatestRun] = useState<any>(null);
     const [loading, setLoading] = useState(true);
-    const [activeView, setActiveView] = useState<'executive' | 'finance' | 'strategy' | 'investor' | 'benchmarking'>('executive');
+    const [activeView, setActiveView] = useState<'overview' | 'executive' | 'finance' | 'strategy' | 'investor' | 'benchmarking'>('overview');
     const [viewData, setViewData] = useState<any>(null);
     const [viewLoading, setViewLoading] = useState(false);
 
@@ -85,6 +86,8 @@ export const DashboardHome: React.FC<DashboardHomeProps> = ({ onSelectRun, token
                 let url = '';
                 if (activeView === 'executive') {
                     url = 'http://localhost:8000/api/dashboard/executive';
+                } else if (activeView === 'overview') {
+                    url = `http://localhost:8000/api/dashboard/overview/${latestRun.id}`;
                 } else {
                     url = `http://localhost:8000/api/dashboard/${activeView}/${latestRun.id}`;
                 }
@@ -188,7 +191,8 @@ export const DashboardHome: React.FC<DashboardHomeProps> = ({ onSelectRun, token
     }
 
     const views = [
-        { id: 'executive', label: 'Executive', icon: LayoutDashboard },
+        { id: 'overview', label: 'Overview', icon: LayoutDashboard },
+        { id: 'executive', label: 'Executive', icon: Activity },
         { id: 'finance', label: 'Finance', icon: DollarSign },
         { id: 'strategy', label: 'Strategy', icon: TrendingUp },
         { id: 'investor', label: 'Investor', icon: ShieldCheck },
@@ -317,6 +321,7 @@ export const DashboardHome: React.FC<DashboardHomeProps> = ({ onSelectRun, token
                 </div>
             ) : (
                 <>
+                    {activeView === 'overview' && <OverviewView data={viewData} />}
                     {activeView === 'executive' && <ExecutiveView data={viewData} />}
                     {activeView === 'finance' && <FinanceView data={viewData} />}
                     {activeView === 'strategy' && <StrategyView data={viewData} />}
