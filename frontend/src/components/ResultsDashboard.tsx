@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { api } from '../config/api';
 import { InputReview } from './InputReview';
 import { EnterpriseValueCard } from './dashboard/EnterpriseValueCard';
 import { ConfidenceGauge } from './dashboard/ConfidenceGauge';
@@ -8,6 +9,16 @@ import { SensitivityMatrix } from './dashboard/SensitivityMatrix';
 import { TrendChart } from './dashboard/TrendChart';
 import { ActionCenter } from './dashboard/ActionCenter';
 import { ScenarioToggle } from './dashboard/ScenarioToggle';
+import { LBOWaterfallChart } from './lbo/LBOWaterfallChart';
+import { SourcesUsesTable } from './lbo/SourcesUsesTable';
+import { ReturnsAnalysisTable } from './lbo/ReturnsAnalysisTable';
+import { LBOSensitivityMatrix } from './lbo/LBOSensitivityMatrix';
+import { LBOTimelineControl } from './lbo/LBOTimelineControl';
+import { CovenantTracker } from './lbo/CovenantTracker';
+import { MIPTable } from './lbo/MIPTable';
+import { AIInsightsWidget } from './dashboard/widgets/AIInsightsWidget';
+
+import { ReportGenerator } from './ReportGenerator';
 
 interface ResultsDashboardProps {
     runId?: string;
@@ -17,6 +28,67 @@ interface ResultsDashboardProps {
 export const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ runId, results }) => {
     const [activeTab, setActiveTab] = useState<'dashboard' | 'inputs' | 'financials'>('dashboard');
     const [scenario, setScenario] = useState<'base' | 'bull' | 'bear'>('base');
+    const [overrideExitYear, setOverrideExitYear] = useState<number | null>(null);
+
+    // Derived LBO Data for Interactivity
+    const getInteractiveLBO = () => {
+        if (!results?.lbo_details?.schedule) return results?.lbo_details;
+
+        const schedule = results.lbo_details.schedule;
+        const maxYear = schedule.length;
+        const currentYear = overrideExitYear || maxYear;
+
+        // Find data for this year
+        const yearData = schedule.find((s: any) => s.year === currentYear);
+        if (!yearData) return results.lbo_details;
+
+        // Check for required data
+        const returns = results.lbo_details.returns_analysis;
+        const waterfall = results.lbo_details.waterfall_summary;
+        if (!returns || !waterfall) return results.lbo_details;
+
+        // Recalculate Returns (Client-Side approximation)
+        // Need Entry Equity.
+        const entryEquity = returns.entry_equity;
+
+        // Exit Equity = (EBITDA * ExitMultiple) - NetDebt
+        // We assume Exit Multiple is constant or same as input. 
+        // Let's infer implied exit multiple from original results: ExitEV / FinalEBITDA
+        const originalExitEV = returns.exit_equity + waterfall.final_debt;
+        const finalEBITDA = schedule[schedule.length - 1].ebitda;
+        const impliedMultiple = originalExitEV / finalEBITDA;
+
+        const currentExitEV = yearData.ebitda * impliedMultiple;
+        const currentNetDebt = yearData.total_debt_balance; // Simplified (cash?)
+        const currentEquity = Math.max(0, currentExitEV - currentNetDebt);
+
+        const moic = entryEquity > 0 ? currentEquity / entryEquity : 0;
+        const irr = entryEquity > 0 ? Math.pow(currentEquity / entryEquity, 1 / currentYear) - 1 : 0;
+        const profit = currentEquity - entryEquity;
+
+        return {
+            ...results.lbo_details,
+            schedule: schedule.slice(0, currentYear),
+            returns_analysis: {
+                ...results.lbo_details.returns_analysis,
+                moic,
+                irr,
+                exit_equity: currentEquity,
+                profit,
+                // Zero out detail for interim (or approx)
+                gp_carry: 0,
+                lp_profit: profit,
+                lp_moic: moic,
+                // Clear detailed breakdown for interactive mode as we don't recalc waterfall client-side
+                dist_capital: undefined,
+                dist_pref: undefined,
+                gp_catchup: undefined,
+                dist_carry: undefined
+            }
+        };
+    };
+
+    const lboData = getInteractiveLBO();
 
     // Helper to get data based on selected scenario
     const getDisplayData = () => {
@@ -47,12 +119,22 @@ export const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ runId, resul
         { id: '3', type: 'critical', message: 'Debt maturity < 12 months', severity: 'high' },
     ];
 
+    // Add Optimization Note if present
+    if (results?.lbo_details?.optimization_note) {
+        alerts.unshift({
+            id: 'opt_note',
+            type: 'success', // Optimization is usually positive
+            message: `Optimization: ${results.lbo_details.optimization_note}`,
+            severity: 'medium'
+        });
+    }
+
     const methods = [
-        { name: 'DCF (FCFF)', value: enterpriseValue, weight: 40, color: 'bg-system-blue' },
-        { name: 'Comparable (GPC)', value: enterpriseValue * 1.1, weight: 30, color: 'bg-system-green' },
-        { name: 'Precedent (GTM)', value: enterpriseValue * 0.9, weight: 20, color: 'bg-system-orange' },
-        { name: 'LBO Floor', value: enterpriseValue * 0.7, weight: 10, color: 'bg-system-red' },
-    ];
+        { name: 'DCF (FCFF)', value: results?.methods?.['DCF_FCFF']?.value || 0, weight: results?.methods?.['DCF_FCFF']?.weight * 100 || 0, color: 'bg-system-blue' },
+        { name: 'Comparable (GPC)', value: results?.methods?.['GPC']?.value || 0, weight: results?.methods?.['GPC']?.weight * 100 || 0, color: 'bg-system-green' },
+        { name: 'Precedent (GTM)', value: results?.methods?.['Precedent_Transactions']?.value || 0, weight: results?.methods?.['Precedent_Transactions']?.weight * 100 || 0, color: 'bg-system-orange' },
+        { name: 'LBO (Implied)', value: results?.methods?.['LBO']?.value || 0, weight: results?.methods?.['LBO']?.weight * 100 || 0, color: 'bg-system-red' },
+    ].filter(m => m.value > 0);
 
     // Use backend sensitivity data
     const sensitivityData = results?.sensitivity || {};
@@ -70,12 +152,41 @@ export const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ runId, resul
         { year: '2028', ebitda: 11000000, cashFlow: 9000000 },
     ];
 
-    const handleGenerateReport = (type: string) => {
+    const handleGenerateReport = async (type: string) => {
         if (!runId) {
             alert('No run ID available');
             return;
         }
-        window.open(`http://localhost:8000/export/${type}/${runId}`, '_blank');
+
+        if (type === 'pdf') {
+            // Use new secure endpoint for PDF
+            try {
+                const token = localStorage.getItem('auth_token');
+                const response = await fetch(`${api.baseURL}/api/analytics/report/pdf/${runId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) throw new Error("Failed to generate report");
+
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `Board_Report_${runId}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+            } catch (error) {
+                console.error("PDF Generation failed:", error);
+                alert("Failed to generate PDF report. Please try again.");
+            }
+        } else {
+            // Legacy/Other exports via window.open (might need update later)
+            window.open(api.url(`/export/${type}/${runId}`), '_blank');
+        }
     };
 
     return (
@@ -112,6 +223,81 @@ export const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ runId, resul
 
             {activeTab === 'dashboard' && (
                 <div className="space-y-8">
+                    {/* LBO Analysis Section (Conditional) */}
+                    {lboData && lboData.schedule && (
+                        <div className="space-y-6 mb-8 animate-fade-in-up">
+                            <div className="flex justify-between items-center mb-2">
+                                <div className="flex gap-4 items-center">
+                                    <h3 className="text-xl font-bold text-gray-800">LBO Analysis</h3>
+                                    <span className="px-2 py-0.5 rounded-full bg-blue-100 text-system-blue text-xs font-bold uppercase tracking-wide">Advanced Model</span>
+                                </div>
+
+                                <LBOTimelineControl
+                                    min={1}
+                                    max={lboData.schedule.length}
+                                    value={overrideExitYear || lboData.schedule.length}
+                                    onChange={setOverrideExitYear}
+                                />
+                            </div>
+
+                            <LBOWaterfallChart schedule={lboData.schedule} />
+
+                            {/* LBO Detail Tables */}
+                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-auto">
+                                <div className="lg:col-span-8">
+                                    {lboData.sources && lboData.uses && (
+                                        <SourcesUsesTable
+                                            sources={lboData.sources}
+                                            uses={lboData.uses}
+                                        />
+                                    )}
+                                </div>
+                                <div className="lg:col-span-4 h-full">
+                                    {lboData.returns_analysis && (
+                                        <div className="space-y-6">
+                                            <ReturnsAnalysisTable data={lboData.returns_analysis} />
+
+                                            {/* MIP Table */}
+                                            {lboData.returns_analysis.mip_pool_percent > 0 && (
+                                                <MIPTable
+                                                    returnsAnalysis={lboData.returns_analysis}
+                                                    mipConfig={{ option_pool_percent: lboData.returns_analysis.mip_pool_percent }}
+                                                />
+                                            )}
+
+                                            {lboData.sensitivity_matrix && (
+                                                <LBOSensitivityMatrix data={lboData.sensitivity_matrix} />
+                                            )}
+                                        </div>
+
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Covenant Tracker */}
+                            {lboData.schedule && lboData.schedule[0].covenant_status && (
+                                <div className="mt-8 animate-fade-in-up">
+                                    <CovenantTracker
+                                        schedule={lboData.schedule}
+                                        covenants={results.input_summary?.lbo?.covenants || results?.lbo_input?.covenants || []}
+                                    // Fallback to extraction if needed or empty list if only visualizing status
+                                    // Actually CovenantTracker uses covenants prop to show limits lines.
+                                    // If we don't have the original input easily, we might skip the lines or pass dummy.
+                                    // Let's assume input_summary has it or simplified.
+                                    />
+                                </div>
+                            )}
+
+                        </div>
+                    )}
+
+
+                    {/* Row 1.5: AI Insights */}
+                    <div className="grid grid-cols-12 gap-8 mb-8">
+                        <div className="col-span-12">
+                            {runId && <AIInsightsWidget runId={runId} />}
+                        </div>
+                    </div>
                     {/* Row 1: High-Level Metrics & Breakdown (4 columns) */}
                     <div className="grid grid-cols-12 gap-8">
                         <div className="col-span-3">
@@ -140,7 +326,7 @@ export const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ runId, resul
                         <div className="col-span-8">
                             <SensitivityMatrix data={sensitivityData} baseValue={enterpriseValue} />
                         </div>
-                        <div className="col-span-4">
+                        <div className="col-span-4 space-y-6">
                             <ActionCenter
                                 actions={results?.action_items || [
                                     { id: '1', task: 'Review growth assumptions', status: 'urgent' },
@@ -148,6 +334,9 @@ export const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ runId, resul
                                 ]}
                                 onGenerateReport={handleGenerateReport}
                             />
+                            {runId && (
+                                <ReportGenerator runId={runId} />
+                            )}
                         </div>
                     </div>
                 </div>

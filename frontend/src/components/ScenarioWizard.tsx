@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { api } from '../config/api';
 
 interface ScenarioWizardProps {
     isOpen: boolean;
@@ -41,7 +42,7 @@ export const ScenarioWizard: React.FC<ScenarioWizardProps> = ({ isOpen, onClose,
         setIsLoading(true);
         setError(null);
         try {
-            const response = await fetch('http://localhost:8000/api/scenarios/generate', {
+            const response = await fetch(api.url('/api/scenarios/generate'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

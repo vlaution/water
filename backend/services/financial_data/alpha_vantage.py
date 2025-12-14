@@ -14,11 +14,20 @@ class AlphaVantageProvider(FinancialDataProvider):
     BASE_URL = "https://www.alphavantage.co/query"
 
     def __init__(self):
-        self.api_key = os.getenv("ALPHA_VANTAGE_API_KEY")
-        if not self.api_key:
-            # Fallback for demo purposes if not set, though ideally should be required
-            print("WARNING: ALPHA_VANTAGE_API_KEY not found. Using 'demo' key which only works for IBM.")
-            self.api_key = "demo"
+        self.api_keys = [k.strip() for k in os.getenv("ALPHA_VANTAGE_API_KEY", "").split(",") if k.strip()]
+        if not self.api_keys:
+            # Fallback for demo purposes
+            print("Info: ALPHA_VANTAGE_API_KEY not set. Using 'demo' key.")
+            self.api_keys = ["demo"]
+        
+        self.current_key_index = 0
+
+    def _get_current_key(self) -> str:
+        return self.api_keys[self.current_key_index]
+
+    def _rotate_key(self):
+        self.current_key_index = (self.current_key_index + 1) % len(self.api_keys)
+        print(f"Info: Switching to API Key index {self.current_key_index}")
 
     def _make_request(self, function: str, symbol: Optional[str] = None, **kwargs) -> Dict[str, Any]:
         # Generate cache key
@@ -32,31 +41,118 @@ class AlphaVantageProvider(FinancialDataProvider):
         if cached_data:
             return cached_data
 
-        params = {
-            "function": function,
-            "apikey": self.api_key,
-            **kwargs
-        }
-        if symbol:
-            params["symbol"] = symbol
+        # MOCK DATA FALLBACK FOR DEMO
+        # Use first key check for demo mode simplifiction
+        if self.api_keys[0] == "demo" and symbol and symbol.upper() != "IBM":
+            print(f"Info: Using mock data for {symbol} (Demo Mode)")
+            return self._get_mock_data(function, symbol)
+
+        attempts = 0
+        max_attempts = len(self.api_keys)
         
-        try:
-            response = requests.get(self.BASE_URL, params=params, timeout=10)
-            response.raise_for_status()
-            data = response.json()
+        while attempts < max_attempts:
+            current_key = self._get_current_key()
+            params = {
+                "function": function,
+                "apikey": current_key,
+                **kwargs
+            }
+            if symbol:
+                params["symbol"] = symbol
             
-            if "Error Message" in data:
-                raise ValueError(f"Alpha Vantage API Error: {data['Error Message']}")
-            if "Note" in data:
-                # API limit reached
-                raise ValueError("Alpha Vantage API Limit Reached")
-            
-            # Cache success response
-            cache.set(cache_key, data)
+            try:
+                response = requests.get(self.BASE_URL, params=params, timeout=10)
+                response.raise_for_status()
+                data = response.json()
                 
-            return data
-        except requests.RequestException as e:
-            raise ConnectionError(f"Failed to connect to Alpha Vantage: {str(e)}")
+                # Check for API errors / Rate limits
+                if "Error Message" in data:
+                    raise ValueError(f"Alpha Vantage API Error: {data['Error Message']}")
+                
+                # Check for rate limits
+                rate_limit_hit = False
+                if "Note" in data:
+                    rate_limit_hit = True
+                    print(f"Rate limit hit (Note) for key index {self.current_key_index}")
+                if "Information" in data:
+                    rate_limit_hit = True
+                    print(f"Rate limit hit (Information) for key index {self.current_key_index}")
+                
+                if rate_limit_hit:
+                    # Rotate key and retry
+                    self._rotate_key()
+                    attempts += 1
+                    continue
+                
+                # Success
+                cache.set(cache_key, data)
+                return data
+
+            except requests.RequestException as e:
+                # Network error - maybe don't rotate? Or do? 
+                # Usually network errors are transient or global, not key specific.
+                # But let's fail hard on network errors to avoid spinning.
+                raise ConnectionError(f"Failed to connect to Alpha Vantage: {str(e)}")
+        
+        # If we exit the loop, we exhausted all keys
+        raise ValueError("Alpha Vantage API Limit Reached on ALL available keys.")
+
+    def _get_mock_data(self, function: str, symbol: str) -> Dict[str, Any]:
+        """Generate consistent mock data for demo purposes."""
+        import random
+        # Seed with symbol to ensure consistent results for same ticker
+        random.seed(symbol)
+        
+        years = ["2023-12-31", "2022-12-31", "2021-12-31", "2020-12-31", "2019-12-31"]
+        base_revenue = random.randint(100, 1000) * 1000000
+        growth_rate = random.uniform(0.05, 0.20)
+        
+        if function == "OVERVIEW":
+            return {
+                "Name": f"{symbol} Corp (Demo)",
+                "Symbol": symbol,
+                "Industry": "Technology",
+                "Sector": "Software",
+                "Description": f"This is a demo description for {symbol}.",
+                "Address": "123 Tech Blvd, San Francisco, CA",
+                "FullTimeEmployees": str(random.randint(1000, 50000)),
+                "FiscalYearEnd": "December",
+                "MarketCapitalization": str(int(base_revenue * random.uniform(5, 10))),
+                "Beta": str(round(random.uniform(0.8, 1.5), 2))
+            }
+            
+        reports = []
+        for i, date in enumerate(years):
+            revenue = base_revenue * ((1 - growth_rate) ** i)
+            
+            if function == "INCOME_STATEMENT":
+                reports.append({
+                    "fiscalDateEnding": date,
+                    "totalRevenue": str(int(revenue)),
+                    "netIncome": str(int(revenue * 0.15)),
+                    "ebit": str(int(revenue * 0.20)),
+                    "ebitda": str(int(revenue * 0.25))
+                })
+            elif function == "BALANCE_SHEET":
+                reports.append({
+                    "fiscalDateEnding": date,
+                    "totalAssets": str(int(revenue * 0.8)),
+                    "totalShareholderEquity": str(int(revenue * 0.4)),
+                    "totalCurrentAssets": str(int(revenue * 0.3)),
+                    "totalCurrentLiabilities": str(int(revenue * 0.2)),
+                    "shortTermDebt": str(int(revenue * 0.05)),
+                    "longTermDebt": str(int(revenue * 0.15)),
+                    "cashAndCashEquivalentsAtCarryingValue": str(int(revenue * 0.1)),
+                    "inventory": str(int(revenue * 0.05)),
+                    "currentNetReceivables": str(int(revenue * 0.08))
+                })
+            elif function == "CASH_FLOW":
+                reports.append({
+                    "fiscalDateEnding": date,
+                    "capitalExpenditures": str(int(revenue * 0.05))
+                })
+                
+        return {"annualReports": reports}
 
     def get_financials(self, ticker: str) -> HistoricalFinancials:
         # Fetch Income Statement

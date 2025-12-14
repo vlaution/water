@@ -1,0 +1,28 @@
+{
+  "name": "excel-addin-valuation-platform",
+  "version": "1.0.0",
+  "description": "Excel Add-in for Valuation Platform",
+  "main": "src/taskpane/index.tsx",
+  "scripts": {
+    "start": "webpack serve --mode development --https",
+    "build": "webpack --mode production",
+    "sideload": "office-addin-debugging start manifest.xml"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "@fluentui/react-components": "^9.0.0",
+    "axios": "^1.6.0",
+    "@types/office-js": "^1.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "webpack": "^5.0.0",
+    "webpack-cli": "^5.0.0",
+    "webpack-dev-server": "^4.0.0",
+    "ts-loader": "^9.0.0",
+    "html-webpack-plugin": "^5.0.0",
+    "office-addin-debugging": "^5.0.0",
+    "office-addin-dev-certs": "^1.0.0"
+  }
+}

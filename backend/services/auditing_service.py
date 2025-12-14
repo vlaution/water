@@ -47,18 +47,47 @@ class AuditingService:
         # LBO Specific Checks
         if input_data.lbo_input:
             lbo = input_data.lbo_input
-            # Check leverage if we can calculate it or if it's an input
-            # LBO has debt_percentage
-            # We can check if debt % is too high?
-            # Or Debt/Equity ratio.
-            # Let's check debt percentage for now.
-            if lbo.debt_percentage > 0.80: # > 80% debt
+            financing = lbo.financing
+            
+            # 1. Leverage Check (>6.0x strict warning)
+            total_lev = financing.total_leverage_ratio
+            if total_lev is None and financing.tranches:
+                total_lev = sum([t.leverage_multiple or 0 for t in financing.tranches])
+            
+            if total_lev and total_lev > 6.0:
                  issues.append(AuditIssue(
-                    field="lbo_input.debt_percentage",
-                    value=lbo.debt_percentage,
-                    message=f"LBO Debt Percentage ({lbo.debt_percentage:.0%}) is very high (>80%).",
+                    field="lbo_input.financing",
+                    value=total_lev,
+                    message=f"Total Leverage ({total_lev:.1f}x) exceeds recommended safety limit (>6.0x). Typical maximum is 6.0x for healthy LBOs.",
                     severity="warning"
                 ))
+
+            # 2. Equity Contribution (<25% strict warning)
+            equity_pct = financing.equity_contribution_percent
+            # If not provided, try to calculate from implied
+            if equity_pct is None and lbo.entry_ev_ebitda_multiple and total_lev:
+                # Equity = EV - Debt
+                # Equity% = (EV - Debt) / EV = 1 - (Debt/EV)
+                # Debt/EV = Debt/EBITDA / EV/EBITDA
+                debt_to_ev = total_lev / lbo.entry_ev_ebitda_multiple
+                equity_pct = 1.0 - debt_to_ev
+
+            if equity_pct is not None and equity_pct < 0.25:
+                    issues.append(AuditIssue(
+                    field="lbo_input.financing.equity_contribution_percent",
+                    value=equity_pct,
+                    message=f"Equity Contribution ({equity_pct:.0%}) is dangerously low (<25%). Lenders typically require 30-40%.",
+                    severity="error"
+                ))
+
+            # 3. IRR Feasibility (High IRR requires High Growth?)
+            # Valid only if we have target IRR and growth logic
+            if lbo.solve_for == "entry_price" and lbo.target_irr:
+                issues.extend(self._check_irr_feasibility(lbo.target_irr, lbo.revenue_growth_rate))
+
+            # 4. Exit Multiple vs Entry/Market
+            if lbo.exit_ev_ebitda_multiple:
+                issues.extend(self._check_exit_multiple(lbo.exit_ev_ebitda_multiple, lbo.entry_ev_ebitda_multiple))
 
         return issues
 
@@ -92,3 +121,27 @@ class AuditingService:
                 severity="warning"
             )]
         return []
+
+    def _check_irr_feasibility(self, target_irr: float, growth_rate: float) -> List[AuditIssue]:
+        """Check if high IRR target is mismatched with low growth assumptions."""
+        # Rule: If Target IRR > 25% AND Revenue Growth < 5% -> Warning
+        if target_irr > 0.25 and growth_rate < 0.05:
+            return [AuditIssue(
+                field="lbo_input.target_irr",
+                value=target_irr,
+                message=f"Target IRR ({target_irr:.0%}) is aggressive for a low-growth asset ({growth_rate:.0%} growth). Ensure margin expansion or multiple arbitrage is realistic.",
+                severity="warning"
+            )]
+        return []
+
+    def _check_exit_multiple(self, exit_mult: float, entry_mult: Optional[float]) -> List[AuditIssue]:
+        """Check for Multiple Expansion fallacy."""
+        issues = []
+        if entry_mult and exit_mult > entry_mult + 1.0:
+             issues.append(AuditIssue(
+                field="lbo_input.exit_ev_ebitda_multiple",
+                value=exit_mult,
+                message=f"Exit Multiple ({exit_mult}x) is significantly higher than Entry ({entry_mult}x). Relying on multiple expansion is risky.",
+                severity="warning"
+            ))
+        return issues

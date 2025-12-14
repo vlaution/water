@@ -11,13 +11,30 @@ import { ModeSelection } from './components/ModeSelection';
 import { ManualEntryForm } from './components/ManualEntryForm';
 import { RecentRuns } from './components/RecentRuns';
 import { DashboardHome } from './components/DashboardHome';
+import { PerformanceDashboard } from './components/admin/PerformanceDashboard';
+import { AuditLogViewer } from './components/admin/AuditLogViewer';
+import { PermissionGuard } from './components/common/PermissionGuard';
+import { RequirePermission } from './components/common/RequirePermission';
+import { Permissions } from './config/permissions';
+import { GlobalAssumptionsPanel } from './components/dashboard/GlobalAssumptionsPanel';
+import { Globe } from 'lucide-react';
+import { UserPreferencesProvider } from './context/UserPreferencesContext';
+import { GlobalConfigProvider } from './context/GlobalConfigContext';
+
+import { RiskDashboard } from './pages/RiskDashboard';
+
+import { ToastProvider, useToast } from './context/ToastContext';
+import { RealTimeProvider } from './context/RealTimeContext';
+import { RealTimeAlerts } from './components/common/RealTimeAlerts';
 
 function ProtectedApp() {
   const { user, loading, token, logout } = useAuth();
-  const [step, setStep] = useState<'mode-selection' | 'upload' | 'mapping' | 'manual-entry' | 'dashboard' | 'dashboard-home'>('mode-selection');
+  const { showToast } = useToast(); // Use the hook
+  const [step, setStep] = useState<'mode-selection' | 'upload' | 'mapping' | 'manual-entry' | 'dashboard' | 'dashboard-home' | 'risk-dashboard'>('mode-selection');
   const [workbookData, setWorkbookData] = useState<any>(null);
   const [results, setResults] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isGlobalSettingsOpen, setIsGlobalSettingsOpen] = useState(false);
 
   if (loading) {
     return (
@@ -44,11 +61,12 @@ function ProtectedApp() {
   const handleUploadSuccess = (data: any) => {
     setWorkbookData(data);
     setStep('mapping');
+    showToast('File uploaded successfully', 'success');
   };
 
   const handleMappingConfirm = async (mappings: Record<string, string>) => {
     if (!workbookData?.file_id) {
-      alert('No file  ID found. Please upload again.');
+      showToast('No file ID found. Please upload again.', 'error');
       return;
     }
 
@@ -67,7 +85,7 @@ function ProtectedApp() {
         const errorData = await response.json();
         if (errorData.type === 'validation_error') {
           const messages = errorData.details.map((d: any) => `${d.severity.toUpperCase()}: ${d.message}`).join('\n');
-          alert(`Validation Errors:\n${messages}`);
+          showToast(`Validation Errors: ${messages}`, 'error');
           return;
         }
         throw new Error('Valuation run failed');
@@ -77,15 +95,16 @@ function ProtectedApp() {
 
       // Check for warnings in successful response
       if (data.validation_warnings && data.validation_warnings.length > 0) {
-        const warnings = data.validation_warnings.map((w: any) => `WARNING: ${w.message}`).join('\n');
-        alert(`Valuation completed with warnings:\n${warnings}`);
+        showToast(`Valuation completed with warnings`, 'warning');
+      } else {
+        showToast('Valuation completed successfully', 'success');
       }
 
       setResults(data);
       setStep('dashboard');
     } catch (error) {
       console.error('Error running valuation:', error);
-      alert('Failed to calculate valuation. Please try again.');
+      showToast('Failed to calculate valuation. Please try again.', 'error');
     } finally {
       setIsLoading(false);
     }
@@ -107,24 +126,27 @@ function ProtectedApp() {
         const errorData = await response.json().catch(() => ({ detail: 'Unknown error' }));
         if (errorData.type === 'validation_error') {
           const messages = errorData.details.map((d: any) => `${d.severity.toUpperCase()}: ${d.message}`).join('\n');
-          alert(`Validation Errors:\n${messages}`);
+          showToast(`Validation Errors: ${messages}`, 'error');
           return;
         }
+        // Handle specific 500/400 errors cleanly
         throw new Error(errorData.detail || 'Valuation calculation failed');
       }
 
       const data = await response.json();
 
       if (data.results && data.results.validation_warnings && data.results.validation_warnings.length > 0) {
-        const warnings = data.results.validation_warnings.map((w: any) => `WARNING: ${w.message}`).join('\n');
-        alert(`Valuation completed with warnings:\n${warnings}`);
+        showToast(`Valuation completed with warnings`, 'warning');
+      } else {
+        showToast('Valuation computed successfully', 'success');
       }
 
-      setResults(data.results);
+      // The /calculate endpoint returns the results directly (including run_id), not wrapped in a 'results' property
+      setResults(data);
       setStep('dashboard');
     } catch (error) {
       console.error('Error during manual valuation:', error);
-      alert(`Failed to calculate valuation: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      showToast(`${error instanceof Error ? error.message : 'Unknown error'}`, 'error');
     } finally {
       setIsLoading(false);
     }
@@ -142,11 +164,12 @@ function ProtectedApp() {
         throw new Error('Failed to fetch run');
       }
       const data = await response.json();
-      setResults(data.results);
+      // Inject the run ID into the results object so it's available for the dashboard
+      setResults({ ...data.results, run_id: data.id });
       setStep('dashboard');
     } catch (error) {
       console.error('Error loading run:', error);
-      alert('Failed to load run. Please try again.');
+      showToast('Failed to load run. Please try again.', 'error');
     } finally {
       setIsLoading(false);
     }
@@ -168,17 +191,55 @@ function ProtectedApp() {
                 <h1 className="text-xl font-bold tracking-tight text-gray-900">Valuation</h1>
               </div>
               <div className="flex flex-col gap-2">
+                <PermissionGuard permission={Permissions.CREATE_VALUATION}>
+                  <button
+                    onClick={() => setStep('mode-selection')}
+                    className="glass-button w-full flex items-center  justify-center gap-2 text-sm"
+                  >
+                    <span>←</span> New Valuation
+                  </button>
+                </PermissionGuard>
+
                 <button
-                  onClick={() => setStep('mode-selection')}
-                  className="glass-button w-full flex items-center  justify-center gap-2 text-sm"
+                  onClick={() => setStep('risk-dashboard')}
+                  className={`glass-button w-full flex items-center justify-center gap-2 text-sm ${step === 'risk-dashboard' ? 'bg-blue-50 border-blue-200' : ''}`}
                 >
-                  <span>←</span> New Valuation
+                  ⚠️ Risk Management
                 </button>
+
+                <PermissionGuard permission={Permissions.VIEW_ANALYTICS}>
+                  <button
+                    onClick={() => window.location.href = '/admin/performance'}
+                    className="glass-button w-full flex items-center justify-center gap-2 text-sm"
+                  >
+                    📊 Performance
+                  </button>
+                </PermissionGuard>
+
+                <PermissionGuard permission={Permissions.VIEW_AUDIT_LOGS}>
+                  <button
+                    onClick={() => window.location.href = '/admin/audit'}
+                    className="glass-button w-full flex items-center justify-center gap-2 text-sm"
+                  >
+                    📋 Audit Logs
+                  </button>
+                </PermissionGuard>
+
                 <button
                   onClick={logout}
                   className="glass-button w-full flex items-center justify-center gap-2 text-sm bg-red-50 hover:bg-red-100"
                 >
                   Logout ({user.name})
+                </button>
+              </div>
+
+              <div className="mt-6 border-t border-gray-200/50 pt-6">
+                <button
+                  onClick={() => setIsGlobalSettingsOpen(true)}
+                  className="glass-button w-full flex items-center justify-center gap-2 text-sm text-gray-600 hover:text-system-blue transition-colors"
+                >
+                  <Globe size={16} />
+                  Global Assumptions
                 </button>
               </div>
             </div>
@@ -220,22 +281,51 @@ function ProtectedApp() {
             <ManualEntryForm onSubmit={handleManualSubmit} isLoading={isLoading} />
           )}
           {step === 'dashboard' && <ResultsDashboard results={results} runId={results?.run_id} />}
-          {step === 'dashboard-home' && <DashboardHome onSelectRun={handleSelectRun} token={token} />}
+          {step === 'dashboard-home' && (
+            <DashboardHome
+              onSelectRun={handleSelectRun}
+              token={token}
+              onOpenGlobalSettings={() => setIsGlobalSettingsOpen(true)}
+            />
+          )}
+          {step === 'risk-dashboard' && <RiskDashboard />}
         </main>
+        <GlobalAssumptionsPanel isOpen={isGlobalSettingsOpen} onClose={() => setIsGlobalSettingsOpen(false)} />
       </div>
     </div>
   );
 }
 
+
+
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/*" element={<ProtectedApp />} />
-        </Routes>
+        <UserPreferencesProvider>
+          <ToastProvider>
+            <RealTimeProvider>
+              <GlobalConfigProvider>
+                <RealTimeAlerts />
+                <Routes>
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/signup" element={<Signup />} />
+                  <Route path="/admin/performance" element={
+                    <RequirePermission permission={Permissions.VIEW_ANALYTICS}>
+                      <PerformanceDashboard />
+                    </RequirePermission>
+                  } />
+                  <Route path="/admin/audit" element={
+                    <RequirePermission permission={Permissions.VIEW_AUDIT_LOGS}>
+                      <AuditLogViewer />
+                    </RequirePermission>
+                  } />
+                  <Route path="/*" element={<ProtectedApp />} />
+                </Routes>
+              </GlobalConfigProvider>
+            </RealTimeProvider>
+          </ToastProvider>
+        </UserPreferencesProvider>
       </AuthProvider>
     </BrowserRouter>
   );

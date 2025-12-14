@@ -5,6 +5,7 @@ interface User {
     id: string;
     email: string;
     name: string;
+    role: string;
 }
 
 interface AuthContextType {
@@ -82,6 +83,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUser(data.user);
         setToken(data.access_token);
         localStorage.setItem('auth_token', data.access_token);
+        if (data.refresh_token) {
+            localStorage.setItem('refresh_token', data.refresh_token);
+        }
     };
 
     const signup = async (email: string, password: string, name: string) => {
@@ -90,7 +94,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email, password, name })
+            body: JSON.stringify({ email, password, full_name: name })
         });
 
         if (!response.ok) {
@@ -102,12 +106,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUser(data.user);
         setToken(data.access_token);
         localStorage.setItem('auth_token', data.access_token);
+        if (data.refresh_token) {
+            localStorage.setItem('refresh_token', data.refresh_token);
+        }
     };
 
     const logout = () => {
         setUser(null);
         setToken(null);
         localStorage.removeItem('auth_token');
+        localStorage.removeItem('refresh_token');
     };
 
     return (

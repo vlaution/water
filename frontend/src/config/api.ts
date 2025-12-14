@@ -23,6 +23,22 @@ export const api = {
         run: (id: string) => `/run/${id}`,
         runDetail: (id: string) => `/runs/${id}`,
         export: (type: string, runId: string) => `/export/${type}/${runId}`,
+        risk: {
+            correlation: {
+                financial: '/api/risk/correlation/financial',
+                qualitative: '/api/risk/correlation/qualitative',
+            },
+            stress: {
+                scenarios: '/api/risk/scenarios',
+                run: (scenario: string) => `/api/risk/stress-test/${scenario}`,
+            },
+            concentration: {
+                sector: '/api/risk/concentration/sector',
+                stage: '/api/risk/concentration/stage',
+                powerLaw: '/api/risk/concentration/power-law',
+            },
+            health: '/api/risk/health',
+        }
     },
 };
 

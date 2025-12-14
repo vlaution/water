@@ -202,8 +202,13 @@ class DashboardService:
             "gpc": results.get("gpc_valuation", {}).get("enterprise_value", 0),
             "fcfe": results.get("fcfe_valuation", {}).get("equity_value", 0), # Note: Equity value
             "anav": results.get("anav_valuation", {}).get("net_asset_value", 0),
-            "lbo": results.get("lbo_valuation", {}).get("implied_valuation", 0)
+            "lbo": results.get("lbo_valuation", {}).get("implied_valuation", 0),
+            "vc": (results.get("vc_method") or {}).get("pre_money_valuation", (results.get("vc_method") or {}).get("post_money_valuation", 0)) # Fallback
         }
+        
+        # Fallback for Manual or simple runs: if all specific methods are 0 but top-level exists
+        if all(v == 0 for v in method_breakdown.values()) and results.get("enterprise_value", 0) > 0:
+            method_breakdown["manual/other"] = results.get("enterprise_value", 0)
 
         return OverviewViewResponse(
             company_name=run.company_name,
@@ -216,3 +221,233 @@ class DashboardService:
             method_breakdown=method_breakdown,
             input_summary=input_data
         )
+
+    def get_portfolio_view(self) -> PortfolioViewResponse:
+        from backend.services.dashboard_models import (
+            PortfolioViewResponse, PortfolioSummary, ValuationHeatmapItem,
+            BenchmarkComparison, AcquisitionPotentialItem, ValuationTimelineItem,
+            RiskMatrixItem
+        )
+        
+        # Aggregate calls to granular methods
+        summary = self.get_portfolio_summary()
+        heatmap = self.get_portfolio_heatmap(limit=100) # Default limit
+        acquisition = self.get_acquisition_potential()
+        timeline = self.get_portfolio_timeline()
+        risks = self.get_risk_matrix()
+        
+        return PortfolioViewResponse(
+            portfolio_summary=summary,
+            valuation_heatmap=heatmap,
+            benchmark_comparison=[
+                 BenchmarkComparison(
+                    sector="Technology",
+                    avg_ev_ebitda=14.5,
+                    portfolio_avg_ev_ebitda=12.5
+                )
+            ],
+            acquisition_potential=acquisition,
+            valuation_timeline=timeline,
+            risk_matrix=risks
+        )
+
+    def get_portfolio_summary(self, comparison_days: Optional[int] = None) -> PortfolioSummary:
+        from backend.services.dashboard_models import PortfolioSummary
+        from datetime import datetime, timedelta
+        
+        runs = self.db.query(ValuationRun).order_by(ValuationRun.created_at.desc()).all()
+        
+        # Helper to get snapshot stats at a specific time
+        def get_snapshot_stats(cutoff_date=None):
+            latest = {}
+            for run in runs:
+                if cutoff_date and run.created_at > cutoff_date:
+                    continue
+                if run.company_name not in latest:
+                    latest[run.company_name] = run
+            
+            total_ev = 0.0
+            multiples = []
+            completeness_scores = []
+            conf_scores = [] # Need conf scores for quality
+            
+            for run in latest.values():
+                results = json.loads(run.results)
+                input_data = json.loads(run.input_data)
+                
+                ev = results.get("enterprise_value", 0)
+                total_ev += ev
+                conf = results.get("confidence_score", {}).get("score", 0)
+                multiples.append({"value": 12.5, "weight": conf}) # Placeholder multiple
+                
+                required_fields = ["dcf_input", "gpc_input"]
+                fields_present = sum(1 for f in required_fields if input_data.get(f))
+                completeness = (fields_present / len(required_fields)) * 100
+                completeness_scores.append(completeness)
+                conf_scores.append(conf)
+
+            active_companies = len(latest)
+            total_weight = sum(m["weight"] for m in multiples)
+            weighted_avg = sum(m["value"] * m["weight"] for m in multiples) / total_weight if total_weight > 0 else 0
+            
+            total_qp = sum(c * (s/100) for c, s in zip(completeness_scores, conf_scores))
+            qual_score = total_qp / active_companies if active_companies else 0
+            
+            return {
+                "total_ev": total_ev,
+                "weighted_avg": weighted_avg,
+                "active_companies": active_companies,
+                "quality_score": qual_score
+            }
+
+        current_stats = get_snapshot_stats()
+        
+        # Calculate comparison if requested
+        ev_change = None
+        mult_change = None
+        active_change = None
+        
+        if comparison_days:
+            cutoff = datetime.utcnow() - timedelta(days=comparison_days)
+            hist_stats = get_snapshot_stats(cutoff)
+            
+            # Avoid division by zero
+            if hist_stats["total_ev"] > 0:
+                ev_change = ((current_stats["total_ev"] - hist_stats["total_ev"]) / hist_stats["total_ev"]) * 100
+            
+            if hist_stats["weighted_avg"] > 0:
+                mult_change = ((current_stats["weighted_avg"] - hist_stats["weighted_avg"]) / hist_stats["weighted_avg"]) * 100
+                
+            active_change = current_stats["active_companies"] - hist_stats["active_companies"]
+
+        return PortfolioSummary(
+            total_ev=current_stats["total_ev"],
+            avg_multiple=12.5, # Static placeholder kept
+            weighted_avg_multiple=current_stats["weighted_avg"],
+            active_companies=current_stats["active_companies"],
+            data_quality_score=current_stats["quality_score"],
+            last_updated=datetime.utcnow().strftime("%Y-%m-%d"),
+            total_ev_change=ev_change,
+            avg_multiple_change=mult_change,
+            active_companies_change=active_change
+        )
+
+    def get_portfolio_heatmap(self, limit: int = 100, sector: str = None, region: str = None) -> List[ValuationHeatmapItem]:
+        from backend.services.dashboard_models import ValuationHeatmapItem
+        from datetime import datetime
+        
+        runs = self.db.query(ValuationRun).order_by(ValuationRun.created_at.desc()).all()
+        latest_runs = {}
+        for run in runs:
+            # Filter logic (filtering BEFORE extracting details for performance would be better in SQL, 
+            # but since sector/region are in JSON, we must filter in python or use complex SQL)
+            # For MVP, fetching all then filtering is okay.
+            if run.company_name not in latest_runs:
+                latest_runs[run.company_name] = run
+                
+        items = []
+        for run in list(latest_runs.values())[:limit]:
+            results = json.loads(run.results)
+            input_data = json.loads(run.input_data)
+            
+            # Extract Filterable Fields
+            # Assuming these might be in a 'company_info' block or at root of input
+            # If not present, default to Unknown
+            run_sector = input_data.get("sector") or input_data.get("company_info", {}).get("sector", "Technology") 
+            run_region = input_data.get("region") or input_data.get("company_info", {}).get("region", "North America")
+            
+            # Apply Filters
+            if sector and sector != "All" and run_sector != sector:
+                 continue
+            if region and region != "All" and run_region != region:
+                 continue
+
+            ev = results.get("enterprise_value", 0)
+            conf = results.get("confidence_score", {}).get("score", 0)
+            
+            # Quality & Warnings
+            warnings = []
+            last_updated = run.updated_at if run.updated_at else run.created_at
+            if (datetime.utcnow() - last_updated).days > 30:
+                warnings.append("Valuation outdated (>30 days)")
+                
+            required_fields = ["dcf_input", "gpc_input"]
+            fields_present = sum(1 for f in required_fields if input_data.get(f))
+            completeness = (fields_present / len(required_fields)) * 100
+            
+            items.append(ValuationHeatmapItem(
+                run_id=run.id,
+                company_name=run.company_name,
+                enterprise_value=ev,
+                confidence_score=conf,
+                sector=run_sector,
+                region=run_region,
+                completeness_score=completeness,
+                last_updated=last_updated.strftime("%Y-%m-%d"),
+                validation_warnings=warnings
+            ))
+            
+        return items
+
+    def get_acquisition_potential(self) -> List[AcquisitionPotentialItem]:
+        from backend.services.dashboard_models import AcquisitionPotentialItem
+        # Mock implementation for distinct service method
+        runs = self.db.query(ValuationRun).order_by(ValuationRun.created_at.desc()).all()
+        companies = set()
+        items = []
+        for run in runs:
+            if run.company_name in companies: continue
+            companies.add(run.company_name)
+            items.append(AcquisitionPotentialItem(
+                company_name=run.company_name,
+                score=75.0, 
+                reason="Strong fundamentals"
+            ))
+        return sorted(items, key=lambda x: x.score, reverse=True)
+
+    def get_portfolio_timeline(self) -> List[ValuationTimelineItem]:
+        from backend.services.dashboard_models import ValuationTimelineItem, PortfolioAnnotation
+        from datetime import datetime
+        
+        runs = self.db.query(ValuationRun).all()
+        timeline_data = {}
+        for run in runs: # Simplified aggregation
+             date_str = run.created_at.strftime("%Y-%m")
+             res = json.loads(run.results)
+             timeline_data[date_str] = timeline_data.get(date_str, 0) + res.get("enterprise_value", 0)
+             
+        # Mock Annotations (Dynamic to match current data)
+        current_month = datetime.utcnow().strftime("%Y-%m")
+        annotations = {
+            current_month: PortfolioAnnotation(id="1", date=current_month, label="Current Review", type="milestone"),
+            "2024-06": PortfolioAnnotation(id="2", date="2024-06", label="Fund Raise", type="event")
+        }
+             
+        return [
+            ValuationTimelineItem(
+                date=d, 
+                total_ev=v,
+                annotation=annotations.get(d)
+            ) 
+            for d, v in sorted(timeline_data.items())
+        ]
+
+    def get_risk_matrix(self) -> List[RiskMatrixItem]:
+        from backend.services.dashboard_models import RiskMatrixItem
+        runs = self.db.query(ValuationRun).order_by(ValuationRun.created_at.desc()).all()
+        latest = {}
+        for r in runs:
+            if r.company_name not in latest: latest[r.company_name] = r
+            
+        items = []
+        for run in latest.values():
+            res = json.loads(run.results)
+            issues = res.get("audit_issues", [])
+            risk_level = "High" if len(issues) > 5 else "Medium" if len(issues) > 2 else "Low"
+            items.append(RiskMatrixItem(
+                company_name=run.company_name,
+                risk_level=risk_level,
+                flags=[i["message"] for i in issues[:3]]
+            ))
+        return items
+

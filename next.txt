@@ -1,1 +1,30 @@
-https://water-git-main-vlautions-projects.vercel.app/signup
+GPC & Find Peers Implementation
+Goal
+Implement the "Find Peers" functionality in GPC to:
+
+Actually save the found peers to the form.
+Calculate median multiples from peers.
+Auto-populate "Applied Multiples" fields in the form (new fields).
+Have the backend use these applied multiples for valuation.
+Backend Changes
+[MODIFY] 
+backend/calculations/models.py
+Add optional 
+ev_revenue_multiple
+ and 
+ev_ebitda_multiple
+ to 
+GPCInput
+.
+[MODIFY] 
+backend/services/valuation/formulas/gpc.py
+Update logic to use provided multiples if available, otherwise fallback to internal calculation.
+Frontend Changes
+[MODIFY] 
+frontend/src/components/ManualEntryForm.tsx
+Update "Find Peers" handler to:
+Update gpc_input.peer_tickers with found tickers.
+Calculate medians and update gpc_input.ev_revenue_multiple and 
+ev_ebitda_multiple
+.
+add Input fields for these multiples so user can see/edit them.

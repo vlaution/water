@@ -22,11 +22,11 @@ export const EnterpriseValueCard: React.FC<EnterpriseValueCardProps> = ({
 
             <div>
                 <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">Enterprise Value</h3>
-                <div className="flex items-baseline gap-2">
-                    <span className="text-5xl font-bold text-gray-900 tracking-tight">
+                <div className="flex items-baseline gap-2 flex-wrap">
+                    <span className="text-3xl lg:text-4xl font-bold text-gray-900 tracking-tight break-all">
                         {formattedValue(value)}
                     </span>
-                    <span className="text-sm font-medium text-gray-500">Weighted Avg</span>
+                    <span className="text-sm font-medium text-gray-500 whitespace-nowrap">Weighted Avg</span>
                 </div>
             </div>
 

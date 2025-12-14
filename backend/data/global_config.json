@@ -1,0 +1,15 @@
+{
+    "default_tax_rate": 0.02,
+    "default_discount_rate": 0.1,
+    "default_dso": 45.0,
+    "default_dio": 60.0,
+    "default_dpo": 30.0,
+    "default_revenue_growth": 0.05,
+    "default_ebitda_margin": 0.2,
+    "default_terminal_growth": 0.02,
+    "default_entry_multiple": 10.0,
+    "default_leverage": 4.0,
+    "default_interest_rate": 0.08,
+    "simulation_iterations": 1000,
+    "sensitivity_range": 0.15
+}

@@ -3,6 +3,30 @@ from typing import List, Optional, Dict, Any
 from backend.calculations.benchmarking_models import CompanyMetrics
 from enum import Enum
 
+class GlobalConfig(BaseModel):
+    # General
+    default_tax_rate: float = 0.25
+    default_discount_rate: float = 0.10
+    
+    # Working Capital Defaults
+    default_dso: float = 45.0
+    default_dio: float = 60.0
+    default_dpo: float = 30.0
+    
+    # Growth & Margins
+    default_revenue_growth: float = 0.05
+    default_ebitda_margin: float = 0.20
+    default_terminal_growth: float = 0.02
+    
+    # LBO Defaults
+    default_entry_multiple: float = 10.0
+    default_leverage: float = 4.0
+    default_interest_rate: float = 0.08
+    
+    # Simulation Parameters
+    simulation_iterations: int = 1000
+    sensitivity_range: float = 0.15 # +/- 15%
+
 # ... (existing imports)
 
 
@@ -84,6 +108,8 @@ class GPCInput(BaseModel):
     target_ticker: str
     peer_tickers: List[str]
     metrics: Dict[str, float] # e.g. {"LTM Revenue": 100, "LTM EBITDA": 20}
+    ev_revenue_multiple: Optional[float] = None
+    ev_ebitda_multiple: Optional[float] = None
 
 class DebtSchedule(BaseModel):
     """Debt schedule for FCFE calculation"""
@@ -138,29 +164,113 @@ class PrecedentTransactionsInput(BaseModel):
     target_ebitda: float  # Target company LTM EBITDA
     use_median: bool = True  # Use median vs mean for multiples
 
+class LBOSolverMode(str, Enum):
+    ENTRY_PRICE = "entry_price" # Solve for max entry price to hit target IRR
+    TARGET_IRR = "target_irr" # Solve for IRR given fixed entry price
+    EXIT_MULTIPLE = "exit_multiple" # Solve for required exit multiple
+    MOIC = "moic" # Solve for Multiple on Invested Capital
+    OPTIMAL_REFINANCING = "optimal_refinancing" # Solve for best refinancing year
+
+class DebtType(str, Enum):
+    SENIOR = "senior"
+    MEZZANINE = "mezzanine"
+    EXCHANGEABLE = "exchangeable"
+    PREFERRED_EQUITY = "preferred_equity"
+
+class DebtTranche(BaseModel):
+    name: str
+    amount: Optional[float] = None # None means auto-calculated (e.g. from leverage multiple)
+    leverage_multiple: Optional[float] = None # Debt/EBITDA. If set, overrides amount.
+    interest_rate: float
+    cash_interest: bool = True # If False, PIK (Payment In Kind)
+    amortization_rate: float = 0.0 # % of principal paid annually
+    maturity: int = 5
+    mandatory_cash_sweep_priority: int = 1 # 1 = First to be paid down
+    
+    @property
+    def is_pik(self) -> bool:
+        return not self.cash_interest
+
+class RefinancingConfig(BaseModel):
+    enabled: bool = False
+    refinance_year: int = 3
+    new_interest_rate: float = 0.06
+    refinance_amount_pct: float = 1.0 # 1.0 = 100% of existing debt
+    penalty_fee_percent: float = 0.01
+
+class CovenantType(str, Enum):
+    MAX_DEBT_EBITDA = "max_debt_ebitda"
+    MIN_INTEREST_COVERAGE = "min_interest_coverage"
+
+class CovenantRule(BaseModel):
+    covenant_type: CovenantType
+    limit: float
+    start_year: int = 1
+    end_year: int = 10
+
+class MIPConfig(BaseModel):
+    option_pool_percent: float = 0.10
+    strike_price_discount: float = 0.0 # vs Entry Equity Value
+    vesting_period: int = 4
+    cliff_years: int = 1
+    
+class TaxConfig(BaseModel):
+    enable_nol: bool = False
+    initial_nol_balance: float = 0.0
+    nol_annual_limit: float = 0.80 # % of taxable income
+    interest_deductibility_cap: float = 0.30 # % of EBITDA
+    # Step-Up Assumptions
+    step_up_percent: float = 0.0 # % of Purchase Price allocated to step-up assets
+    depreciation_years: int = 15 # Amortization period for step-up basis
+
+
+class LBOFinancing(BaseModel):
+    tranches: List[DebtTranche]
+    total_leverage_ratio: Optional[float] = None # Total Debt / Entry EBITDA
+    equity_contribution_percent: Optional[float] = None # If set, solves for Debt.
+
+class LBOAssumptions(BaseModel):
+    transaction_fees_percent: float = 0.02
+    synergy_benefits: float = 0.0 # Annual EBITDA impact
+    
+    # Waterfall Distribution
+    hurdle_rate: float = 0.08
+    carry_percent: float = 0.20
+    catchup_active: bool = True
+    
 class LBOInput(BaseModel):
-    """Leveraged Buyout Analysis inputs"""
-    # Entry assumptions
-    entry_revenue: float  # LTM revenue at entry
-    entry_ebitda: float  # LTM EBITDA at entry
-    entry_ev_ebitda_multiple: float = 10.0  # Entry valuation multiple
+    """Advanced Leveraged Buyout Analysis Inputs"""
+    solve_for: LBOSolverMode = LBOSolverMode.ENTRY_PRICE
     
-    # Financing structure
-    debt_percentage: float = 0.60  # % of purchase price financed with debt
-    debt_interest_rate: float = 0.06  # Annual interest rate on debt
+    # Entry
+    entry_revenue: float
+    entry_ebitda: float
+    entry_ev_ebitda_multiple: Optional[float] = None # Required if NOT solving for Entry Price
     
-    # Operating assumptions
-    revenue_growth_rate: float = 0.05  # Annual revenue growth
-    ebitda_margin: float = 0.25  # EBITDA as % of revenue
-    capex_percentage: float = 0.03  # CapEx as % of revenue
-    nwc_percentage: float = 0.05  # NWC as % of revenue
+    # Financing
+    financing: LBOFinancing
+    assumptions: LBOAssumptions = LBOAssumptions()
     
-    # Exit assumptions
-    holding_period: int = 5  # Years until exit
-    exit_ev_ebitda_multiple: float = 10.0  # Exit valuation multiple
+    # Operations
+    revenue_growth_rate: float = 0.05
+    ebitda_margin: float = 0.25
+    capex_percentage: float = 0.03
+    nwc_percentage: float = 0.05
+    tax_rate: float = 0.25
     
-    # Target returns
-    target_irr: float = 0.20  # Target IRR (20%)
+    # Exit
+    holding_period: int = 5
+    exit_ev_ebitda_multiple: Optional[float] = None # Required if NOT solving for Exit Multiple
+    target_irr: Optional[float] = 0.20 # Required if solving for Entry Price
+    include_sensitivity: bool = False
+    
+    # Advanced Features
+    refinancing_config: Optional[RefinancingConfig] = None
+    covenants: List[CovenantRule] = []
+    mip_assumptions: Optional[MIPConfig] = None
+    tax_assumptions: Optional[TaxConfig] = None
+
+
 
 class ANAVInput(BaseModel):
     """Adjusted Net Asset Value inputs"""

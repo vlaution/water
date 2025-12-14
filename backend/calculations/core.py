@@ -5,6 +5,8 @@ from backend.parser.models import WorkbookData
 from backend.utils.cache import cache
 import hashlib
 import json
+from datetime import datetime
+from backend.database.models import SessionLocal, ValuationMetric
 
 # Import new services
 from backend.services.valuation.formulas.dcf import DCFCalculator
@@ -17,9 +19,10 @@ from backend.services.valuation.formulas.vc_method import VCMethodCalculator
 from backend.services.validation.assumption_validator import AssumptionValidator
 
 class ValuationEngine:
-    def __init__(self, workbook_data: Optional[WorkbookData] = None, mappings: Optional[Dict[str, str]] = None):
+    def __init__(self, workbook_data: Optional[WorkbookData] = None, mappings: Optional[Dict[str, str]] = None, user_id: Optional[int] = None):
         self.workbook_data = workbook_data
         self.mappings = mappings
+        self.user_id = user_id
         self.results = {}
 
     def run(self) -> Dict[str, Any]:
@@ -37,14 +40,42 @@ class ValuationEngine:
         cache_key = self._generate_cache_key(valuation_input)
         cached_result = cache.get_sync(cache_key)
         if cached_result:
+            # Record cache hit metric
+            try:
+                db = SessionLocal()
+                metric = ValuationMetric(
+                    valuation_id="cached", # Or generate a new ID
+                    method_type="ALL",
+                    start_time=datetime.utcnow(),
+                    end_time=datetime.utcnow(),
+                    duration_ms=0,
+                    cache_hit=True,
+                    input_complexity_score=len(str(valuation_input)),
+                    user_id=self.user_id
+                )
+                db.add(metric)
+                db.commit()
+                db.close()
+            except Exception:
+                pass
             return cached_result
+
+        start_time = datetime.utcnow()
 
         # Perform calculations using new services
         dcf_value, dcf_flows, dcf_details = DCFCalculator.calculate(valuation_input.dcf_input)
         gpc_value = GPCCalculator.calculate(valuation_input.gpc_input)
         fcfe_value = FCFECalculator.calculate(valuation_input.dcfe_input)
         pt_value = PrecedentTransactionsCalculator.calculate(valuation_input.precedent_transactions_input)
-        lbo_value = LBOCalculator.calculate(valuation_input.lbo_input)
+        
+        # Unpack LBO result
+        lbo_result = LBOCalculator.calculate(valuation_input.lbo_input)
+        if isinstance(lbo_result, tuple):
+            lbo_value, lbo_details = lbo_result
+        else:
+            lbo_value = lbo_result
+            lbo_details = {}
+            
         anav_value = ANAVCalculator.calculate(valuation_input.anav_input)
         
         # VC Method
@@ -139,6 +170,7 @@ class ValuationEngine:
             "warnings": warnings,
             "critical_errors": critical_errors,
             "dcf_details": dcf_details if dcf_value > 0 else {},
+            "lbo_details": lbo_details if lbo_value > 0 else {},
             "input_summary": valuation_input.dict(),
             "confidence_score": self._calculate_confidence_score(valuation_input, methods_used),
             "strategic_alerts": self._generate_strategic_alerts(valuation_input, enterprise_value),
@@ -149,6 +181,28 @@ class ValuationEngine:
         
         # Cache the result
         cache.set_sync(cache_key, self.results, ttl=3600)
+
+        # Record Metric
+        try:
+            end_time = datetime.utcnow()
+            duration = int((end_time - start_time).total_seconds() * 1000)
+            
+            db = SessionLocal()
+            metric = ValuationMetric(
+                valuation_id=cache_key, # Using cache key as ID for now
+                method_type="ALL",
+                start_time=start_time,
+                end_time=end_time,
+                duration_ms=duration,
+                cache_hit=False,
+                input_complexity_score=len(str(valuation_input)),
+                user_id=self.user_id
+            )
+            db.add(metric)
+            db.commit()
+            db.close()
+        except Exception as e:
+            print(f"Failed to save valuation metric: {e}")
         
         return self.results
 

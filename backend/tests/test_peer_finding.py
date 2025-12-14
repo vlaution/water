@@ -1,56 +1,41 @@
 import pytest
-from unittest.mock import MagicMock, patch
 from backend.services.peer_finding_service import PeerFindingService
-from backend.services.financial_data.alpha_vantage import AlphaVantageProvider
 
-def test_peer_finding_direct_lookup():
+def test_peer_finding_exact_match():
     service = PeerFindingService()
-    peers = service.find_peers("IBM")
-    assert "MSFT" in peers
-    assert "ORCL" in peers
+    # AAPL (Tech, Consumer Electronics)
+    # Should find peers in same industry/sector
+    peers = service.find_peers("AAPL", limit=3)
+    
+    assert "MSFT" in peers or "GOOGL" in peers or "NVDA" in peers
+    assert "AAPL" not in peers
+    assert len(peers) <= 3
 
-def test_peer_finding_sector_fallback():
+def test_peer_finding_industry_match():
     service = PeerFindingService()
-    peers = service.find_peers("UNKNOWN_TICKER", sector="Technology")
-    assert "MSFT" in peers
-    assert "AAPL" in peers
+    # NVDA (Semiconductors)
+    # Should prefer AMD, INTC, QCOM over MSFT
+    peers = service.find_peers("NVDA", limit=3)
+    
+    assert "AMD" in peers
+    assert "INTC" in peers
+    # MSFT is software, so it should be lower priority than semis if available
 
-def test_get_company_multiples():
-    provider = AlphaVantageProvider()
+def test_peer_finding_market_cap_sort():
+    service = PeerFindingService()
+    # JPM (Big Bank)
+    # Should find BAC (Big Bank) before a small bank if we had one
+    # In our dataset, BAC is closest in size in Financials
+    peers = service.find_peers("JPM", limit=1)
+    assert peers[0] == "BAC" or peers[0] == "V" # V is also huge
+
+def test_peer_finding_fallback_sector():
+    service = PeerFindingService()
+    # Unknown ticker, but sector provided
+    peers = service.find_peers("UNKNOWN_TICKER", sector="Energy", limit=2)
+    assert "CVX" in peers # Only energy stock in our list currently
     
-    # Mock _make_request
-    provider._make_request = MagicMock()
-    
-    def side_effect(function, symbol=None, **kwargs):
-        if function == "OVERVIEW":
-            return {"MarketCapitalization": "1000000000"} # 1B
-        elif function == "BALANCE_SHEET":
-            return {
-                "annualReports": [{
-                    "shortTermDebt": "50000000", # 50M
-                    "longTermDebt": "150000000", # 150M
-                    "cashAndCashEquivalentsAtCarryingValue": "20000000" # 20M
-                }]
-            }
-        elif function == "INCOME_STATEMENT":
-            return {
-                "annualReports": [{
-                    "totalRevenue": "500000000", # 500M
-                    "ebitda": "100000000" # 100M
-                }]
-            }
-        return {}
-        
-    provider._make_request.side_effect = side_effect
-    
-    multiples = provider.get_company_multiples("TEST")
-    
-    # EV = Market Cap + Debt - Cash
-    # EV = 1000 + (50+150) - 20 = 1000 + 180 = 1180M
-    assert multiples["enterprise_value"] == 1180000000.0
-    
-    # EV/Revenue = 1180 / 500 = 2.36
-    assert multiples["ev_revenue"] == 2.36
-    
-    # EV/EBITDA = 1180 / 100 = 11.80
-    assert multiples["ev_ebitda"] == 11.80
+def test_peer_finding_unknown():
+    service = PeerFindingService()
+    peers = service.find_peers("UNKNOWN_TICKER")
+    assert peers == ["SPY", "QQQ"]

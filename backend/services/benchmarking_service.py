@@ -72,10 +72,40 @@ class BenchmarkingService:
             return None
 
     def _get_sector_peers(self, ticker: str) -> List[str]:
-        # TODO: Implement real sector lookup from DB
-        # For now, return a static list based on common sectors or just a default set
-        # In a real implementation, we would query our database for companies with the same sector.
-        return ["MSFT", "GOOGL", "AMZN", "META", "TSLA"]
+        """
+        Get peers in the same sector from the database.
+        """
+        from backend.database.models import SessionLocal, Company
+        db = SessionLocal()
+        try:
+            # 1. Find target company
+            target = db.query(Company).filter(Company.ticker == ticker).first()
+            if not target:
+                # Fallback if target not in DB
+                print(f"Target {ticker} not found in Company DB, using default peers")
+                return ["MSFT", "GOOGL", "AMZN", "META", "TSLA"]
+            
+            # 2. Find peers in same sector
+            peers = db.query(Company.ticker)\
+                .filter(Company.sector == target.sector)\
+                .filter(Company.ticker != ticker)\
+                .limit(10)\
+                .all()
+            
+            # Flatten list of tuples
+            peer_tickers = [p[0] for p in peers]
+            
+            if not peer_tickers:
+                print(f"No peers found for {ticker} in sector {target.sector}")
+                return ["MSFT", "GOOGL", "AMZN"] # Fallback
+                
+            return peer_tickers
+            
+        except Exception as e:
+            print(f"Error querying sector peers: {e}")
+            return ["MSFT", "GOOGL", "AMZN", "META", "TSLA"]
+        finally:
+            db.close()
 
     def _is_sufficient_data(self, metrics: CompanyMetrics) -> bool:
         # Check if > 50% of key fields are present

@@ -1,7 +1,25 @@
 import React, { useState } from 'react';
+import { api } from '../config/api';
 import { WaccCalculator } from './WaccCalculator';
 import { AuditAlert, type AuditIssue } from './dashboard/AuditAlert';
 import { ScenarioWizard } from './ScenarioWizard';
+import { AIValidationResult } from './AIValidationResult';
+import { useDebounce } from '../hooks/useDebounce';
+import { SuggestionPanel } from './SuggestionPanel';
+import { EnhancedFormInput } from './common/EnhancedFormInput';
+
+import { useChangeHistory } from '../hooks/useChangeHistory';
+import { AISuggestionsButton } from './common/AISuggestionsButton';
+import { useAICopilot } from '../hooks/useAICopilot';
+import { useUserPreferences } from '../context/UserPreferencesContext';
+import { LBOWizard } from './lbo/LBOWizard';
+import { useGlobalConfig } from '../context/GlobalConfigContext';
+
+// Lazy load heavy modals
+const ExplanationModal = React.lazy(() => import('./common/ExplanationModal').then(module => ({ default: module.ExplanationModal })));
+const AISettingsModal = React.lazy(() => import('./common/AISettingsModal').then(module => ({ default: module.AISettingsModal })));
+
+
 
 interface ManualEntryFormProps {
     onSubmit: (data: any) => Promise<void>;
@@ -29,30 +47,14 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
         );
     };
     const [isWizardOpen, setIsWizardOpen] = useState(false);
-    const [activeMethod, setActiveMethod] = useState<'dcf' | 'gpc' | 'fcfe' | 'precedent' | 'anav' | 'weights'>('dcf');
-    const [formData, setFormData] = useState<{
-        company_name: string;
-        currency: string;
+    const [activeMethod, setActiveMethod] = useState<'dcf' | 'gpc' | 'fcfe' | 'precedent' | 'lbo' | 'anav' | 'weights'>('dcf');
+    const [explanationModalOpen, setExplanationModalOpen] = useState(false);
+    const [settingsModalOpen, setSettingsModalOpen] = useState(false);
+    const [activeSuggestion, setActiveSuggestion] = useState<any>(null);
+    const { preferences } = useUserPreferences();
+    const { config: globalConfig } = useGlobalConfig();
 
-        ticker: string;
-        industry: string;
-        sector: string;
-        description: string;
-        address: string;
-        employees: string;
-        fiscal_year_end: string;
-        dcf_input: any;
-        gpc_input: any;
-        dcfe_input: any;
-        precedent_transactions_input: any;
-        anav_input: {
-            assets: Record<string, number>;
-            liabilities: Record<string, number>;
-            adjustments: Record<string, number>;
-        };
-        sensitivity_analysis: any;
-        method_weights: any;
-    }>({
+    const { state: formData, pushState, undo, redo, canUndo, canRedo } = useChangeHistory({
         company_name: "New Company",
         currency: "USD",
 
@@ -98,7 +100,9 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
             metrics: {
                 "LTM Revenue": 120,
                 "LTM EBITDA": 25
-            }
+            },
+            ev_revenue_multiple: undefined as number | undefined,
+            ev_ebitda_multiple: undefined as number | undefined
         },
         dcfe_input: {
             historical: {
@@ -154,9 +158,9 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
             use_median: true
         },
         anav_input: {
-            assets: { "Cash": 10, "Inventory": 20, "PP&E": 100 },
-            liabilities: { "Debt": 50, "Payables": 10 },
-            adjustments: { "PP&E": 20, "Inventory": -5 }
+            assets: { "Cash": 10, "Inventory": 20, "PP&E": 100 } as Record<string, number>,
+            liabilities: { "Debt": 50, "Payables": 10 } as Record<string, number>,
+            adjustments: { "PP&E": 20, "Inventory": -5 } as Record<string, number>
         },
         sensitivity_analysis: {
             variable_1: "discount_rate",
@@ -171,8 +175,60 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
             precedent: 0.3,
             anav: 0.0,
             lbo: 0.0
+        },
+        lbo_input: {
+            solve_for: 'entry_price' as any,
+            entry_revenue: 100,
+            entry_ebitda: 20,
+            entry_ev_ebitda_multiple: 10.0 as number | undefined,
+            target_irr: 0.20,
+            financing: {
+                tranches: [
+                    {
+                        name: "Senior Debt",
+                        leverage_multiple: 4.0,
+                        interest_rate: 0.08,
+                        cash_interest: true,
+                        amortization_rate: 0.05,
+                        maturity: 5,
+                        mandatory_cash_sweep_priority: 1
+                    },
+                    {
+                        name: "Mezzanine",
+                        leverage_multiple: 1.0,
+                        interest_rate: 0.12,
+                        cash_interest: false, // PIK
+                        amortization_rate: 0.0,
+                        maturity: 7,
+                        mandatory_cash_sweep_priority: 2
+                    }
+                ],
+                total_leverage_ratio: 5.0,
+                equity_contribution_percent: 0.40
+            },
+            assumptions: {
+                transaction_fees_percent: 0.02,
+                synergy_benefits: 0.0
+            },
+            revenue_growth_rate: 0.05,
+            ebitda_margin: 0.25,
+            capex_percentage: 0.03,
+            nwc_percentage: 0.05,
+            tax_rate: 0.25,
+            holding_period: 5,
+            exit_ev_ebitda_multiple: 10.0
         }
     });
+
+    // Helper to update state with history
+    const setFormData = (newStateOrUpdater: React.SetStateAction<typeof formData>) => {
+        if (typeof newStateOrUpdater === 'function') {
+            // @ts-ignore - complex state type
+            pushState(newStateOrUpdater(formData));
+        } else {
+            pushState(newStateOrUpdater);
+        }
+    };
 
     const handleWizardApply = (newAssumptions: any) => {
         setFormData(newAssumptions);
@@ -237,9 +293,139 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
     const [fetchError, setFetchError] = useState<string | null>(null);
     const [auditIssues, setAuditIssues] = useState<AuditIssue[]>([]);
 
+    // AI Validation State
+    const [validationResult, setValidationResult] = useState<any>(null);
+    const [isValidating, setIsValidating] = useState(false);
+
+    // Debounce the entire form data (wait 1s after typing stops)
+    const debouncedFormData = useDebounce(formData, 1000);
+    const { suggestions: aiSuggestions, isLoading: isFetchingSuggestions, undoLastChange, canUndo: canUndoAI } = useAICopilot();
+
+    // Validation Cache
+    const validationCache = React.useRef<Record<string, any>>({});
+
+    // Effect to trigger validation when debounced data changes
+    React.useEffect(() => {
+        const validate = async () => {
+            if (!preferences.aiEnabled || !preferences.autoValidate) return;
+            if (!debouncedFormData.ticker) return;
+
+            // Create a simple hash/key for the current state
+            const cacheKey = JSON.stringify({
+                ticker: debouncedFormData.ticker,
+                revenue: debouncedFormData.dcf_input.historical.revenue,
+                ebitda: debouncedFormData.dcf_input.historical.ebitda
+            });
+
+            // Check cache
+            if (validationCache.current[cacheKey]) {
+                setValidationResult(validationCache.current[cacheKey]);
+                return;
+            }
+
+            setIsValidating(true);
+            try {
+                const response = await fetch(api.url(`/api/validation/analyze?ticker=${debouncedFormData.ticker}`), {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(debouncedFormData)
+                });
+                if (response.ok) {
+                    const result = await response.json();
+                    setValidationResult(result);
+                    // Update cache
+                    validationCache.current[cacheKey] = result;
+                }
+            } catch (error) {
+                console.error("Validation error", error);
+            } finally {
+                setIsValidating(false);
+            }
+        };
+
+        validate();
+    }, [debouncedFormData, preferences.aiEnabled, preferences.autoValidate]);
+
+    // Auto-sync with Global Config
+    React.useEffect(() => {
+        if (globalConfig) {
+            setFormData((prev: any) => {
+                const next = JSON.parse(JSON.stringify(prev));
+                let changed = false;
+
+                // Helper to safely update nested if different
+                const sync = (path: string[], value: number) => {
+                    let current = next;
+                    for (let i = 0; i < path.length - 1; i++) {
+                        current = current[path[i]];
+                        if (!current) return;
+                    }
+                    const field = path[path.length - 1];
+                    // Check strict inequality to avoid microscopic fp diffs if value is float
+                    if (Math.abs(current[field] - value) > 0.0001) {
+                        current[field] = value;
+                        changed = true;
+                    }
+                };
+
+                // Apply Global Defaults
+                if (next.dcf_input?.projections) {
+                    sync(['dcf_input', 'projections', 'tax_rate'], globalConfig.default_tax_rate);
+                    sync(['dcf_input', 'projections', 'discount_rate'], globalConfig.default_discount_rate);
+                    sync(['dcf_input', 'projections', 'revenue_growth_start'], globalConfig.default_revenue_growth);
+                    sync(['dcf_input', 'projections', 'ebitda_margin_start'], globalConfig.default_ebitda_margin);
+                    sync(['dcf_input', 'projections', 'terminal_growth_rate'], globalConfig.default_terminal_growth);
+
+                    if (next.dcf_input.projections.working_capital) {
+                        sync(['dcf_input', 'projections', 'working_capital', 'dso'], globalConfig.default_dso);
+                        sync(['dcf_input', 'projections', 'working_capital', 'dio'], globalConfig.default_dio);
+                        sync(['dcf_input', 'projections', 'working_capital', 'dpo'], globalConfig.default_dpo);
+                    }
+                }
+
+                if (next.lbo_input) {
+                    sync(['lbo_input', 'entry_ev_ebitda_multiple'], globalConfig.default_entry_multiple);
+                    // Leverage is trickier structure, simplified for now:
+                    if (next.lbo_input.financing) {
+                        sync(['lbo_input', 'financing', 'total_leverage_ratio'], globalConfig.default_leverage);
+                    }
+                }
+
+                return changed ? next : prev;
+            });
+        }
+    }, [globalConfig]);
+
+
+
+
+
+    const getSuggestion = (field: string) => {
+        if (!preferences.aiEnabled || !preferences.showBadges) return undefined;
+        // Map form field to suggestion key used by AI Copilot
+        const fieldMap: Record<string, string> = {
+            revenue_growth_start: 'revenue_growth',
+            ebitda_margin_start: 'ebitda_margin',
+            discount_rate: 'wacc',
+            terminal_growth_rate: 'terminal_growth'
+        };
+        const key = fieldMap[field];
+        return aiSuggestions?.[key];
+    };
+
+
+    const validateWithAI = async () => {
+        // Manual trigger (keep existing logic but maybe just force update)
+        // The effect handles it, but this button can be "Force Refresh"
+        // For now, let's just let the effect handle it mostly, but keep the button for explicit user action
+        // We can just trigger the same logic.
+        // Actually, let's just rely on the effect for "Real-time" but keep the button for "Show me the summary panel" focus.
+        // Or we can make the button scroll to the result.
+    };
+
     const runAudit = async () => {
         try {
-            const response = await fetch('http://localhost:8000/api/audit/assumptions', {
+            const response = await fetch(api.url('/api/audit/assumptions'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
@@ -258,7 +444,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
         setIsFetching(true);
         setFetchError(null);
         try {
-            const response = await fetch(`http://localhost:8000/api/financials/${formData.ticker}`);
+            const response = await fetch(api.url(`/api/financials/${formData.ticker}`));
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(errorData.detail || 'Failed to fetch financials');
@@ -299,6 +485,77 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
         updateProjection('discount_rate', wacc.toString());
     };
 
+    const handleApplyPattern = (values: { revenue_growth: number; ebitda_margin: number }) => {
+        setFormData(prev => ({
+            ...prev,
+            dcf_input: {
+                ...prev.dcf_input,
+                projections: {
+                    ...prev.dcf_input.projections,
+                    revenue_growth_start: values.revenue_growth,
+                    ebitda_margin_start: values.ebitda_margin
+                }
+            }
+        }));
+    };
+
+    const handleApplySuggestions = (suggestions: any) => {
+        // Batch application logic
+        // 1. Create a deep copy of current state to modify
+        let newFormData = JSON.parse(JSON.stringify(formData));
+
+        // 2. Apply updates in logical order (though for state snapshot, order matters less than result)
+        if (suggestions.revenue_growth) newFormData.dcf_input.projections.revenue_growth_start = suggestions.revenue_growth;
+        if (suggestions.ebitda_margin) newFormData.dcf_input.projections.ebitda_margin_start = suggestions.ebitda_margin;
+        if (suggestions.wacc) newFormData.dcf_input.projections.discount_rate = suggestions.wacc;
+        if (suggestions.terminal_growth) newFormData.dcf_input.projections.terminal_growth_rate = suggestions.terminal_growth;
+
+        // 3. Push single new state to history
+        pushState(newFormData);
+    };
+
+    const applyAllAISuggestions = () => {
+        if (!aiSuggestions) return;
+        const updates: any = {};
+        Object.entries(aiSuggestions).forEach(([key, suggestion]: [string, any]) => {
+            updates[key] = suggestion.value;
+        });
+        handleApplySuggestions(updates);
+    };
+
+    const handleExplainSuggestion = (field: string, suggestion: any) => {
+        if (!suggestion) return;
+        setActiveSuggestion({
+            field,
+            currentValue: field === 'revenue_growth_start' ? formData.dcf_input.projections.revenue_growth_start :
+                field === 'ebitda_margin_start' ? formData.dcf_input.projections.ebitda_margin_start :
+                    field === 'discount_rate' ? formData.dcf_input.projections.discount_rate :
+                        field === 'terminal_growth_rate' ? formData.dcf_input.projections.terminal_growth_rate : 0,
+            suggestedValue: suggestion.value,
+            confidence: suggestion.confidence,
+            reasoning: suggestion.reasoning || suggestion.message,
+            impact: suggestion.impact,
+            source: suggestion.source || "AI Analysis"
+        });
+        setExplanationModalOpen(true);
+    };
+
+
+
+
+
+
+    // Undo the last AI change
+    const undoLastAIChange = () => {
+        undoLastChange((field: string, oldVal: any) => {
+            // Revert the corresponding form field
+            if (field === 'revenue_growth_start') updateProjection('revenue_growth_start', oldVal.toString());
+            else if (field === 'ebitda_margin_start') updateProjection('ebitda_margin_start', oldVal.toString());
+            else if (field === 'discount_rate') updateProjection('discount_rate', oldVal.toString());
+            else if (field === 'terminal_growth_rate') updateProjection('terminal_growth_rate', oldVal.toString());
+        });
+    };
+
     return (
         <div className="max-w-6xl mx-auto mt-10 animate-fade-in-up" >
             <ScenarioWizard
@@ -315,10 +572,117 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
 
                 <AuditAlert issues={auditIssues} />
 
+                <div id="suggestion-panel">
+                    <SuggestionPanel
+                        companyData={{
+                            sector: formData.sector,
+                            revenue: formData.dcf_input.historical.revenue[formData.dcf_input.historical.revenue.length - 1] * 1000000 // Assuming millions input
+                        }}
+                        currentAssumptions={{
+                            revenue_growth: formData.dcf_input.projections.revenue_growth_start,
+                            ebitda_margin: formData.dcf_input.projections.ebitda_margin_start,
+                            wacc: formData.dcf_input.projections.discount_rate,
+                            terminal_growth: formData.dcf_input.projections.terminal_growth_rate
+                        }}
+                        onApplySuggestions={handleApplySuggestions}
+                    />
+                </div>
+
+                <AIValidationResult
+                    result={validationResult}
+                    isLoading={isValidating}
+                    onApplyPattern={handleApplyPattern}
+                />
+
                 <div className="glass-panel p-6">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-4 tracking-tight">Select Valuation Method</h2>
+                    <div className="flex justify-between items-center mb-4">
+                        <div className="flex items-center gap-4">
+                            <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Select Valuation Method</h2>
+
+                            {/* Undo/Redo Controls */}
+                            <div className="flex items-center gap-1 bg-white/50 rounded-lg p-1 border border-white/20">
+                                <button
+                                    type="button"
+                                    onClick={undo}
+                                    disabled={!canUndo}
+                                    className="p-1.5 hover:bg-white rounded-md disabled:opacity-30 transition-all"
+                                    title="Undo"
+                                >
+                                    ↩
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={redo}
+                                    disabled={!canRedo}
+                                    className="p-1.5 hover:bg-white rounded-md disabled:opacity-30 transition-all"
+                                    title="Redo"
+                                >
+                                    ↪
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                            {/* Global AI Apply Button */}
+                            {validationResult && (
+                                <AISuggestionsButton
+                                    suggestions={validationResult}
+                                    onApplyAll={applyAllAISuggestions}
+                                    onReview={() => {
+                                        // Open modal with summary or first suggestion
+                                        if (validationResult.patterns?.avg_values) {
+                                            // Just pick one for demo or create a summary view
+                                            handleExplainSuggestion('revenue_growth_start', {
+                                                value: validationResult.patterns.avg_values.revenue_growth,
+                                                confidence: validationResult.patterns.confidence,
+                                                message: `Market consensus for ${validationResult.patterns.matched_cluster}`,
+                                                impact: "Aligns with industry standards"
+                                            });
+                                        }
+                                    }}
+                                />
+                            )}
+
+                            {/* Undo AI Changes Button */}
+                            <button
+                                type="button"
+                                onClick={undoLastAIChange}
+                                disabled={!canUndoAI}
+                                className="px-3 py-2.5 bg-gray-100 text-gray-600 rounded-xl hover:bg-gray-200 disabled:opacity-50 transition-colors flex items-center gap-2"
+                                title="Undo last AI change"
+                            >
+                                <span>↺</span>
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={validateWithAI}
+                                disabled={isValidating || !preferences.aiEnabled}
+                                className="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all font-medium flex items-center gap-2 disabled:opacity-70 disabled:scale-100 disabled:cursor-not-allowed"
+                            >
+                                {isValidating ? (
+                                    <>
+                                        <span className="animate-spin">⚡</span> Analyzing...
+                                    </>
+                                ) : (
+                                    <>
+                                        <span>✨</span> Validate with AI
+                                    </>
+                                )}
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={() => setSettingsModalOpen(true)}
+                                className="p-2.5 bg-white text-gray-600 rounded-xl shadow-sm hover:bg-gray-50 border border-gray-200 transition-colors"
+                                title="AI Settings"
+                            >
+                                ⚙️
+                            </button>
+                        </div>
+                    </div>
                     <div className="flex space-x-2 bg-gray-100/50 backdrop-blur-md p-1.5 rounded-xl w-fit overflow-x-auto border border-white/20">
-                        {['dcf', 'fcfe', 'gpc', 'precedent', 'anav', 'weights'].map((method) => (
+                        {['dcf', 'fcfe', 'gpc', 'precedent', 'lbo', 'anav', 'weights'].map((method) => (
                             <button
                                 key={method}
                                 type="button"
@@ -341,33 +705,37 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                 <div className="glass-panel p-6 animate-fade-in-up">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
-                            <label className="block text-sm font-medium text-gray-600 mb-2">Company Name</label>
-                            <input
+                            <EnhancedFormInput
+                                label="Company Name"
                                 type="text"
                                 value={formData.company_name}
                                 onChange={(e) => setFormData({ ...formData, company_name: e.target.value })}
+                                error={getFieldError('company_name')?.message}
                                 className="glass-input"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-600 mb-2">Ticker Symbol</label>
-                            <div className="flex gap-2">
-                                <input
+                            <div className="flex gap-2 items-end">
+                                <EnhancedFormInput
+                                    label="Ticker Symbol"
                                     type="text"
                                     value={formData.ticker}
                                     onChange={(e) => setFormData({ ...formData, ticker: e.target.value.toUpperCase() })}
                                     placeholder="e.g. IBM"
+                                    error={getFieldError('ticker')?.message}
                                     className="glass-input"
+                                    wrapperClassName="flex-grow"
                                 />
                                 <button
                                     type="button"
                                     onClick={fetchFinancialData}
                                     disabled={!formData.ticker || isFetching}
-                                    className="px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 disabled:opacity-50 transition-colors text-sm font-medium whitespace-nowrap"
+                                    className="px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 disabled:opacity-50 transition-colors text-sm font-medium whitespace-nowrap h-[42px] mb-1"
                                 >
                                     {isFetching ? 'Loading...' : 'Auto-Populate'}
                                 </button>
                             </div>
+
                             {fetchError && (
                                 <div className="mt-2 text-xs text-red-600 bg-red-50 p-2 rounded-lg border border-red-100">
                                     {fetchError}
@@ -443,49 +811,121 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
 
                 {activeMethod === 'dcf' && (
                     <div className="glass-panel p-8 animate-fade-in-up">
-                        <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-xl font-bold text-gray-900">DCF Assumptions (FCFF)</h3>
+                        <div className="flex justify-between items-center mb-8 pb-4 border-b border-gray-200/50">
+                            <div>
+                                <h3 className="text-xl font-bold text-gray-900 tracking-tight">DCF Assumptions</h3>
+                                <p className="text-sm text-gray-500 mt-1">Free Cash Flow to Firm (FCFF)</p>
+                            </div>
                             <button
                                 type="button"
                                 onClick={() => setIsWizardOpen(true)}
-                                className="px-4 py-2 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-lg shadow-md hover:shadow-lg transition-all text-sm font-medium flex items-center gap-2"
+                                className="glass-button text-sm font-medium flex items-center gap-2 text-system-blue"
                             >
+                                <span className="text-lg">✨</span>
                                 <span>Scenario Wizard</span>
                             </button>
                         </div>
+
+                        {/* AI Suggestions Panel */}
+                        {aiSuggestions && (
+                            <div className="mb-6 flex justify-end">
+                                <AISuggestionsButton
+                                    suggestions={aiSuggestions}
+                                    onApplyAll={applyAllAISuggestions}
+                                    onReview={() => {
+                                        // Highlight first suggestion logic or open panel
+                                        const firstKey = Object.keys(aiSuggestions.suggestions)[0];
+                                        if (firstKey) {
+                                            // Focus logic or scroll to it
+                                        }
+                                    }}
+                                    isLoading={isFetchingSuggestions}
+                                />
+                            </div>
+                        )}
+
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                             <div>
-                                <label className="block text-sm font-medium text-gray-600 mb-2">Discount Rate (WACC)</label>
-                                <div className="flex gap-2">
-                                    <input
-                                        type="number"
-                                        step="0.001"
-                                        value={formData.dcf_input.projections.discount_rate}
-                                        onChange={(e) => updateProjection('discount_rate', e.target.value)}
-                                        className={getInputClassName('discount_rate')}
-                                    />
+                                <EnhancedFormInput
+                                    label="Revenue Growth (Start)"
+                                    type="number"
+                                    step="0.01"
+                                    value={formData.dcf_input.projections.revenue_growth_start}
+                                    onChange={(e) => updateProjection('revenue_growth_start', e.target.value)}
+                                    error={getFieldError('revenue_growth_start')?.message}
+                                    suggestion={getSuggestion('revenue_growth_start')}
+                                    onApplySuggestion={(val) => updateProjection('revenue_growth_start', val)}
+                                    isLoading={isFetchingSuggestions}
+                                    onExplain={() => {
+                                        const s = getSuggestion('revenue_growth_start');
+                                        if (s) handleExplainSuggestion('revenue_growth_start', s);
+                                    }}
+                                />
+                            </div>
+                            <div>
+                                <EnhancedFormInput
+                                    label="EBITDA Margin (Start)"
+                                    type="number"
+                                    step="0.01"
+                                    value={formData.dcf_input.projections.ebitda_margin_start}
+                                    onChange={(e) => updateProjection('ebitda_margin_start', e.target.value)}
+                                    error={getFieldError('ebitda_margin_start')?.message}
+                                    suggestion={getSuggestion('ebitda_margin_start')}
+                                    onApplySuggestion={(val) => updateProjection('ebitda_margin_start', val)}
+                                    isLoading={isFetchingSuggestions}
+                                    onExplain={() => {
+                                        const s = getSuggestion('ebitda_margin_start');
+                                        if (s) handleExplainSuggestion('ebitda_margin_start', s);
+                                    }}
+                                />
+                            </div>
+                            <div>
+                                <div className="flex gap-2 items-end">
+                                    <div className="flex-grow">
+                                        <EnhancedFormInput
+                                            label="Discount Rate (WACC)"
+                                            type="number"
+                                            step="0.001"
+                                            value={formData.dcf_input.projections.discount_rate}
+                                            onChange={(e) => updateProjection('discount_rate', e.target.value)}
+                                            error={getFieldError('discount_rate')?.message}
+                                            suggestion={getSuggestion('wacc')}
+                                            onApplySuggestion={(val) => updateProjection('discount_rate', val)}
+                                            isLoading={isFetchingSuggestions}
+                                            onExplain={() => {
+                                                const s = getSuggestion('wacc');
+                                                if (s) handleExplainSuggestion('discount_rate', s);
+                                            }}
+                                        />
+                                    </div>
                                     <button
                                         type="button"
                                         onClick={() => setIsWaccModalOpen(true)}
-                                        className="px-3 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors text-xs font-medium"
+                                        className="mb-4 px-3 py-2.5 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors text-xs font-medium h-[42px]"
                                         title="Calculate WACC"
                                     >
                                         Calc
                                     </button>
                                 </div>
-                                {renderErrorMessage('discount_rate')}
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-600 mb-2">Terminal Growth Rate</label>
-                                <input
+                                <EnhancedFormInput
+                                    label="Terminal Growth Rate"
                                     type="number"
                                     step="0.01"
                                     value={formData.dcf_input.projections.terminal_growth_rate}
                                     onChange={(e) => updateProjection('terminal_growth_rate', e.target.value)}
-                                    className={getInputClassName('terminal_growth_rate')}
+                                    error={getFieldError('terminal_growth_rate')?.message}
+                                    suggestion={getSuggestion('terminal_growth_rate')}
+                                    onApplySuggestion={(val) => updateProjection('terminal_growth_rate', val)}
+                                    isLoading={isFetchingSuggestions}
+                                    onExplain={() => {
+                                        const s = getSuggestion('terminal_growth_rate');
+                                        if (s) handleExplainSuggestion('terminal_growth_rate', s);
+                                    }}
                                 />
-                                {renderErrorMessage('terminal_growth_rate')}
                             </div>
+
                             <div>
                                 <label className="block text-sm font-medium text-gray-600 mb-2">Tax Rate</label>
                                 <input
@@ -699,7 +1139,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                                             return;
                                         }
                                         try {
-                                            const res = await fetch(`http://localhost:8000/api/peers/${formData.ticker}?sector=${formData.sector}`);
+                                            const res = await fetch(api.url(`/api/peers/${formData.ticker}?sector=${formData.sector}`));
                                             if (!res.ok) throw new Error("Failed to fetch peers");
                                             const peers = await res.json();
 
@@ -717,10 +1157,18 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                                             const medianEvRev = median(evRevs);
                                             const medianEvEbitda = median(evEbitdas);
 
-                                            // Update form data with found peers and medians (simplified for now, just alerting found peers)
-                                            // Ideally we would show a selection list, but for MVP we auto-apply medians if found
+                                            setFormData(prev => ({
+                                                ...prev,
+                                                gpc_input: {
+                                                    ...prev.gpc_input,
+                                                    peer_tickers: peers.map((p: any) => p.ticker),
+                                                    ev_revenue_multiple: parseFloat(medianEvRev.toFixed(2)),
+                                                    ev_ebitda_multiple: parseFloat(medianEvEbitda.toFixed(2))
+                                                }
+                                            }));
+
                                             if (peers.length > 0) {
-                                                alert(`Found ${peers.length} peers: ${peers.map((p: any) => p.ticker).join(", ")}.\n\nMedian EV/Revenue: ${medianEvRev.toFixed(2)}x\nMedian EV/EBITDA: ${medianEvEbitda.toFixed(2)}x\n\n(Note: Auto-application of multiples to valuation model is coming in next update)`);
+                                                alert(`Found ${peers.length} peers. Applied median multiples.`);
                                             } else {
                                                 alert("No peers found.");
                                             }
@@ -766,6 +1214,51 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                                         className={getInputClassName('gpc_ebitda')}
                                     />
                                     {renderErrorMessage('gpc_ebitda')}
+                                </div>
+                                <div className="mt-4 col-span-1 md:col-span-2 grid grid-cols-2 gap-6 p-4 bg-blue-50/50 rounded-xl border border-blue-100">
+                                    <h4 className="col-span-2 font-semibold text-gray-800 text-sm">Applied Multiples (Median)</h4>
+                                    <div>
+                                        <label className="block text-xs font-medium text-gray-600 mb-1">EV / Revenue</label>
+                                        <input
+                                            type="number"
+                                            step="0.1"
+                                            value={formData.gpc_input.ev_revenue_multiple || ''}
+                                            onChange={(e) => setFormData(prev => ({
+                                                ...prev,
+                                                gpc_input: {
+                                                    ...prev.gpc_input,
+                                                    ev_revenue_multiple: parseFloat(e.target.value)
+                                                }
+                                            }))}
+                                            className="w-full px-3 py-2 rounded-lg border border-white/30 bg-white/50 text-sm"
+                                            placeholder="Auto-calc"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-medium text-gray-600 mb-1">EV / EBITDA</label>
+                                        <input
+                                            type="number"
+                                            step="0.1"
+                                            value={formData.gpc_input.ev_ebitda_multiple || ''}
+                                            onChange={(e) => setFormData(prev => ({
+                                                ...prev,
+                                                gpc_input: {
+                                                    ...prev.gpc_input,
+                                                    ev_ebitda_multiple: parseFloat(e.target.value)
+                                                }
+                                            }))}
+                                            className="w-full px-3 py-2 rounded-lg border border-white/30 bg-white/50 text-sm"
+                                            placeholder="Auto-calc"
+                                        />
+                                    </div>
+                                    <div className="col-span-2">
+                                        <label className="block text-xs font-medium text-gray-600 mb-1">Peer Group</label>
+                                        <div className="text-xs text-gray-500 italic bg-white/50 p-2 rounded-lg border border-white/30">
+                                            {formData.gpc_input.peer_tickers?.length > 0
+                                                ? formData.gpc_input.peer_tickers.join(", ")
+                                                : "No peers selected"}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1069,6 +1562,58 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                         </div>
                     )
                 }
+                {
+                    activeMethod === 'lbo' && (
+                        <>
+                            {!formData.lbo_input ? (
+                                <div className="p-8 text-center text-gray-500 glass-panel">
+                                    <p>Initializing LBO Module...</p>
+                                    <button
+                                        type="button"
+                                        onClick={() => setFormData(prev => ({
+                                            ...prev,
+                                            lbo_input: {
+                                                solve_for: 'entry_price',
+                                                entry_revenue: 100,
+                                                entry_ebitda: 20,
+                                                entry_ev_ebitda_multiple: 10.0 as number | undefined,
+                                                target_irr: 0.20,
+                                                financing: {
+                                                    tranches: [],
+                                                    total_leverage_ratio: 5.0,
+                                                    equity_contribution_percent: 0.40
+                                                },
+                                                assumptions: { transaction_fees_percent: 0.02, synergy_benefits: 0.0 },
+                                                revenue_growth_rate: 0.05,
+                                                ebitda_margin: 0.25,
+                                                capex_percentage: 0.03,
+                                                nwc_percentage: 0.05,
+                                                tax_rate: 0.25,
+                                                holding_period: 5,
+                                                exit_ev_ebitda_multiple: 10.0
+                                            }
+                                        }))}
+                                        className="mt-4 px-4 py-2 bg-system-blue text-white rounded-lg hover:bg-blue-600"
+                                    >
+                                        Initialize LBO Data
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="animate-fade-in-up">
+                                    <LBOWizard
+                                        data={formData.lbo_input}
+                                        onChange={(newData) => {
+                                            setFormData(prev => ({
+                                                ...prev,
+                                                lbo_input: newData
+                                            }));
+                                        }}
+                                    />
+                                </div>
+                            )}
+                        </>
+                    )
+                }
 
                 <div className="flex justify-end pt-4">
                     <button
@@ -1087,6 +1632,28 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                 onApply={handleWaccApply}
                 initialTicker={formData.ticker}
             />
+
+            <React.Suspense fallback={null}>
+                {activeSuggestion && (
+                    <ExplanationModal
+                        isOpen={explanationModalOpen}
+                        onClose={() => setExplanationModalOpen(false)}
+                        onApply={() => {
+                            const updates: any = {};
+                            if (activeSuggestion.field === 'revenue_growth_start') updates.revenue_growth = activeSuggestion.suggestedValue;
+                            if (activeSuggestion.field === 'ebitda_margin_start') updates.ebitda_margin = activeSuggestion.suggestedValue;
+                            handleApplySuggestions(updates);
+                        }}
+                        suggestion={activeSuggestion}
+                    />
+                )}
+                <AISettingsModal
+                    isOpen={settingsModalOpen}
+                    onClose={() => setSettingsModalOpen(false)}
+                />
+            </React.Suspense>
+
+
         </div >
     );
 };

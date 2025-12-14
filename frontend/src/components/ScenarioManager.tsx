@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { api } from '../config/api';
 import { ScenarioWizard } from './ScenarioWizard';
 
 interface Scenario {
@@ -78,7 +79,7 @@ export const ScenarioManager: React.FC<PWSAProps> = ({ baseAssumptions, isOpen, 
                 }))
             };
 
-            const response = await fetch('http://localhost:8000/api/valuation/pwsa', {
+            const response = await fetch(api.url('/api/valuation/pwsa'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(requestBody)

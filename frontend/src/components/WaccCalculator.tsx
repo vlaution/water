@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { api } from '../config/api';
 
 interface WaccCalculatorProps {
     isOpen: boolean;
@@ -39,7 +40,7 @@ export const WaccCalculator: React.FC<WaccCalculatorProps> = ({ isOpen, onClose,
         setLoading(true);
         setError(null);
         try {
-            const response = await fetch(`http://localhost:8000/api/market-data/${symbol}`);
+            const response = await fetch(api.url(`/api/market-data/${symbol}`));
             if (!response.ok) {
                 throw new Error('Failed to fetch market data');
             }

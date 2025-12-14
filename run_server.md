@@ -1,0 +1,1 @@
+celery -A backend.celery_app worker --loglevel=info celery -A backend.celery_app beat --loglevel=info

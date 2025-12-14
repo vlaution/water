@@ -77,16 +77,22 @@ class DCFCalculator:
             
         terminal_value = tv_multiple if proj.terminal_exit_multiple else tv_ggm
         
-        # Discounting
+        # Discounting (Mid-Year Convention)
         dcf_value = 0
         for i, cf in enumerate(projected_cash_flows):
-            dcf_value += cf / ((1 + proj.discount_rate) ** (i + 1))
+            # Mid-year convention: Discount factor is (i + 0.5)
+            dcf_value += cf / ((1 + proj.discount_rate) ** (i + 0.5))
             
+        # Terminal Value is at end of year 5, so discount by 5 years
         dcf_value += terminal_value / ((1 + proj.discount_rate) ** 5)
         
         return dcf_value, projected_cash_flows, {
             "revenue": [last_revenue * (1 + proj.revenue_growth_start + (proj.revenue_growth_end - proj.revenue_growth_start) * (i / 4)) for i in range(5)],
-            "ebitda": [last_revenue * (1 + proj.revenue_growth_start) * (proj.ebitda_margin_start) for i in range(5)],
+            "ebitda": [
+                (last_revenue * (1 + proj.revenue_growth_start + (proj.revenue_growth_end - proj.revenue_growth_start) * (i / 4))) * 
+                (proj.ebitda_margin_start + (proj.ebitda_margin_end - proj.ebitda_margin_start) * (i / 4))
+                for i in range(5)
+            ],
             "fcff": projected_cash_flows,
             "balance_sheet": {
                 "cash": [cf * 0.1 for cf in projected_cash_flows],

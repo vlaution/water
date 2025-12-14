@@ -1,0 +1,263 @@
+[
+    {
+        "ticker": "AAPL",
+        "name": "Apple Inc.",
+        "sector": "Technology",
+        "industry": "Consumer Electronics",
+        "market_cap": 3000000000000,
+        "revenue": 383000000000,
+        "ebitda": 130000000000
+    },
+    {
+        "ticker": "MSFT",
+        "name": "Microsoft Corp.",
+        "sector": "Technology",
+        "industry": "Software - Infrastructure",
+        "market_cap": 2800000000000,
+        "revenue": 211000000000,
+        "ebitda": 102000000000
+    },
+    {
+        "ticker": "GOOGL",
+        "name": "Alphabet Inc.",
+        "sector": "Technology",
+        "industry": "Internet Content & Information",
+        "market_cap": 1700000000000,
+        "revenue": 282000000000,
+        "ebitda": 90000000000
+    },
+    {
+        "ticker": "AMZN",
+        "name": "Amazon.com Inc.",
+        "sector": "Consumer Cyclical",
+        "industry": "Internet Retail",
+        "market_cap": 1500000000000,
+        "revenue": 514000000000,
+        "ebitda": 55000000000
+    },
+    {
+        "ticker": "NVDA",
+        "name": "NVIDIA Corp.",
+        "sector": "Technology",
+        "industry": "Semiconductors",
+        "market_cap": 1200000000000,
+        "revenue": 27000000000,
+        "ebitda": 10000000000
+    },
+    {
+        "ticker": "META",
+        "name": "Meta Platforms Inc.",
+        "sector": "Technology",
+        "industry": "Internet Content & Information",
+        "market_cap": 800000000000,
+        "revenue": 116000000000,
+        "ebitda": 40000000000
+    },
+    {
+        "ticker": "TSLA",
+        "name": "Tesla Inc.",
+        "sector": "Consumer Cyclical",
+        "industry": "Auto Manufacturers",
+        "market_cap": 750000000000,
+        "revenue": 81000000000,
+        "ebitda": 17000000000
+    },
+    {
+        "ticker": "JPM",
+        "name": "JPMorgan Chase & Co.",
+        "sector": "Financial Services",
+        "industry": "Banks - Diversified",
+        "market_cap": 430000000000,
+        "revenue": 128000000000,
+        "ebitda": 50000000000
+    },
+    {
+        "ticker": "V",
+        "name": "Visa Inc.",
+        "sector": "Financial Services",
+        "industry": "Credit Services",
+        "market_cap": 480000000000,
+        "revenue": 29000000000,
+        "ebitda": 20000000000
+    },
+    {
+        "ticker": "JNJ",
+        "name": "Johnson & Johnson",
+        "sector": "Healthcare",
+        "industry": "Drug Manufacturers - General",
+        "market_cap": 400000000000,
+        "revenue": 95000000000,
+        "ebitda": 30000000000
+    },
+    {
+        "ticker": "WMT",
+        "name": "Walmart Inc.",
+        "sector": "Consumer Defensive",
+        "industry": "Discount Stores",
+        "market_cap": 420000000000,
+        "revenue": 611000000000,
+        "ebitda": 38000000000
+    },
+    {
+        "ticker": "PG",
+        "name": "Procter & Gamble Co.",
+        "sector": "Consumer Defensive",
+        "industry": "Household & Personal Products",
+        "market_cap": 350000000000,
+        "revenue": 80000000000,
+        "ebitda": 20000000000
+    },
+    {
+        "ticker": "MA",
+        "name": "Mastercard Inc.",
+        "sector": "Financial Services",
+        "industry": "Credit Services",
+        "market_cap": 370000000000,
+        "revenue": 22000000000,
+        "ebitda": 13000000000
+    },
+    {
+        "ticker": "HD",
+        "name": "Home Depot Inc.",
+        "sector": "Consumer Cyclical",
+        "industry": "Home Improvement Retail",
+        "market_cap": 300000000000,
+        "revenue": 157000000000,
+        "ebitda": 25000000000
+    },
+    {
+        "ticker": "CVX",
+        "name": "Chevron Corp.",
+        "sector": "Energy",
+        "industry": "Oil & Gas Integrated",
+        "market_cap": 300000000000,
+        "revenue": 246000000000,
+        "ebitda": 50000000000
+    },
+    {
+        "ticker": "MRK",
+        "name": "Merck & Co. Inc.",
+        "sector": "Healthcare",
+        "industry": "Drug Manufacturers - General",
+        "market_cap": 270000000000,
+        "revenue": 59000000000,
+        "ebitda": 20000000000
+    },
+    {
+        "ticker": "ABBV",
+        "name": "AbbVie Inc.",
+        "sector": "Healthcare",
+        "industry": "Drug Manufacturers - General",
+        "market_cap": 260000000000,
+        "revenue": 58000000000,
+        "ebitda": 25000000000
+    },
+    {
+        "ticker": "PEP",
+        "name": "PepsiCo Inc.",
+        "sector": "Consumer Defensive",
+        "industry": "Beverages - Non-Alcoholic",
+        "market_cap": 240000000000,
+        "revenue": 86000000000,
+        "ebitda": 15000000000
+    },
+    {
+        "ticker": "KO",
+        "name": "Coca-Cola Co.",
+        "sector": "Consumer Defensive",
+        "industry": "Beverages - Non-Alcoholic",
+        "market_cap": 250000000000,
+        "revenue": 43000000000,
+        "ebitda": 13000000000
+    },
+    {
+        "ticker": "BAC",
+        "name": "Bank of America Corp.",
+        "sector": "Financial Services",
+        "industry": "Banks - Diversified",
+        "market_cap": 230000000000,
+        "revenue": 95000000000,
+        "ebitda": 30000000000
+    },
+    {
+        "ticker": "CSCO",
+        "name": "Cisco Systems Inc.",
+        "sector": "Technology",
+        "industry": "Communication Equipment",
+        "market_cap": 220000000000,
+        "revenue": 57000000000,
+        "ebitda": 18000000000
+    },
+    {
+        "ticker": "ORCL",
+        "name": "Oracle Corp.",
+        "sector": "Technology",
+        "industry": "Software - Infrastructure",
+        "market_cap": 300000000000,
+        "revenue": 50000000000,
+        "ebitda": 20000000000
+    },
+    {
+        "ticker": "ADBE",
+        "name": "Adobe Inc.",
+        "sector": "Technology",
+        "industry": "Software - Infrastructure",
+        "market_cap": 250000000000,
+        "revenue": 18000000000,
+        "ebitda": 80000000000
+    },
+    {
+        "ticker": "CRM",
+        "name": "Salesforce Inc.",
+        "sector": "Technology",
+        "industry": "Software - Application",
+        "market_cap": 200000000000,
+        "revenue": 31000000000,
+        "ebitda": 6000000000
+    },
+    {
+        "ticker": "AMD",
+        "name": "Advanced Micro Devices Inc.",
+        "sector": "Technology",
+        "industry": "Semiconductors",
+        "market_cap": 170000000000,
+        "revenue": 23000000000,
+        "ebitda": 5000000000
+    },
+    {
+        "ticker": "INTC",
+        "name": "Intel Corp.",
+        "sector": "Technology",
+        "industry": "Semiconductors",
+        "market_cap": 150000000000,
+        "revenue": 63000000000,
+        "ebitda": 15000000000
+    },
+    {
+        "ticker": "QCOM",
+        "name": "Qualcomm Inc.",
+        "sector": "Technology",
+        "industry": "Semiconductors",
+        "market_cap": 130000000000,
+        "revenue": 44000000000,
+        "ebitda": 15000000000
+    },
+    {
+        "ticker": "NFLX",
+        "name": "Netflix Inc.",
+        "sector": "Communication Services",
+        "industry": "Entertainment",
+        "market_cap": 200000000000,
+        "revenue": 31000000000,
+        "ebitda": 6000000000
+    },
+    {
+        "ticker": "DIS",
+        "name": "Walt Disney Co.",
+        "sector": "Communication Services",
+        "industry": "Entertainment",
+        "market_cap": 150000000000,
+        "revenue": 82000000000,
+        "ebitda": 12000000000
+    }
+]

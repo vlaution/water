@@ -4,9 +4,12 @@ interface FileUploadProps {
     onUploadSuccess?: (data: any) => void;
 }
 
+import { useToast } from '../context/ToastContext';
+
 export const FileUpload: React.FC<FileUploadProps> = ({ onUploadSuccess }) => {
     const [file, setFile] = useState<File | null>(null);
     const [uploading, setUploading] = useState(false);
+    const { showToast } = useToast();
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
@@ -37,11 +40,11 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onUploadSuccess }) => {
             if (onUploadSuccess) {
                 onUploadSuccess(data);
             } else {
-                alert('Upload successful!');
+                showToast('Upload successful!', 'success');
             }
         } catch (error) {
             console.error('Error uploading file:', error);
-            alert('Upload failed. Check console for details.');
+            showToast('Upload failed. Check console for details.', 'error');
         } finally {
             setUploading(false);
         }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { api } from '../config/api';
 import { SkeletonCard } from './dashboard/SkeletonCard';
 import { Settings, Check } from 'lucide-react';
 import { ExecutiveView } from './dashboard/views/ExecutiveView';
@@ -7,24 +8,27 @@ import { FinanceView } from './dashboard/views/FinanceView';
 import { StrategyView } from './dashboard/views/StrategyView';
 import { InvestorView } from './dashboard/views/InvestorView';
 import { BenchmarkDashboard } from './BenchmarkDashboard';
+import { PortfolioDashboard } from './PortfolioDashboard';
 import { RealOptionsModal } from './modals/RealOptionsModal';
 import { AISummaryModal } from './modals/AISummaryModal';
 import { MonteCarloModal } from './modals/MonteCarloModal';
 import { VCMethodModal } from './modals/VCMethodModal';
 import { MergerAnalysisModal } from './MergerAnalysisModal';
 import { ScenarioManager } from './ScenarioManager';
-import { Building2, Sparkles, Activity, PieChart, Rocket, LayoutDashboard, DollarSign, TrendingUp, ShieldCheck } from 'lucide-react';
+import { Building2, Sparkles, Activity, PieChart, Rocket, LayoutDashboard, DollarSign, TrendingUp, ShieldCheck, Briefcase, Globe } from 'lucide-react';
+// GlobalAssumptionsPanel removed, lifted to App
 
 
 interface DashboardHomeProps {
     onSelectRun: (runId: string) => void;
     token: string | null;
+    onOpenGlobalSettings: () => void;
 }
 
-export const DashboardHome: React.FC<DashboardHomeProps> = ({ onSelectRun, token }) => {
+export const DashboardHome: React.FC<DashboardHomeProps> = ({ onSelectRun, token, onOpenGlobalSettings }) => {
     const [latestRun, setLatestRun] = useState<any>(null);
     const [loading, setLoading] = useState(true);
-    const [activeView, setActiveView] = useState<'overview' | 'executive' | 'finance' | 'strategy' | 'investor' | 'benchmarking'>('overview');
+    const [activeView, setActiveView] = useState<'overview' | 'portfolio' | 'executive' | 'finance' | 'strategy' | 'investor' | 'benchmarking'>('overview');
     const [viewData, setViewData] = useState<any>(null);
     const [viewLoading, setViewLoading] = useState(false);
 
@@ -39,13 +43,14 @@ export const DashboardHome: React.FC<DashboardHomeProps> = ({ onSelectRun, token
     const [isMonteCarloOpen, setIsMonteCarloOpen] = useState(false);
     const [isPWSAOpen, setIsPWSAOpen] = useState(false);
     const [isVCOpen, setIsVCOpen] = useState(false);
+    // isGlobalSettingsOpen lifted to App
 
     useEffect(() => {
         const fetchData = async () => {
             if (!token) return;
             try {
                 // 1. Fetch Config
-                const configRes = await fetch('http://localhost:8000/api/dashboard/config', {
+                const configRes = await fetch(api.url('/api/dashboard/config'), {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (configRes.ok) {
@@ -54,13 +59,13 @@ export const DashboardHome: React.FC<DashboardHomeProps> = ({ onSelectRun, token
                 }
 
                 // 2. Fetch Latest Run
-                const runsRes = await fetch('http://localhost:8000/runs?limit=1', {
+                const runsRes = await fetch(api.url('/runs?limit=1'), {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (runsRes.ok) {
                     const runs = await runsRes.json();
                     if (runs.length > 0) {
-                        const detailRes = await fetch(`http://localhost:8000/runs/${runs[0].id}`, {
+                        const detailRes = await fetch(api.url(`/runs/${runs[0].id}`), {
                             headers: { 'Authorization': `Bearer ${token}` }
                         });
                         if (detailRes.ok) {
@@ -80,16 +85,16 @@ export const DashboardHome: React.FC<DashboardHomeProps> = ({ onSelectRun, token
 
     useEffect(() => {
         const fetchViewData = async () => {
-            if (!token || (activeView !== 'executive' && !latestRun) || activeView === 'benchmarking') return;
+            if (!token || (activeView !== 'executive' && activeView !== 'portfolio' && !latestRun) || activeView === 'benchmarking' || activeView === 'portfolio') return;
             setViewLoading(true);
             try {
                 let url = '';
                 if (activeView === 'executive') {
-                    url = 'http://localhost:8000/api/dashboard/executive';
+                    url = api.url('/api/dashboard/executive');
                 } else if (activeView === 'overview') {
-                    url = `http://localhost:8000/api/dashboard/overview/${latestRun.id}`;
+                    url = api.url(`/api/dashboard/overview/${latestRun.id}`);
                 } else {
-                    url = `http://localhost:8000/api/dashboard/${activeView}/${latestRun.id}`;
+                    url = api.url(`/api/dashboard/${activeView}/${latestRun.id}`);
                 }
 
                 const res = await fetch(url, {
@@ -140,7 +145,7 @@ export const DashboardHome: React.FC<DashboardHomeProps> = ({ onSelectRun, token
 
         // Save to backend
         try {
-            await fetch('http://localhost:8000/api/dashboard/config', {
+            await fetch(api.url('/api/dashboard/config'), {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -175,7 +180,7 @@ export const DashboardHome: React.FC<DashboardHomeProps> = ({ onSelectRun, token
         );
     }
 
-    if (!latestRun && activeView !== 'executive') {
+    if (!latestRun && activeView !== 'executive' && activeView !== 'portfolio') {
         return (
             <div className="text-center py-20">
                 <h2 className="text-2xl font-bold text-gray-900">Welcome to Valuation Dashboard</h2>
@@ -192,6 +197,7 @@ export const DashboardHome: React.FC<DashboardHomeProps> = ({ onSelectRun, token
 
     const views = [
         { id: 'overview', label: 'Overview', icon: LayoutDashboard },
+        { id: 'portfolio', label: 'Portfolio', icon: Briefcase },
         { id: 'executive', label: 'Executive', icon: Activity },
         { id: 'finance', label: 'Finance', icon: DollarSign },
         { id: 'strategy', label: 'Strategy', icon: TrendingUp },
@@ -220,6 +226,11 @@ export const DashboardHome: React.FC<DashboardHomeProps> = ({ onSelectRun, token
                         {isCustomizing ? 'Done' : 'Customize'}
                     </button>
 
+                    <button onClick={onOpenGlobalSettings} className="glass-button text-sm flex items-center gap-2 text-gray-700 hover:text-gray-900 border-gray-300">
+                        <Globe className="w-4 h-4" />
+                        Global Assumptions
+                    </button>
+
                     <div className="h-6 w-px bg-gray-300 mx-2"></div>
 
                     <button onClick={() => setIsAIModalOpen(true)} className="glass-button bg-purple-50 text-purple-700 hover:bg-purple-100 border-purple-200 text-sm flex items-center gap-2">
@@ -245,7 +256,7 @@ export const DashboardHome: React.FC<DashboardHomeProps> = ({ onSelectRun, token
                     <button onClick={() => setIsRealOptionsOpen(true)} className="glass-button text-system-blue text-sm">
                         Real Options
                     </button>
-                    <button onClick={() => window.open(`http://localhost:8000/api/export/report/${latestRun?.id}`, '_blank')} className="glass-button text-system-blue text-sm">
+                    <button onClick={() => window.open(api.url(`/api/export/report/${latestRun?.id}`), '_blank')} className="glass-button text-system-blue text-sm">
                         View Full Report
                     </button>
                 </div>
@@ -264,6 +275,12 @@ export const DashboardHome: React.FC<DashboardHomeProps> = ({ onSelectRun, token
                 isOpen={isPWSAOpen}
                 onClose={() => setIsPWSAOpen(false)}
                 baseAssumptions={latestRun?.results?.input_summary}
+            />
+            <RealOptionsModal
+                isOpen={isRealOptionsOpen}
+                onClose={() => setIsRealOptionsOpen(false)}
+                dcfValue={latestRun?.results?.enterprise_value}
+                runId={latestRun?.id}
             />
             <RealOptionsModal
                 isOpen={isRealOptionsOpen}
@@ -322,6 +339,7 @@ export const DashboardHome: React.FC<DashboardHomeProps> = ({ onSelectRun, token
             ) : (
                 <>
                     {activeView === 'overview' && <OverviewView data={viewData} />}
+                    {activeView === 'portfolio' && <PortfolioDashboard token={token} />}
                     {activeView === 'executive' && <ExecutiveView data={viewData} />}
                     {activeView === 'finance' && <FinanceView data={viewData} />}
                     {activeView === 'strategy' && <StrategyView data={viewData} />}

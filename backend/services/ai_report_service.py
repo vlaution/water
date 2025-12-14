@@ -10,11 +10,63 @@ class AIReportService:
 
     def generate_executive_summary(self, valuation_results: Dict[str, Any], company_name: str) -> str:
         """
-        Generates a 3-paragraph executive summary based on valuation results.
+        Generates an executive summary. Uses Groq LLM if available, otherwise falls back to template.
         """
+        import os
+        import requests
         
+        api_key = os.getenv("GROQ_API_KEY")
+        
+        if api_key:
+            try:
+                print("Info: Generating summary using Groq LLM...")
+                
+                # Prepare context
+                context_str = json.dumps(valuation_results, indent=2)
+                prompt = (
+                    f"You are a sophisticated financial analyst. Write a professional 3-paragraph executive summary "
+                    f"for the valuation of {company_name}. \n\n"
+                    f"Valuation Data:\n{context_str}\n\n"
+                    f"Requirements:\n"
+                    f"1. First paragraph: Valuation Verdict (Undervalued/Overvalued) and calculated Enterprise Value.\n"
+                    f"2. Second paragraph: Key structural drivers (Growth, Margins, WACC).\n"
+                    f"3. Third paragraph: Strategic recommendations based on the verdict.\n"
+                    f"Style: Professional, investment banking tone, concise."
+                )
+                
+                response = requests.post(
+                    "https://api.groq.com/openai/v1/chat/completions",
+                    headers={
+                        "Authorization": f"Bearer {api_key}",
+                        "Content-Type": "application/json"
+                    },
+                    json={
+                        "model": "llama3-70b-8192",
+                        "messages": [
+                            {"role": "system", "content": "You are a senior equity research analyst."},
+                            {"role": "user", "content": prompt}
+                        ],
+                        "temperature": 0.7,
+                        "max_tokens": 1024
+                    },
+                    timeout=15
+                )
+                
+                if response.status_code == 200:
+                    return response.json()["choices"][0]["message"]["content"]
+                else:
+                    print(f"Groq API Error: {response.status_code} - {response.text}")
+            except Exception as e:
+                print(f"Groq Integration Failed: {e}")
+        
+        # Fallback to Template Engine
+        print("Info: Using template engine for summary.")
+        return self._generate_template_summary(valuation_results, company_name)
+
+    def _generate_template_summary(self, valuation_results: Dict[str, Any], company_name: str) -> str:
         # 1. Analyze the Data
         ev = valuation_results.get("enterprise_value", 0)
+        # ... (rest of the existing logic)
         dcf_value = self._get_method_value(valuation_results, "DCF")
         market_value = ev * 0.9 # Simulated "Current Market Cap" for comparison (usually passed in input)
         
