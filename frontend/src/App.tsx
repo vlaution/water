@@ -199,13 +199,13 @@ const ProtectedApp = () => {
   };
 
   return (
-    <div className="min-h-screen font-sans text-gray-900">
+    <div className="min-h-screen font-sans text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-slate-950 transition-colors duration-300">
       <CommandController setStep={setStep} />
       <BackendSearchController setStep={setStep} />
       <div className="flex">
         {/* Sidebar */}
         {step !== 'mode-selection' && (
-          <aside className="w-80 min-h-screen bg-white/40 backdrop-blur-xl border-r border-white/20 dark:bg-black/20 dark:border-white/5 p-6 shadow-glass z-10 transition-colors duration-300">
+          <aside className="w-80 min-h-screen bg-white/60 backdrop-blur-xl border-r border-white/20 dark:bg-gray-900/60 dark:border-white/10 p-6 shadow-sidebar z-50 transition-all duration-300">
             <div className="mb-8 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-system-blue rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30">
@@ -213,7 +213,7 @@ const ProtectedApp = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                   </svg>
                 </div>
-                <h1 className="text-xl font-bold tracking-tight text-gray-900">Valuation</h1>
+                <h1 className="text-xl font-bold tracking-tight text-gray-900 dark:text-gray-100">Valuation</h1>
               </div>
               <ThemeToggle />
             </div>
