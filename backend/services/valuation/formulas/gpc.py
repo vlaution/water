@@ -1,4 +1,5 @@
 from backend.services.peer_finding_service import PeerFindingService
+from backend.calculations.models import GPCInput
 import statistics
 
 class GPCCalculator:
