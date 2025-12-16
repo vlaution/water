@@ -33,3 +33,4 @@ uvicorn[standard]
 psutil
 apscheduler
 sqlmodel
+seaborn
