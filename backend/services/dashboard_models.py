@@ -58,16 +58,16 @@ class AcquisitionPotentialItem(BaseModel):
     score: float
     reason: str
 
-class ValuationTimelineItem(BaseModel):
-    date: str
-    total_ev: float
-    annotation: Optional[PortfolioAnnotation] = None
-    
 class PortfolioAnnotation(BaseModel):
     id: str
     date: str
     label: str
     type: str = "event" # event, milestone, alert
+
+class ValuationTimelineItem(BaseModel):
+    date: str
+    total_ev: float
+    annotation: Optional[PortfolioAnnotation] = None
 
 class RiskMatrixItem(BaseModel):
     company_name: str
