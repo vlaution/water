@@ -3,6 +3,11 @@ from typing import List, Dict, Any
 import json
 from backend.database.models import ValuationRun
 from backend.api.dashboard_models import ExecutiveViewResponse, FinanceViewResponse, StrategyViewResponse, InvestorViewResponse, OverviewViewResponse
+from backend.services.dashboard_models import (
+    PortfolioViewResponse, PortfolioSummary, ValuationHeatmapItem,
+    BenchmarkComparison, AcquisitionPotentialItem, ValuationTimelineItem,
+    RiskMatrixItem, PortfolioAnnotation
+)
 from backend.services.benchmarking_service import BenchmarkingService
 
 class DashboardService:
@@ -223,11 +228,6 @@ class DashboardService:
         )
 
     def get_portfolio_view(self) -> PortfolioViewResponse:
-        from backend.services.dashboard_models import (
-            PortfolioViewResponse, PortfolioSummary, ValuationHeatmapItem,
-            BenchmarkComparison, AcquisitionPotentialItem, ValuationTimelineItem,
-            RiskMatrixItem
-        )
         
         # Aggregate calls to granular methods
         summary = self.get_portfolio_summary()
@@ -252,7 +252,6 @@ class DashboardService:
         )
 
     def get_portfolio_summary(self, comparison_days: Optional[int] = None) -> PortfolioSummary:
-        from backend.services.dashboard_models import PortfolioSummary
         from datetime import datetime, timedelta
         
         runs = self.db.query(ValuationRun).order_by(ValuationRun.created_at.desc()).all()
@@ -333,7 +332,6 @@ class DashboardService:
         )
 
     def get_portfolio_heatmap(self, limit: int = 100, sector: str = None, region: str = None) -> List[ValuationHeatmapItem]:
-        from backend.services.dashboard_models import ValuationHeatmapItem
         from datetime import datetime
         
         runs = self.db.query(ValuationRun).order_by(ValuationRun.created_at.desc()).all()
@@ -390,7 +388,6 @@ class DashboardService:
         return items
 
     def get_acquisition_potential(self) -> List[AcquisitionPotentialItem]:
-        from backend.services.dashboard_models import AcquisitionPotentialItem
         # Mock implementation for distinct service method
         runs = self.db.query(ValuationRun).order_by(ValuationRun.created_at.desc()).all()
         companies = set()
@@ -406,7 +403,6 @@ class DashboardService:
         return sorted(items, key=lambda x: x.score, reverse=True)
 
     def get_portfolio_timeline(self) -> List[ValuationTimelineItem]:
-        from backend.services.dashboard_models import ValuationTimelineItem, PortfolioAnnotation
         from datetime import datetime
         
         runs = self.db.query(ValuationRun).all()
@@ -433,7 +429,6 @@ class DashboardService:
         ]
 
     def get_risk_matrix(self) -> List[RiskMatrixItem]:
-        from backend.services.dashboard_models import RiskMatrixItem
         runs = self.db.query(ValuationRun).order_by(ValuationRun.created_at.desc()).all()
         latest = {}
         for r in runs:
