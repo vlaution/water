@@ -19,6 +19,7 @@ import { DealSourcingDashboard } from './components/analytics/DealSourcingDashbo
 import { DebtMarketDashboard } from './components/analytics/DebtMarketDashboard';
 import { PermissionGuard } from './components/common/PermissionGuard';
 import { RequirePermission } from './components/common/RequirePermission';
+import { ThemeToggle } from './components/common/ThemeToggle';
 import { Permissions } from './config/permissions';
 import { GlobalAssumptionsPanel } from './components/dashboard/GlobalAssumptionsPanel';
 import { Globe } from 'lucide-react';
@@ -285,6 +286,9 @@ const ProtectedApp = () => {
                 >
                   Logout ({user.name})
                 </button>
+                <div className="mt-4 flex justify-center">
+                  <ThemeToggle />
+                </div>
               </div>
 
               <div className="mt-6 border-t border-gray-200/50 pt-6">
@@ -326,6 +330,9 @@ const ProtectedApp = () => {
               >
                 Logout ({user.name})
               </button>
+              <div className="ml-4">
+                <ThemeToggle />
+              </div>
             </header>
           )}
 
