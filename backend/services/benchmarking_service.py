@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, Dict
 import numpy as np
 from backend.calculations.benchmarking_models import CompanyMetrics, BenchmarkResponse, BenchmarkComparison
 from backend.services.financial_data.cache import cache
