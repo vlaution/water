@@ -418,26 +418,27 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
     return (
         <div className="glass-panel p-0 overflow-hidden animate-fade-in-up">
             {/* Header / Stepper */}
-            <div className="bg-gray-50 border-b border-gray-200 p-6">
+            {/* Header / Stepper */}
+            <div className="bg-gray-50 dark:bg-white/5 border-b border-gray-200 dark:border-white/10 p-6">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h2 className="text-xl font-bold text-gray-900">LBO Analysis Wizard</h2>
-                        <p className="text-sm text-gray-500">Configure your Leverage Buyout model in 6 steps</p>
+                        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">LBO Analysis Wizard</h2>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Configure your Leverage Buyout model in 6 steps</p>
                     </div>
                     <div className="flex items-center gap-2">
                         <button
                             onClick={() => setShowTutorial(true)}
-                            className="text-gray-400 hover:text-blue-600 p-2 rounded-full hover:bg-blue-50 transition-colors"
+                            className="text-gray-400 hover:text-blue-600 dark:text-gray-500 dark:hover:text-blue-400 p-2 rounded-full hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-colors"
                             title="Start Tutorial"
                         >
                             <BookOpen size={20} />
                         </button>
                         {[1, 2, 3, 4, 5, 6].map(s => ( // Updated to 6 steps
-                            <div key={s} className={`flex items-center gap-2 ${step >= s ? 'text-system-blue' : 'text-gray-400'}`}>
-                                <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm border-2 ${step === s ? 'border-system-blue bg-blue-50' : step > s ? 'border-system-blue bg-system-blue text-white' : 'border-gray-300'}`}>
+                            <div key={s} className={`flex items-center gap-2 ${step >= s ? 'text-system-blue' : 'text-gray-400 dark:text-gray-600'}`}>
+                                <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm border-2 ${step === s ? 'border-system-blue bg-blue-50 text-system-blue dark:bg-blue-500/20' : step > s ? 'border-system-blue bg-system-blue text-white' : 'border-gray-300 dark:border-gray-600'}`}>
                                     {step > s ? <Check size={16} /> : s}
                                 </div>
-                                {s < 6 && <div className={`w-4 h-0.5 ${step > s ? 'bg-system-blue' : 'bg-gray-300'}`} />}
+                                {s < 6 && <div className={`w-4 h-0.5 ${step > s ? 'bg-system-blue' : 'bg-gray-300 dark:bg-gray-700'}`} />}
                             </div>
                         ))}
                     </div>
@@ -447,13 +448,13 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
             <div className="p-8">
                 {step === 1 && (
                     <div className="space-y-6 animate-fade-in">
-                        <div className="flex justify-between items-center border-b border-gray-100 pb-2">
-                            <h3 className="text-lg font-semibold text-gray-800">Step 1: Deal Structure & Entry</h3>
+                        <div className="flex justify-between items-center border-b border-gray-100 dark:border-white/10 pb-2">
+                            <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">Step 1: Deal Structure & Entry</h3>
                             <div className="flex items-center gap-4">
                                 {scenarios && (
                                     <div className="flex items-center gap-2">
-                                        <span className="text-sm text-gray-500 font-medium">Market Scenario:</span>
-                                        <div className="flex bg-gray-100 rounded-lg p-1">
+                                        <span className="text-sm text-gray-500 dark:text-gray-400 font-medium">Market Scenario:</span>
+                                        <div className="flex bg-gray-100 dark:bg-white/10 rounded-lg p-1">
                                             {Object.keys(scenarios).map(key => (
                                                 <button
                                                     key={key}
@@ -486,8 +487,8 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                                                         onChange(newData);
                                                     }}
                                                     className={`px-3 py-1 text-xs font-medium rounded-md transition-all ${selectedScenario === key
-                                                        ? 'bg-white text-blue-600 shadow-sm'
-                                                        : 'text-gray-500 hover:text-gray-700'
+                                                        ? 'bg-white dark:bg-white/20 text-blue-600 dark:text-blue-300 shadow-sm'
+                                                        : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
                                                         }`}
                                                     title={scenarios[key].description}
                                                 >
@@ -499,9 +500,9 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                                 )}
 
                                 <div className="flex items-center gap-2">
-                                    <span className="text-sm text-gray-500">Quick Start:</span>
+                                    <span className="text-sm text-gray-500 dark:text-gray-400">Quick Start:</span>
                                     <select
-                                        className="text-sm border border-gray-300 rounded-lg px-2 py-1 bg-white focus:ring-2 focus:ring-blue-500 outline-none"
+                                        className="text-sm border border-gray-300 dark:border-white/20 rounded-lg px-2 py-1 bg-white dark:bg-white/10 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 outline-none"
                                         onChange={(e) => {
                                             const type = e.target.value;
                                             if (!type) return;
@@ -555,18 +556,18 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                                     }}
                                 />
                                 {benchmarks && (
-                                    <div className="mt-2 p-3 bg-blue-50 rounded-lg text-sm border border-blue-100 grid grid-cols-3 gap-2">
+                                    <div className="mt-2 p-3 bg-blue-50 dark:bg-blue-500/10 rounded-lg text-sm border border-blue-100 dark:border-blue-500/20 grid grid-cols-3 gap-2">
                                         <div className="text-center">
-                                            <div className="text-xs text-gray-500">Avg EV/EBITDA</div>
-                                            <div className="font-bold text-blue-700">{benchmarks.ev_ebitda.mean.toFixed(1)}x</div>
+                                            <div className="text-xs text-gray-500 dark:text-gray-400">Avg EV/EBITDA</div>
+                                            <div className="font-bold text-blue-700 dark:text-blue-300">{benchmarks.ev_ebitda.mean.toFixed(1)}x</div>
                                         </div>
                                         <div className="text-center">
-                                            <div className="text-xs text-gray-500">Max Leverage</div>
-                                            <div className="font-bold text-blue-700">{benchmarks.leverage.max.toFixed(1)}x</div>
+                                            <div className="text-xs text-gray-500 dark:text-gray-400">Max Leverage</div>
+                                            <div className="font-bold text-blue-700 dark:text-blue-300">{benchmarks.leverage.max.toFixed(1)}x</div>
                                         </div>
                                         <div className="text-center">
-                                            <div className="text-xs text-gray-500">Success Rate</div>
-                                            <div className="font-bold text-blue-700">{(benchmarks.success_rate * 100).toFixed(0)}%</div>
+                                            <div className="text-xs text-gray-500 dark:text-gray-400">Success Rate</div>
+                                            <div className="font-bold text-blue-700 dark:text-blue-300">{(benchmarks.success_rate * 100).toFixed(0)}%</div>
                                         </div>
                                     </div>
                                 )}
@@ -574,7 +575,7 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
 
                             {/* Inputs continued */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Solve For</label>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Solve For</label>
                                 <select
                                     value={data.solve_for}
                                     onChange={(e) => updateField('solve_for', e.target.value)}
@@ -669,7 +670,7 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                                         <button
                                             type="button"
                                             onClick={toggleHistoricalMode}
-                                            className="text-sm text-gray-600 font-medium flex items-center gap-1 hover:bg-gray-100 px-2 py-1 rounded-lg transition-all"
+                                            className="text-sm text-gray-600 dark:text-gray-300 font-medium flex items-center gap-1 hover:bg-gray-100 dark:hover:bg-white/10 px-2 py-1 rounded-lg transition-all"
                                             title="Use historical market data"
                                         >
                                             <History size={14} />
@@ -678,7 +679,7 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                                             type="button"
                                             onClick={fetchMarketRates}
                                             disabled={isFetchingMarketData}
-                                            className="text-sm text-purple-600 font-medium flex items-center gap-1 hover:bg-purple-50 px-2 py-1 rounded-lg border border-transparent hover:border-purple-200 transition-all"
+                                            className="text-sm bg-purple-500/10 text-purple-600 dark:text-purple-300 font-medium flex items-center gap-1 hover:bg-purple-500/20 px-3 py-1.5 rounded-lg border border-purple-500/20 transition-all"
                                             title="Fetch live interest rates from FRED"
                                         >
                                             {isFetchingMarketData ? <RefreshCw className="animate-spin" size={14} /> : <Zap size={14} />}
@@ -692,7 +693,7 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                                         type="button"
                                         onClick={fetchMarketLevMultiples}
                                         disabled={isFetchingMarketData}
-                                        className="text-sm text-indigo-600 font-medium flex items-center gap-1 hover:bg-indigo-50 px-2 py-1 rounded-lg border border-transparent hover:border-indigo-200 transition-all"
+                                        className="text-sm bg-indigo-500/10 text-indigo-600 dark:text-indigo-300 font-medium flex items-center gap-1 hover:bg-indigo-500/20 px-3 py-1.5 rounded-lg border border-indigo-500/20 transition-all"
                                         title={`Fetch typical leverage for ${data.sector}`}
                                     >
                                         <BarChart2 size={14} />
@@ -705,7 +706,7 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                                         type="button"
                                         onClick={fetchAdvisory}
                                         disabled={isFetchingAdvice}
-                                        className="text-sm text-blue-600 font-medium flex items-center gap-1 hover:bg-blue-50 px-2 py-1 rounded-lg border border-transparent hover:border-blue-200 transition-all"
+                                        className="text-sm bg-blue-500/10 text-blue-600 dark:text-blue-300 font-medium flex items-center gap-1 hover:bg-blue-500/20 px-3 py-1.5 rounded-lg border border-blue-500/20 transition-all"
                                         title="Get AI Debt Structure Recommendation"
                                     >
                                         {isFetchingAdvice ? <RefreshCw className="animate-spin" size={14} /> : <Zap size={14} />}
@@ -713,13 +714,13 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                                     </button>
                                 )}
 
-                                <button type="button" onClick={addTranche} className="text-sm text-system-blue font-medium flex items-center gap-1 hover:bg-blue-50 px-2 py-1 rounded-lg">
+                                <button type="button" onClick={addTranche} className="text-sm bg-system-blue text-white font-medium flex items-center gap-1 hover:bg-blue-600 px-3 py-1.5 rounded-lg shadow-md hover:shadow-lg transition-all">
                                     <Plus size={16} /> Add Tranche
                                 </button>
                                 <button
                                     type="button"
                                     onClick={() => setShowRefiOptimizer(true)}
-                                    className="text-sm text-green-600 font-medium flex items-center gap-1 hover:bg-green-50 px-2 py-1 rounded-lg border border-transparent hover:border-green-200 transition-all"
+                                    className="text-sm bg-green-500/10 text-green-600 dark:text-green-400 font-medium flex items-center gap-1 hover:bg-green-500/20 px-3 py-1.5 rounded-lg border border-green-500/20 transition-all"
                                 >
                                     <TrendingUp size={14} />
                                     Refi Optimizer
@@ -728,22 +729,22 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                         </div>
 
                         {showRefiOptimizer && (
-                            <div className="bg-green-50 p-6 rounded-xl border border-green-100 mb-6 animate-fade-in relative">
+                            <div className="bg-green-50 dark:bg-green-900/10 p-6 rounded-xl border border-green-100 dark:border-green-500/20 mb-6 animate-fade-in relative">
                                 <button
                                     onClick={() => setShowRefiOptimizer(false)}
-                                    className="absolute top-4 right-4 text-green-600 hover:text-green-800"
+                                    className="absolute top-4 right-4 text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-200"
                                 >
                                     <Trash2 size={16} />
                                 </button>
-                                <h4 className="text-lg font-bold text-green-900 mb-4 flex items-center gap-2">
+                                <h4 className="text-lg font-bold text-green-900 dark:text-green-100 mb-4 flex items-center gap-2">
                                     <TrendingUp size={20} />
                                     Refinancing Optimizer
                                 </h4>
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                     <div className="space-y-4">
                                         <div>
-                                            <label className="block text-xs font-medium text-green-800 mb-1">Current W.A. Interest Rate</label>
-                                            <div className="text-xl font-bold text-green-900">
+                                            <label className="block text-xs font-medium text-green-800 dark:text-green-300 mb-1">Current W.A. Interest Rate</label>
+                                            <div className="text-xl font-bold text-green-900 dark:text-green-100">
                                                 {(() => {
                                                     const totalDebt = data.financing.tranches.reduce((sum, t) => sum + (t.amount || (t.leverage_multiple || 0) * data.entry_ebitda), 0);
                                                     if (totalDebt === 0) return "0.0%";
@@ -759,6 +760,7 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                                                 value={refiParams.newRate * 100}
                                                 onChange={(e) => setRefiParams(p => ({ ...p, newRate: parseFloat(e.target.value) / 100 }))}
                                                 step="0.1"
+                                                className="bg-white dark:bg-black/20"
                                             />
                                         </div>
                                         <div>
@@ -768,6 +770,7 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                                                 value={refiParams.costPercent * 100}
                                                 onChange={(e) => setRefiParams(p => ({ ...p, costPercent: parseFloat(e.target.value) / 100 }))}
                                                 step="0.1"
+                                                className="bg-white dark:bg-black/20"
                                             />
                                         </div>
                                         <button
@@ -779,39 +782,39 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                                     </div>
 
                                     {refiResult ? (
-                                        <div className="col-span-2 bg-white/60 p-4 rounded-xl border border-green-200">
+                                        <div className="col-span-2 bg-white/60 dark:bg-white/5 p-4 rounded-xl border border-green-200 dark:border-green-500/20">
                                             <div className="flex justify-between items-start mb-4">
                                                 <div>
-                                                    <div className="text-sm text-green-800 font-medium">Recommendation</div>
-                                                    <div className={`text-xl font-bold ${refiResult.net_present_value > 0 ? 'text-green-700' : 'text-red-600'}`}>
+                                                    <div className="text-sm text-green-800 dark:text-green-300 font-medium">Recommendation</div>
+                                                    <div className={`text-xl font-bold ${refiResult.net_present_value > 0 ? 'text-green-700 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                                                         {refiResult.recommendation}
                                                     </div>
                                                 </div>
                                                 <div className="text-right">
-                                                    <div className="text-sm text-green-800 font-medium">Net Present Value (NPV)</div>
-                                                    <div className={`text-xl font-bold ${refiResult.net_present_value > 0 ? 'text-green-700' : 'text-red-600'}`}>
+                                                    <div className="text-sm text-green-800 dark:text-green-300 font-medium">Net Present Value (NPV)</div>
+                                                    <div className={`text-xl font-bold ${refiResult.net_present_value > 0 ? 'text-green-700 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                                                         ${refiResult.net_present_value.toLocaleString()}
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <div className="grid grid-cols-3 gap-4 pt-4 border-t border-green-200">
+                                            <div className="grid grid-cols-3 gap-4 pt-4 border-t border-green-200 dark:border-green-900/50">
                                                 <div>
-                                                    <div className="text-xs text-green-700">Annual Savings (After-Tax)</div>
-                                                    <div className="font-semibold text-green-900">${refiResult.annual_interest_savings.toLocaleString()}</div>
+                                                    <div className="text-xs text-green-700 dark:text-green-400">Annual Savings (After-Tax)</div>
+                                                    <div className="font-semibold text-green-900 dark:text-green-100">${refiResult.annual_interest_savings.toLocaleString()}</div>
                                                 </div>
                                                 <div>
-                                                    <div className="text-xs text-green-700">Upfront Cost</div>
-                                                    <div className="font-semibold text-green-900">${refiResult.upfront_cost.toLocaleString()}</div>
+                                                    <div className="text-xs text-green-700 dark:text-green-400">Upfront Cost</div>
+                                                    <div className="font-semibold text-green-900 dark:text-green-100">${refiResult.upfront_cost.toLocaleString()}</div>
                                                 </div>
                                                 <div>
-                                                    <div className="text-xs text-green-700">Break-Even</div>
-                                                    <div className="font-semibold text-green-900">{refiResult.break_even_years} Years</div>
+                                                    <div className="text-xs text-green-700 dark:text-green-400">Break-Even</div>
+                                                    <div className="font-semibold text-green-900 dark:text-green-100">{refiResult.break_even_years} Years</div>
                                                 </div>
                                             </div>
                                         </div>
                                     ) : (
-                                        <div className="col-span-2 flex items-center justify-center text-green-700/50 text-sm italic border-2 border-dashed border-green-200 rounded-xl">
+                                        <div className="col-span-2 flex items-center justify-center text-green-700/50 dark:text-green-400/50 text-sm italic border-2 border-dashed border-green-200 dark:border-green-500/20 rounded-xl">
                                             Enter parameters and click Analyze to see results
                                         </div>
                                     )}
@@ -820,51 +823,51 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                         )}
 
                         {advisoryData && (
-                            <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 mb-6 animate-fade-in shadow-sm relative">
+                            <div className="bg-blue-50 dark:bg-blue-500/10 p-4 rounded-xl border border-blue-100 dark:border-blue-500/20 mb-6 animate-fade-in shadow-sm relative">
                                 <button
                                     onClick={() => setAdvisoryData(null)}
-                                    className="absolute top-2 right-2 text-blue-400 hover:text-blue-600"
+                                    className="absolute top-2 right-2 text-blue-400 hover:text-blue-600 dark:hover:text-blue-300"
                                 >
                                     <Trash2 size={14} />
                                 </button>
-                                <h4 className="text-sm font-semibold text-blue-800 mb-3 flex items-center gap-2">
-                                    <Zap size={14} className="fill-blue-800" />
+                                <h4 className="text-sm font-semibold text-blue-800 dark:text-blue-200 mb-3 flex items-center gap-2">
+                                    <Zap size={14} className="fill-blue-800 dark:fill-blue-200" />
                                     <span>AI Recommended Structure</span>
                                     {advisoryData.market_condition_adjustment !== 0 && (
-                                        <span className="text-[10px] font-normal bg-white/60 px-2 py-0.5 rounded-full text-blue-700 border border-blue-200">
+                                        <span className="text-[10px] font-normal bg-white/60 dark:bg-white/10 px-2 py-0.5 rounded-full text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-500/30">
                                             Market Adjusted ({advisoryData.market_condition_adjustment}x)
                                         </span>
                                     )}
                                 </h4>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-4">
-                                    <div className="bg-white/50 p-2 rounded-lg">
-                                        <div className="text-xs text-blue-600 mb-1 font-medium">Senior Debt</div>
+                                    <div className="bg-white/50 dark:bg-white/5 p-2 rounded-lg">
+                                        <div className="text-xs text-blue-600 dark:text-blue-400 mb-1 font-medium">Senior Debt</div>
                                         <div className="flex justify-between items-end">
-                                            <span className="text-gray-600">Leverage</span>
-                                            <span className="font-bold text-gray-800">{advisoryData.suggested_structure.senior_debt.leverage.toFixed(1)}x</span>
+                                            <span className="text-gray-600 dark:text-gray-400">Leverage</span>
+                                            <span className="font-bold text-gray-800 dark:text-gray-200">{advisoryData.suggested_structure.senior_debt.leverage.toFixed(1)}x</span>
                                         </div>
                                         <div className="flex justify-between items-end mt-1">
-                                            <span className="text-gray-600">Rate</span>
-                                            <span className="font-mono text-xs">{(advisoryData.suggested_structure.senior_debt.interest_rate * 100).toFixed(2)}%</span>
+                                            <span className="text-gray-600 dark:text-gray-400">Rate</span>
+                                            <span className="font-mono text-xs dark:text-gray-300">{(advisoryData.suggested_structure.senior_debt.interest_rate * 100).toFixed(2)}%</span>
                                         </div>
                                     </div>
-                                    <div className="bg-white/50 p-2 rounded-lg">
-                                        <div className="text-xs text-blue-600 mb-1 font-medium">Mezzanine Debt</div>
+                                    <div className="bg-white/50 dark:bg-white/5 p-2 rounded-lg">
+                                        <div className="text-xs text-blue-600 dark:text-blue-400 mb-1 font-medium">Mezzanine Debt</div>
                                         <div className="flex justify-between items-end">
-                                            <span className="text-gray-600">Leverage</span>
-                                            <span className="font-bold text-gray-800">{advisoryData.suggested_structure.mezzanine_debt.leverage.toFixed(1)}x</span>
+                                            <span className="text-gray-600 dark:text-gray-400">Leverage</span>
+                                            <span className="font-bold text-gray-800 dark:text-gray-200">{advisoryData.suggested_structure.mezzanine_debt.leverage.toFixed(1)}x</span>
                                         </div>
                                         <div className="flex justify-between items-end mt-1">
-                                            <span className="text-gray-600">Rate</span>
-                                            <span className="font-mono text-xs">{(advisoryData.suggested_structure.mezzanine_debt.interest_rate * 100).toFixed(2)}%</span>
+                                            <span className="text-gray-600 dark:text-gray-400">Rate</span>
+                                            <span className="font-mono text-xs dark:text-gray-300">{(advisoryData.suggested_structure.mezzanine_debt.interest_rate * 100).toFixed(2)}%</span>
                                         </div>
                                     </div>
                                 </div>
 
                                 {advisoryData.warnings && advisoryData.warnings.length > 0 && (
-                                    <div className="mt-3 pt-3 border-t border-blue-200 mb-3">
+                                    <div className="mt-3 pt-3 border-t border-blue-200 dark:border-blue-500/30 mb-3">
                                         {advisoryData.warnings.map((w: string, i: number) => (
-                                            <div key={i} className="text-xs text-amber-700 flex items-start gap-1 font-medium bg-amber-50 p-1.5 rounded">
+                                            <div key={i} className="text-xs text-amber-700 dark:text-amber-400 flex items-start gap-1 font-medium bg-amber-50 dark:bg-amber-900/20 p-1.5 rounded">
                                                 <span>!</span>
                                                 {w}
                                             </div>
@@ -885,13 +888,13 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
 
                         <div className="space-y-4">
                             {data.financing.tranches.map((tranche, index) => (
-                                <div key={index} className="bg-white/50 border border-gray-200 rounded-xl p-4 relative group">
+                                <div key={index} className="bg-white/50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl p-4 relative group">
                                     <button type="button" onClick={() => removeTranche(index)} className="absolute top-4 right-4 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
                                         <Trash2 size={16} />
                                     </button>
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                         <div className="col-span-1 md:col-span-3">
-                                            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 block">Tranche Name</label>
+                                            <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1 block">Tranche Name</label>
                                             <input
                                                 className="glass-input w-full md:w-1/2"
                                                 value={tranche.name}
@@ -954,7 +957,7 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                                             })()}
                                         </div>
                                         <div className="flex items-center pt-8">
-                                            <label className="flex items-center gap-2 cursor-pointer text-sm font-medium text-gray-700">
+                                            <label className="flex items-center gap-2 cursor-pointer text-sm font-medium text-gray-700 dark:text-gray-300">
                                                 <input
                                                     type="checkbox"
                                                     checked={tranche.cash_interest}
@@ -974,7 +977,7 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                                             />
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-2">Sweep Priority</label>
+                                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Sweep Priority</label>
                                             <input
                                                 type="number"
                                                 className="glass-input w-full"
@@ -987,20 +990,20 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                             ))}
 
                             {data.financing.tranches.length === 0 && (
-                                <div className="text-center p-8 bg-gray-50 rounded-xl border border-dashed border-gray-300">
-                                    <p className="text-gray-500">No debt tranches defined. Add one to get started.</p>
+                                <div className="text-center p-8 bg-gray-50 dark:bg-white/5 rounded-xl border border-dashed border-gray-300 dark:border-white/10">
+                                    <p className="text-gray-500 dark:text-gray-400">No debt tranches defined. Add one to get started.</p>
                                 </div>
                             )}
 
                             {/* REFINANCING SECTION */}
-                            <div className="pt-6 border-t border-gray-100">
+                            <div className="pt-6 border-t border-gray-100 dark:border-white/10">
                                 <div className="flex justify-between items-center mb-4">
-                                    <h4 className="text-md font-semibold text-gray-700">Refinancing Strategy</h4>
+                                    <h4 className="text-md font-semibold text-gray-700 dark:text-gray-200">Refinancing Strategy</h4>
                                     <div className="flex items-center gap-4">
                                         <button
                                             type="button"
                                             onClick={() => updateField('solve_for', data.solve_for === 'optimal_refinancing' ? 'entry_price' : 'optimal_refinancing')}
-                                            className={`text-xs px-2 py-1 rounded border ${data.solve_for === 'optimal_refinancing' ? 'bg-purple-100 border-purple-300 text-purple-700' : 'border-gray-300 text-gray-500'}`}
+                                            className={`text-xs px-2 py-1 rounded border ${data.solve_for === 'optimal_refinancing' ? 'bg-purple-100 dark:bg-purple-500/20 border-purple-300 dark:border-purple-500/30 text-purple-700 dark:text-purple-300' : 'border-gray-300 dark:border-white/20 text-gray-500 dark:text-gray-400'}`}
                                         >
                                             {data.solve_for === 'optimal_refinancing' ? 'Optimization Active' : 'Auto-Optimize Timing'}
                                         </button>
@@ -1023,10 +1026,10 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                                 </div>
 
                                 {data.refinancing_config?.enabled && (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-blue-50/50 p-4 rounded-xl border border-blue-100">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-blue-50/50 dark:bg-blue-500/5 p-4 rounded-xl border border-blue-100 dark:border-white/10">
                                         <div>
                                             {data.solve_for === 'optimal_refinancing' ? (
-                                                <div className="bg-purple-50 p-3 rounded border border-purple-100 text-sm text-purple-800">
+                                                <div className="bg-purple-50 dark:bg-purple-500/10 p-3 rounded border border-purple-100 dark:border-purple-500/20 text-sm text-purple-800 dark:text-purple-300">
                                                     <strong>Auto-Optimization:</strong> The model will test all years and choose the best refinancing timing for MAX IRR.
                                                 </div>
                                             ) : (
@@ -1071,27 +1074,27 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
 
                 {step === 3 && (
                     <div className="space-y-6 animate-fade-in">
-                        <h3 className="text-lg font-semibold text-gray-800 border-b border-gray-100 pb-2">Step 3: Covenants & Tax</h3>
+                        <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 border-b border-gray-100 dark:border-white/10 pb-2">Step 3: Covenants & Tax</h3>
 
                         {/* COVENANTS */}
                         <div className="space-y-4">
                             <div className="flex justify-between items-center">
-                                <h4 className="text-md font-semibold text-gray-700">Financial Covenants</h4>
+                                <h4 className="text-md font-semibold text-gray-700 dark:text-gray-200">Financial Covenants</h4>
                                 <button type="button" onClick={() => {
                                     const newCov: CovenantRule = { covenant_type: 'max_debt_ebitda', limit: 6.0, start_year: 1, end_year: 5 };
                                     updateField('covenants', [...(data.covenants || []), newCov]);
-                                }} className="text-sm text-system-blue font-medium flex items-center gap-1 hover:bg-blue-50 px-2 py-1 rounded-lg">
+                                }} className="text-sm text-system-blue font-medium flex items-center gap-1 hover:bg-blue-50 dark:hover:bg-blue-500/10 px-2 py-1 rounded-lg">
                                     <Plus size={16} /> Add Covenant
                                 </button>
                             </div>
 
                             {(data.covenants || []).map((cov, idx) => (
-                                <div key={idx} className="bg-white/50 border border-gray-200 rounded-xl p-4 relative flex gap-4 items-end">
+                                <div key={idx} className="bg-white/50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl p-4 relative flex gap-4 items-end">
                                     <button type="button" onClick={() => updateField('covenants', data.covenants?.filter((_, i) => i !== idx))} className="absolute top-2 right-2 text-gray-400 hover:text-red-500">
                                         <Trash2 size={14} />
                                     </button>
                                     <div className="flex-1">
-                                        <label className="text-xs text-gray-500 block mb-1">Type</label>
+                                        <label className="text-xs text-gray-500 dark:text-gray-400 block mb-1">Type</label>
                                         <select
                                             value={cov.covenant_type}
                                             onChange={(e) => {
@@ -1143,12 +1146,12 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                         </div>
 
                         {/* TAX SHIELD */}
-                        <div className="pt-6 border-t border-gray-100">
-                            <h4 className="text-md font-semibold text-gray-700 mb-4">Tax Optimization</h4>
+                        <div className="pt-6 border-t border-gray-100 dark:border-white/10">
+                            <h4 className="text-md font-semibold text-gray-700 dark:text-gray-200 mb-4">Tax Optimization</h4>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="md:col-span-2">
-                                    <h5 className="text-sm font-medium text-gray-600 mb-2">Loss Carryforwards (NOL)</h5>
-                                    <label className="flex items-center gap-2 cursor-pointer text-sm font-medium text-gray-700 mb-4">
+                                    <h5 className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Loss Carryforwards (NOL)</h5>
+                                    <label className="flex items-center gap-2 cursor-pointer text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">
                                         <input
                                             type="checkbox"
                                             checked={data.tax_assumptions?.enable_nol || false}
@@ -1182,7 +1185,7 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                                     </>
                                 )}
                                 <div>
-                                    <h5 className="text-sm font-medium text-gray-600 mb-2">Deductibility</h5>
+                                    <h5 className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Deductibility</h5>
                                     <EnhancedFormInput
                                         label="Interest Deductibility Cap (% EBITDA)"
                                         type="number" step="1"
@@ -1192,11 +1195,11 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                                             updateField('tax_assumptions', { ...currentTax, interest_deductibility_cap: parseFloat(e.target.value) / 100 } as TaxConfig);
                                         }}
                                     />
-                                    <p className="text-xs text-gray-500 mt-1">Leave 0 for no cap (Section 163(j) defaults to 30%)</p>
+                                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Leave 0 for no cap (Section 163(j) defaults to 30%)</p>
                                 </div>
 
-                                <div className="md:col-span-2 pt-4 border-t border-gray-100">
-                                    <h5 className="text-sm font-medium text-gray-600 mb-2">Asset Step-Up (Section 338(h)(10))</h5>
+                                <div className="md:col-span-2 pt-4 border-t border-gray-100 dark:border-white/10">
+                                    <h5 className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Asset Step-Up (Section 338(h)(10))</h5>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div>
                                             <EnhancedFormInput
@@ -1229,9 +1232,9 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
 
                 {step === 4 && (
                     <div className="space-y-6 animate-fade-in">
-                        <h3 className="text-lg font-semibold text-gray-800 border-b border-gray-100 pb-2">Step 4: Management Incentive Plan (MIP)</h3>
+                        <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 border-b border-gray-100 dark:border-white/10 pb-2">Step 4: Management Incentive Plan (MIP)</h3>
 
-                        <div className="bg-orange-50/50 p-6 rounded-xl border border-orange-100">
+                        <div className="bg-orange-50/50 dark:bg-orange-500/10 p-6 rounded-xl border border-orange-100 dark:border-orange-500/20">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <EnhancedFormInput
@@ -1242,6 +1245,7 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                                             const currentMIP = data.mip_assumptions || { strike_price_discount: 0, vesting_period: 4, cliff_years: 1 };
                                             updateField('mip_assumptions', { ...currentMIP, option_pool_percent: parseFloat(e.target.value) / 100 } as MIPConfig);
                                         }}
+                                        className="dark:bg-black/20"
                                     />
                                 </div>
                                 <div>
@@ -1253,6 +1257,7 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                                             const currentMIP = data.mip_assumptions || { option_pool_percent: 0.1, strike_price_discount: 0, cliff_years: 1 };
                                             updateField('mip_assumptions', { ...currentMIP, vesting_period: parseFloat(e.target.value) } as MIPConfig);
                                         }}
+                                        className="dark:bg-black/20"
                                     />
                                 </div>
                             </div>
@@ -1262,7 +1267,7 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
 
                 {step === 5 && (
                     <div className="space-y-6 animate-fade-in">
-                        <h3 className="text-lg font-semibold text-gray-800 border-b border-gray-100 pb-2">Step 5: Assumptions & Exit</h3>
+                        <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 border-b border-gray-100 dark:border-white/10 pb-2">Step 5: Assumptions & Exit</h3>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
@@ -1302,8 +1307,8 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                                 />
                             </div>
 
-                            <div className="md:col-span-2 pt-4 border-t border-gray-100">
-                                <h4 className="text-md font-semibold text-gray-700 mb-4">Exit Assumptions</h4>
+                            <div className="md:col-span-2 pt-4 border-t border-gray-100 dark:border-white/10">
+                                <h4 className="text-md font-semibold text-gray-700 dark:text-gray-200 mb-4">Exit Assumptions</h4>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <EnhancedFormInput
@@ -1323,8 +1328,8 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                                         />
                                     </div>
 
-                                    <div className="md:col-span-2 pt-4 border-t border-gray-100">
-                                        <h4 className="text-md font-semibold text-gray-700 mb-2">Waterfall Distribution</h4>
+                                    <div className="md:col-span-2 pt-4 border-t border-gray-100 dark:border-white/10">
+                                        <h4 className="text-md font-semibold text-gray-700 dark:text-gray-200 mb-2">Waterfall Distribution</h4>
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                             <div>
                                                 <EnhancedFormInput
@@ -1343,7 +1348,7 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                                                 />
                                             </div>
                                             <div className="flex items-center pt-8">
-                                                <label className="flex items-center gap-2 cursor-pointer text-sm font-medium text-gray-700">
+                                                <label className="flex items-center gap-2 cursor-pointer text-sm font-medium text-gray-700 dark:text-gray-300">
                                                     <input
                                                         type="checkbox"
                                                         checked={data.assumptions.catchup_active !== false} // Default true
@@ -1362,12 +1367,12 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                 )}
                 {step === 6 && (
                     <div className="space-y-6 animate-fade-in">
-                        <div className="flex justify-between items-center border-b border-gray-100 pb-2">
-                            <h3 className="text-lg font-semibold text-gray-800">Step 6: Sensitivity Analysis (Phase 4)</h3>
+                        <div className="flex justify-between items-center border-b border-gray-100 dark:border-white/10 pb-2">
+                            <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">Step 6: Sensitivity Analysis (Phase 4)</h3>
                         </div>
 
-                        <div className="bg-blue-50/50 p-4 rounded-xl border border-blue-100 mb-4">
-                            <p className="text-sm text-gray-600 mb-2">
+                        <div className="bg-blue-50/50 dark:bg-blue-500/10 p-4 rounded-xl border border-blue-100 dark:border-blue-500/20 mb-4">
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
                                 <Activity className="inline w-4 h-4 mr-1 text-blue-500" />
                                 Run sensitivity scenarios to understand how changes in key variables impact your returns (IRR).
                             </p>
@@ -1379,14 +1384,14 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
             </div>
 
             {/* Footer Navigation */}
-            <div className="p-6 bg-gray-50 border-t border-gray-200 flex justify-between items-center">
+            <div className="p-6 bg-gray-50 dark:bg-white/5 border-t border-gray-200 dark:border-white/10 flex justify-between items-center">
                 <button
                     type="button"
                     onClick={prevStep}
                     disabled={step === 1}
                     className={`flex items-center gap-2 px-6 py-2 rounded-xl text-sm font-medium transition-all ${step === 1
-                        ? 'text-gray-400 bg-gray-100 cursor-not-allowed'
-                        : 'text-gray-600 bg-white border border-gray-200 hover:bg-gray-50 shadow-sm'
+                        ? 'text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-white/5 cursor-not-allowed'
+                        : 'text-gray-600 dark:text-gray-300 bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/10 shadow-sm'
                         }`}
                 >
                     <ChevronLeft size={16} /> Back
@@ -1405,7 +1410,7 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                         <button
                             type="button"
                             onClick={nextStep} // Go to Sensitivity
-                            className="flex items-center gap-2 px-6 py-2 rounded-xl text-sm font-medium text-blue-700 bg-blue-100 hover:bg-blue-200 shadow-sm transition-all"
+                            className="flex items-center gap-2 px-6 py-2 rounded-xl text-sm font-medium text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-500/20 hover:bg-blue-200 dark:hover:bg-blue-500/30 shadow-sm transition-all"
                         >
                             Sensitivity <Layers size={16} />
                         </button>

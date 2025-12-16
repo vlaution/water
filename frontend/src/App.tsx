@@ -205,9 +205,9 @@ const ProtectedApp = () => {
       <div className="flex">
         {/* Sidebar */}
         {step !== 'mode-selection' && (
-          <aside className="w-80 min-h-screen bg-white/40 backdrop-blur-xl border-r border-white/20 p-6 shadow-glass z-10">
-            <div className="mb-8">
-              <div className="flex items-center gap-3 mb-6">
+          <aside className="w-80 min-h-screen bg-white/40 backdrop-blur-xl border-r border-white/20 dark:bg-black/20 dark:border-white/5 p-6 shadow-glass z-10 transition-colors duration-300">
+            <div className="mb-8 flex items-center justify-between">
+              <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-system-blue rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30">
                   <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
@@ -215,99 +215,99 @@ const ProtectedApp = () => {
                 </div>
                 <h1 className="text-xl font-bold tracking-tight text-gray-900">Valuation</h1>
               </div>
-              <div className="flex flex-col gap-2">
-                <PermissionGuard permission={Permissions.CREATE_VALUATION}>
-                  <button
-                    onClick={() => setStep('mode-selection')}
-                    className="glass-button w-full flex items-center  justify-center gap-2 text-sm"
-                  >
-                    <span>←</span> New Valuation
-                  </button>
-                </PermissionGuard>
-
-                <button
-                  onClick={() => setStep('risk-dashboard')}
-                  className={`glass-button w-full flex items-center justify-center gap-2 text-sm ${step === 'risk-dashboard' ? 'bg-blue-50 border-blue-200' : ''}`}
-                >
-                  Risk Management
-                </button>
-
-                <button
-                  onClick={() => setStep('fund-simulator')}
-                  className={`glass-button w-full flex items-center justify-center gap-2 text-sm ${step === 'fund-simulator' ? 'bg-blue-50 border-blue-200' : ''}`}
-                >
-                  Fund Simulator
-                </button>
-
-                <button
-                  onClick={() => setStep('deal-sourcing')}
-                  className={`glass-button w-full flex items-center justify-center gap-2 text-sm ${step === 'deal-sourcing' ? 'bg-blue-50 border-blue-200' : ''}`}
-                >
-                  Deal Sourcing
-                </button>
-
-                <button
-                  onClick={() => setStep('debt-markets')}
-                  className={`glass-button w-full flex items-center justify-center gap-2 text-sm ${step === 'debt-markets' ? 'bg-blue-50 border-blue-200' : ''}`}
-                >
-                  Debt Markets
-                </button>
-
-                <PermissionGuard permission={Permissions.VIEW_ANALYTICS}>
-                  <button
-                    onClick={() => window.location.href = '/admin/performance'}
-                    className="glass-button w-full flex items-center justify-center gap-2 text-sm"
-                  >
-                    Performance
-                  </button>
-                </PermissionGuard>
-
-                <PermissionGuard permission={Permissions.VIEW_AUDIT_LOGS}>
-                  <button
-                    onClick={() => window.location.href = '/admin/audit'}
-                    className="glass-button w-full flex items-center justify-center gap-2 text-sm"
-                  >
-                    Audit Logs
-                  </button>
-                </PermissionGuard>
-
-                <PermissionGuard permission={Permissions.CONFIGURE_SYSTEM}>
-                  <button
-                    onClick={() => window.location.href = '/admin/health'}
-                    className="glass-button w-full flex items-center justify-center gap-2 text-sm"
-                  >
-                    System Health
-                  </button>
-                </PermissionGuard>
-
-                <button
-                  onClick={logout}
-                  className="glass-button w-full flex items-center justify-center gap-2 text-sm bg-red-50 hover:bg-red-100"
-                >
-                  Logout ({user.name})
-                </button>
-                <div className="mt-4 flex justify-center">
-                  <ThemeToggle />
-                </div>
-              </div>
-
-              <div className="mt-6 border-t border-gray-200/50 pt-6">
-                <button
-                  onClick={() => setIsGlobalSettingsOpen(true)}
-                  className="glass-button w-full flex items-center justify-center gap-2 text-sm text-gray-600 hover:text-system-blue transition-colors"
-                >
-                  <Globe size={16} />
-                  Global Assumptions
-                </button>
-                <button
-                  onClick={() => setIsSecretsModalOpen(true)}
-                  className="glass-button w-full flex items-center justify-center gap-2 text-sm text-gray-600 hover:text-system-blue transition-colors mt-2"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                  API Vault
-                </button>
-              </div>
+              <ThemeToggle />
             </div>
+            <div className="flex flex-col gap-2">
+              <PermissionGuard permission={Permissions.CREATE_VALUATION}>
+                <button
+                  onClick={() => setStep('mode-selection')}
+                  className="glass-button w-full flex items-center  justify-center gap-2 text-sm"
+                >
+                  <span>←</span> New Valuation
+                </button>
+              </PermissionGuard>
+
+              <button
+                onClick={() => setStep('risk-dashboard')}
+                className={`glass-button w-full flex items-center justify-center gap-2 text-sm ${step === 'risk-dashboard' ? 'nav-item-active' : ''}`}
+              >
+                Risk Management
+              </button>
+
+              <button
+                onClick={() => setStep('fund-simulator')}
+                className={`glass-button w-full flex items-center justify-center gap-2 text-sm ${step === 'fund-simulator' ? 'nav-item-active' : ''}`}
+              >
+                Fund Simulator
+              </button>
+
+              <button
+                onClick={() => setStep('deal-sourcing')}
+                className={`glass-button w-full flex items-center justify-center gap-2 text-sm ${step === 'deal-sourcing' ? 'nav-item-active' : ''}`}
+              >
+                Deal Sourcing
+              </button>
+
+              <button
+                onClick={() => setStep('debt-markets')}
+                className={`glass-button w-full flex items-center justify-center gap-2 text-sm ${step === 'debt-markets' ? 'nav-item-active' : ''}`}
+              >
+                Debt Markets
+              </button>
+
+              <PermissionGuard permission={Permissions.VIEW_ANALYTICS}>
+                <button
+                  onClick={() => window.location.href = '/admin/performance'}
+                  className="glass-button w-full flex items-center justify-center gap-2 text-sm"
+                >
+                  Performance
+                </button>
+              </PermissionGuard>
+
+              <PermissionGuard permission={Permissions.VIEW_AUDIT_LOGS}>
+                <button
+                  onClick={() => window.location.href = '/admin/audit'}
+                  className="glass-button w-full flex items-center justify-center gap-2 text-sm"
+                >
+                  Audit Logs
+                </button>
+              </PermissionGuard>
+
+              <PermissionGuard permission={Permissions.CONFIGURE_SYSTEM}>
+                <button
+                  onClick={() => window.location.href = '/admin/health'}
+                  className="glass-button w-full flex items-center justify-center gap-2 text-sm"
+                >
+                  System Health
+                </button>
+              </PermissionGuard>
+
+              <button
+                onClick={logout}
+                className="glass-button w-full flex items-center justify-center gap-2 text-sm bg-red-50 hover:bg-red-100"
+              >
+                Logout ({user.name})
+              </button>
+
+            </div>
+
+            <div className="mt-6 border-t border-gray-200/50 pt-6">
+              <button
+                onClick={() => setIsGlobalSettingsOpen(true)}
+                className="glass-button w-full flex items-center justify-center gap-2 text-sm text-gray-600 hover:text-system-blue transition-colors"
+              >
+                <Globe size={16} />
+                Global Assumptions
+              </button>
+              <button
+                onClick={() => setIsSecretsModalOpen(true)}
+                className="glass-button w-full flex items-center justify-center gap-2 text-sm text-gray-600 hover:text-system-blue transition-colors mt-2"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                API Vault
+              </button>
+            </div>
+
             <RecentRuns onSelectRun={handleSelectRun} token={token} />
           </aside>
         )}
@@ -322,15 +322,15 @@ const ProtectedApp = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                   </svg>
                 </div>
-                <h1 className="text-4xl font-bold tracking-tight text-gray-900">Valuation</h1>
+                <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-100">Valuation</h1>
               </div>
-              <button
-                onClick={logout}
-                className="glass-button text-sm"
-              >
-                Logout ({user.name})
-              </button>
-              <div className="ml-4">
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={logout}
+                  className="glass-button text-sm"
+                >
+                  Logout ({user.name})
+                </button>
                 <ThemeToggle />
               </div>
             </header>
@@ -364,7 +364,7 @@ const ProtectedApp = () => {
         <GlobalAssumptionsPanel isOpen={isGlobalSettingsOpen} onClose={() => setIsGlobalSettingsOpen(false)} />
         <SecretsModal isOpen={isSecretsModalOpen} onClose={() => setIsSecretsModalOpen(false)} /> {/* Render User Modal */}
       </div>
-    </div>
+    </div >
   );
 }
 

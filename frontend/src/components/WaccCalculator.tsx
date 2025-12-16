@@ -76,10 +76,10 @@ export const WaccCalculator: React.FC<WaccCalculatorProps> = ({ isOpen, onClose,
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 m-4 animate-fade-in-up border border-white/20">
+            <div className="bg-white dark:bg-gray-900/90 backdrop-blur-xl rounded-2xl shadow-2xl w-full max-w-md p-6 m-4 animate-fade-in-up border border-white/20 dark:border-white/10">
                 <div className="flex justify-between items-center mb-6">
-                    <h3 className="text-xl font-bold text-gray-900">WACC Calculator</h3>
-                    <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">WACC Calculator</h3>
+                    <button onClick={onClose} className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors">
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                         </svg>
@@ -92,19 +92,19 @@ export const WaccCalculator: React.FC<WaccCalculatorProps> = ({ isOpen, onClose,
                         value={ticker}
                         onChange={(e) => setTicker(e.target.value)}
                         placeholder="Ticker (e.g. IBM)"
-                        className="flex-1 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
+                        className="flex-1 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-colors"
                     />
                     <button
                         onClick={() => fetchMarketData(ticker)}
                         disabled={loading}
-                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg disabled:opacity-50 transition-colors shadow-md"
                     >
                         {loading ? 'Loading...' : 'Fetch'}
                     </button>
                 </div>
 
                 {error && (
-                    <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">
+                    <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 border border-red-100 dark:border-red-500/20 rounded-lg text-sm">
                         {error}
                     </div>
                 )}
@@ -112,75 +112,75 @@ export const WaccCalculator: React.FC<WaccCalculatorProps> = ({ isOpen, onClose,
                 <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-xs font-medium text-gray-500 mb-1">Risk-Free Rate</label>
+                            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Risk-Free Rate</label>
                             <input
                                 type="number"
                                 step="0.001"
                                 value={data.risk_free_rate}
                                 onChange={(e) => setData({ ...data, risk_free_rate: parseFloat(e.target.value) })}
-                                className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm"
+                                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500/50 outline-none"
                             />
                         </div>
                         <div>
-                            <label className="block text-xs font-medium text-gray-500 mb-1">Beta</label>
+                            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Beta</label>
                             <input
                                 type="number"
                                 step="0.01"
                                 value={data.beta}
                                 onChange={(e) => setData({ ...data, beta: parseFloat(e.target.value) })}
-                                className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm"
+                                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500/50 outline-none"
                             />
                         </div>
                         <div>
-                            <label className="block text-xs font-medium text-gray-500 mb-1">Market Risk Premium</label>
+                            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Market Risk Premium</label>
                             <input
                                 type="number"
                                 step="0.001"
                                 value={data.market_risk_premium}
                                 onChange={(e) => setData({ ...data, market_risk_premium: parseFloat(e.target.value) })}
-                                className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm"
+                                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500/50 outline-none"
                             />
                         </div>
                         <div>
-                            <label className="block text-xs font-medium text-gray-500 mb-1">Cost of Debt</label>
+                            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Cost of Debt</label>
                             <input
                                 type="number"
                                 step="0.001"
                                 value={data.cost_of_debt}
                                 onChange={(e) => setData({ ...data, cost_of_debt: parseFloat(e.target.value) })}
-                                className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm"
+                                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500/50 outline-none"
                             />
                         </div>
                         <div>
-                            <label className="block text-xs font-medium text-gray-500 mb-1">Tax Rate</label>
+                            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Tax Rate</label>
                             <input
                                 type="number"
                                 step="0.01"
                                 value={data.tax_rate}
                                 onChange={(e) => setData({ ...data, tax_rate: parseFloat(e.target.value) })}
-                                className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm"
+                                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500/50 outline-none"
                             />
                         </div>
                         <div>
-                            <label className="block text-xs font-medium text-gray-500 mb-1">Equity Weight</label>
+                            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Equity Weight</label>
                             <input
                                 type="number"
                                 step="0.01"
                                 value={data.equity_weight}
                                 onChange={(e) => setData({ ...data, equity_weight: parseFloat(e.target.value) })}
-                                className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm"
+                                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500/50 outline-none"
                             />
                         </div>
                     </div>
 
-                    <div className="mt-6 p-4 bg-gray-50 rounded-xl flex justify-between items-center">
-                        <span className="font-medium text-gray-700">Calculated WACC</span>
-                        <span className="text-2xl font-bold text-blue-600">{(wacc * 100).toFixed(2)}%</span>
+                    <div className="mt-6 p-4 bg-gray-50 dark:bg-white/5 rounded-xl border border-gray-100 dark:border-white/10 flex justify-between items-center">
+                        <span className="font-medium text-gray-700 dark:text-gray-300">Calculated WACC</span>
+                        <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">{(wacc * 100).toFixed(2)}%</span>
                     </div>
 
                     <button
                         onClick={handleApply}
-                        className="w-full py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/20"
+                        className="w-full py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40"
                     >
                         Apply to Valuation
                     </button>

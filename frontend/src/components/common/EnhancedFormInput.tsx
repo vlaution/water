@@ -54,7 +54,7 @@ export const EnhancedFormInput: React.FC<EnhancedFormInputProps> = ({
     return (
         <div className={`relative ${wrapperClassName}`}>
             {label && (
-                <label className="block text-sm font-medium text-gray-600 mb-2">
+                <label className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
                     {label}
                 </label>
             )}

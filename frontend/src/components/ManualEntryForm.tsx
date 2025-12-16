@@ -630,15 +630,15 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                 <div className="glass-panel p-6">
                     <div className="flex justify-between items-center mb-4">
                         <div className="flex items-center gap-4">
-                            <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Select Valuation Method</h2>
+                            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">Select Valuation Method</h2>
 
-                            {/* Undo/Redo Controls */}
-                            <div className="flex items-center gap-1 bg-white/50 rounded-lg p-1 border border-white/20">
+                            {/* Undo/Redo Controls - Styled like buttons */}
+                            <div className="flex items-center gap-2">
                                 <button
                                     type="button"
                                     onClick={undo}
                                     disabled={!canUndo}
-                                    className="p-1.5 hover:bg-white rounded-md disabled:opacity-30 transition-all"
+                                    className="p-2 bg-system-blue text-white rounded-lg shadow-md hover:shadow-blue-500/30 hover:-translate-y-0.5 disabled:opacity-30 disabled:hover:translate-y-0 transition-all"
                                     title="Undo"
                                 >
                                     ↩
@@ -647,7 +647,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                                     type="button"
                                     onClick={redo}
                                     disabled={!canRedo}
-                                    className="p-1.5 hover:bg-white rounded-md disabled:opacity-30 transition-all"
+                                    className="p-2 bg-system-blue text-white rounded-lg shadow-md hover:shadow-blue-500/30 hover:-translate-y-0.5 disabled:opacity-30 disabled:hover:translate-y-0 transition-all"
                                     title="Redo"
                                 >
                                     ↪
@@ -681,7 +681,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                                 type="button"
                                 onClick={undoLastAIChange}
                                 disabled={!canUndoAI}
-                                className="px-3 py-2.5 bg-gray-100 text-gray-600 rounded-xl hover:bg-gray-200 disabled:opacity-50 transition-colors flex items-center gap-2"
+                                className="px-3 py-2.5 bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-300 rounded-xl hover:bg-gray-200 dark:hover:bg-white/20 disabled:opacity-50 transition-colors flex items-center gap-2"
                                 title="Undo last AI change"
                             >
                                 <span>↺</span>
@@ -691,7 +691,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                                 type="button"
                                 onClick={validateWithAI}
                                 disabled={isValidating || !preferences.aiEnabled}
-                                className="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all font-medium flex items-center gap-2 disabled:opacity-70 disabled:scale-100 disabled:cursor-not-allowed"
+                                className="px-5 py-2.5 bg-system-blue text-white rounded-xl shadow-lg hover:shadow-blue-500/30 hover:scale-105 transition-all font-medium flex items-center gap-2 disabled:opacity-70 disabled:scale-100 disabled:cursor-not-allowed"
                             >
                                 {isValidating ? (
                                     <>
@@ -721,8 +721,8 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                                 type="button"
                                 onClick={() => setActiveMethod(method as any)}
                                 className={`px-6 py-2 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap ${activeMethod === method
-                                    ? 'bg-white text-gray-900 shadow-sm scale-100'
-                                    : 'text-gray-500 hover:text-gray-800 hover:bg-white/30'
+                                    ? 'glass-tab-active scale-100'
+                                    : 'text-gray-500 hover:text-gray-800 hover:bg-white/30 dark:text-gray-400 dark:hover:text-white dark:hover:bg-white/5'
                                     }`}
                             >
                                 {method === 'dcf' ? 'DCF (FCFF)' :
@@ -763,7 +763,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                                     type="button"
                                     onClick={fetchFinancialData}
                                     disabled={!formData.ticker || isFetching}
-                                    className="px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 disabled:opacity-50 transition-colors text-sm font-medium whitespace-nowrap h-[42px] mb-1"
+                                    className="px-4 py-2 bg-system-blue text-white rounded-lg shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5 disabled:opacity-50 transition-all text-sm font-medium whitespace-nowrap h-[42px] mb-1"
                                 >
                                     {isFetching ? 'Loading...' : 'Auto-Populate'}
                                 </button>
@@ -792,10 +792,10 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                 </div>
 
                 <div className="glass-panel p-6 animate-fade-in-up">
-                    <h3 className="text-lg font-semibold text-gray-800 mb-4">Company Profile</h3>
+                    <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Company Profile</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="md:col-span-2">
-                            <label className="block text-sm font-medium text-gray-600 mb-2">Description</label>
+                            <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Description</label>
                             <textarea
                                 value={formData.description}
                                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -804,7 +804,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-600 mb-2">Industry</label>
+                            <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Industry</label>
                             <input
                                 type="text"
                                 value={formData.industry}
@@ -813,7 +813,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-600 mb-2">Sector</label>
+                            <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Sector</label>
                             <input
                                 type="text"
                                 value={formData.sector}
@@ -822,7 +822,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-600 mb-2">Location (Address)</label>
+                            <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Location (Address)</label>
                             <input
                                 type="text"
                                 value={formData.address}
@@ -831,7 +831,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-600 mb-2">Employees</label>
+                            <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Employees</label>
                             <input
                                 type="text"
                                 value={formData.employees}
@@ -846,7 +846,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                     <div className="glass-panel p-8 animate-fade-in-up">
                         <div className="flex justify-between items-center mb-8 pb-4 border-b border-gray-200/50">
                             <div>
-                                <h3 className="text-xl font-bold text-gray-900 tracking-tight">DCF Assumptions</h3>
+                                <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">DCF Assumptions</h3>
                                 <p className="text-sm text-gray-500 mt-1">Free Cash Flow to Firm (FCFF)</p>
                             </div>
                             <button
@@ -1209,7 +1209,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                                             alert("Error finding peers: " + e);
                                         }
                                     }}
-                                    className="px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium border border-blue-200"
+                                    className="px-4 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors text-sm font-medium border border-blue-200 dark:border-blue-500/30"
                                 >
                                     Find Peers
                                 </button>
@@ -1248,8 +1248,8 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                                     />
                                     {renderErrorMessage('gpc_ebitda')}
                                 </div>
-                                <div className="mt-4 col-span-1 md:col-span-2 grid grid-cols-2 gap-6 p-4 bg-blue-50/50 rounded-xl border border-blue-100">
-                                    <h4 className="col-span-2 font-semibold text-gray-800 text-sm">Applied Multiples (Median)</h4>
+                                <div className="mt-4 col-span-1 md:col-span-2 grid grid-cols-2 gap-6 p-4 bg-blue-50/50 dark:bg-blue-900/10 rounded-xl border border-blue-100 dark:border-blue-500/20">
+                                    <h4 className="col-span-2 font-semibold text-gray-800 dark:text-gray-200 text-sm">Applied Multiples (Median)</h4>
                                     <div>
                                         <label className="block text-xs font-medium text-gray-600 mb-1">EV / Revenue</label>
                                         <input
@@ -1263,7 +1263,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                                                     ev_revenue_multiple: parseFloat(e.target.value)
                                                 }
                                             }))}
-                                            className="w-full px-3 py-2 rounded-lg border border-white/30 bg-white/50 text-sm"
+                                            className="w-full px-3 py-2 rounded-lg border border-white/30 dark:border-white/10 bg-white/50 dark:bg-white/5 text-sm text-gray-900 dark:text-white"
                                             placeholder="Auto-calc"
                                         />
                                     </div>
@@ -1280,21 +1280,20 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                                                     ev_ebitda_multiple: parseFloat(e.target.value)
                                                 }
                                             }))}
-                                            className="w-full px-3 py-2 rounded-lg border border-white/30 bg-white/50 text-sm"
+                                            className="w-full px-3 py-2 rounded-lg border border-white/30 dark:border-white/10 bg-white/50 dark:bg-white/5 text-sm text-gray-900 dark:text-white"
                                             placeholder="Auto-calc"
                                         />
                                     </div>
                                     <div className="col-span-2">
                                         <label className="block text-xs font-medium text-gray-600 mb-1">Peer Group</label>
-                                        <div className="text-xs text-gray-500 italic bg-white/50 p-2 rounded-lg border border-white/30">
-                                            {formData.gpc_input.peer_tickers?.length > 0
-                                                ? formData.gpc_input.peer_tickers.join(", ")
-                                                : "No peers selected"}
-                                        </div>
+                                        {formData.gpc_input.peer_tickers?.length > 0
+                                            ? formData.gpc_input.peer_tickers.join(", ")
+                                            : "No peers selected"}
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     )
                 }
 
@@ -1304,8 +1303,8 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                             <h3 className="text-xl font-bold text-gray-900 mb-6">Precedent Transactions</h3>
                             <p className="text-gray-500 text-sm mb-6">Enter comparable M&A transactions</p>
 
-                            <div className="mb-6 p-6 bg-blue-50/50 rounded-2xl border border-blue-100">
-                                <h4 className="font-semibold text-gray-800 mb-4">Target Company Metrics</h4>
+                            <div className="mb-6 p-6 bg-blue-50/50 dark:bg-blue-900/10 rounded-2xl border border-blue-100 dark:border-blue-500/20">
+                                <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-4">Target Company Metrics</h4>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
                                         <label className="block text-sm font-medium text-gray-600 mb-2">LTM Revenue ($M)</label>
@@ -1319,7 +1318,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                                                     target_revenue: parseFloat(e.target.value)
                                                 }
                                             }))}
-                                            className={`${getInputClassName('precedent_target_revenue')} bg-white/80`}
+                                            className={`${getInputClassName('precedent_target_revenue')} bg-white/80 dark:bg-white/5 dark:text-white`}
                                         />
                                         {renderErrorMessage('precedent_target_revenue')}
                                     </div>
@@ -1335,7 +1334,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                                                     target_ebitda: parseFloat(e.target.value)
                                                 }
                                             }))}
-                                            className={`${getInputClassName('precedent_target_ebitda')} bg-white/80`}
+                                            className={`${getInputClassName('precedent_target_ebitda')} bg-white/80 dark:bg-white/5 dark:text-white`}
                                         />
                                         {renderErrorMessage('precedent_target_ebitda')}
                                     </div>
@@ -1345,7 +1344,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                             <div className="overflow-x-auto rounded-xl border border-white/30">
                                 <table className="w-full">
                                     <thead>
-                                        <tr className="bg-white/50 border-b border-white/30">
+                                        <tr className="bg-white/50 dark:bg-white/5 border-b border-white/30 dark:border-white/10">
                                             <th className="text-left py-3 px-4 text-sm font-semibold text-gray-600">Target</th>
                                             <th className="text-left py-3 px-4 text-sm font-semibold text-gray-600">Acquirer</th>
                                             <th className="text-left py-3 px-4 text-sm font-semibold text-gray-600">Date</th>
@@ -1356,7 +1355,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                                     </thead>
                                     <tbody className="divide-y divide-white/30">
                                         {formData.precedent_transactions_input.transactions.map((txn: any, index: number) => (
-                                            <tr key={index} className="hover:bg-white/40">
+                                            <tr key={index} className="hover:bg-white/40 dark:hover:bg-white/5">
                                                 <td className="py-2 px-2">
                                                     <input
                                                         type="text"
@@ -1366,7 +1365,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                                                             newTxns[index].target_name = e.target.value;
                                                             setFormData(prev => ({ ...prev, precedent_transactions_input: { ...prev.precedent_transactions_input, transactions: newTxns } }));
                                                         }}
-                                                        className="w-full px-2 py-1.5 rounded-lg border border-white/30 bg-white/50 focus:ring-2 focus:ring-system-blue/50 outline-none text-sm"
+                                                        className="w-full px-2 py-1.5 rounded-lg border border-white/30 dark:border-white/10 bg-white/50 dark:bg-white/5 focus:ring-2 focus:ring-system-blue/50 outline-none text-sm dark:text-white"
                                                     />
                                                 </td>
                                                 <td className="py-2 px-2">
@@ -1378,7 +1377,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                                                             newTxns[index].acquirer_name = e.target.value;
                                                             setFormData(prev => ({ ...prev, precedent_transactions_input: { ...prev.precedent_transactions_input, transactions: newTxns } }));
                                                         }}
-                                                        className="w-full px-2 py-1.5 rounded-lg border border-white/30 bg-white/50 focus:ring-2 focus:ring-system-blue/50 outline-none text-sm"
+                                                        className="w-full px-2 py-1.5 rounded-lg border border-white/30 dark:border-white/10 bg-white/50 dark:bg-white/5 focus:ring-2 focus:ring-system-blue/50 outline-none text-sm dark:text-white"
                                                     />
                                                 </td>
                                                 <td className="py-2 px-2">
@@ -1390,7 +1389,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                                                             newTxns[index].announcement_date = e.target.value;
                                                             setFormData(prev => ({ ...prev, precedent_transactions_input: { ...prev.precedent_transactions_input, transactions: newTxns } }));
                                                         }}
-                                                        className="w-full px-2 py-1.5 rounded-lg border border-white/30 bg-white/50 focus:ring-2 focus:ring-system-blue/50 outline-none text-sm"
+                                                        className="w-full px-2 py-1.5 rounded-lg border border-white/30 dark:border-white/10 bg-white/50 dark:bg-white/5 focus:ring-2 focus:ring-system-blue/50 outline-none text-sm dark:text-white"
                                                     />
                                                 </td>
                                                 <td className="py-2 px-2">
@@ -1402,7 +1401,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                                                             newTxns[index].deal_value = parseFloat(e.target.value);
                                                             setFormData(prev => ({ ...prev, precedent_transactions_input: { ...prev.precedent_transactions_input, transactions: newTxns } }));
                                                         }}
-                                                        className="w-full px-2 py-1.5 rounded-lg border border-white/30 bg-white/50 focus:ring-2 focus:ring-system-blue/50 outline-none text-sm"
+                                                        className="w-full px-2 py-1.5 rounded-lg border border-white/30 dark:border-white/10 bg-white/50 dark:bg-white/5 focus:ring-2 focus:ring-system-blue/50 outline-none text-sm dark:text-white"
                                                     />
                                                 </td>
                                                 <td className="py-2 px-2">
@@ -1414,7 +1413,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                                                             newTxns[index].revenue = parseFloat(e.target.value);
                                                             setFormData(prev => ({ ...prev, precedent_transactions_input: { ...prev.precedent_transactions_input, transactions: newTxns } }));
                                                         }}
-                                                        className="w-full px-2 py-1.5 rounded-lg border border-white/30 bg-white/50 focus:ring-2 focus:ring-system-blue/50 outline-none text-sm"
+                                                        className="w-full px-2 py-1.5 rounded-lg border border-white/30 dark:border-white/10 bg-white/50 dark:bg-white/5 focus:ring-2 focus:ring-system-blue/50 outline-none text-sm dark:text-white"
                                                     />
                                                 </td>
                                                 <td className="py-2 px-2">
@@ -1426,7 +1425,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                                                             newTxns[index].ebitda = parseFloat(e.target.value);
                                                             setFormData(prev => ({ ...prev, precedent_transactions_input: { ...prev.precedent_transactions_input, transactions: newTxns } }));
                                                         }}
-                                                        className="w-full px-2 py-1.5 rounded-lg border border-white/30 bg-white/50 focus:ring-2 focus:ring-system-blue/50 outline-none text-sm"
+                                                        className="w-full px-2 py-1.5 rounded-lg border border-white/30 dark:border-white/10 bg-white/50 dark:bg-white/5 focus:ring-2 focus:ring-system-blue/50 outline-none text-sm dark:text-white"
                                                     />
                                                 </td>
                                             </tr>
@@ -1456,11 +1455,11 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                                         }
                                     }));
                                 }}
-                                className="mt-4 px-4 py-2 bg-blue-50 text-system-blue rounded-xl hover:bg-blue-100 transition-colors text-sm font-medium border border-blue-100"
+                                className="mt-4 px-4 py-2 bg-blue-50 dark:bg-blue-900/20 text-system-blue dark:text-blue-400 rounded-xl hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors text-sm font-medium border border-blue-100 dark:border-blue-500/20"
                             >
                                 + Add Transaction
                             </button>
-                        </div>
+                        </div >
                     )
                 }
 
@@ -1491,7 +1490,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                                                                 assets: { ...prev.anav_input.assets, [key]: parseFloat(e.target.value) }
                                                             }
                                                         }))}
-                                                        className={`${getInputClassName(`anav_assets_${key}`)} w-24 px-2 py-1.5 rounded-lg border border-white/30 bg-white/50 text-sm`}
+                                                        className={`${getInputClassName(`anav_assets_${key}`)} w-24 px-2 py-1.5 rounded-lg border border-white/30 dark:border-white/10 bg-white/50 dark:bg-white/5 text-sm dark:text-white`}
                                                         placeholder="Book Value"
                                                     />
                                                     <input
@@ -1504,7 +1503,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                                                                 adjustments: { ...prev.anav_input.adjustments, [key]: parseFloat(e.target.value) }
                                                             }
                                                         }))}
-                                                        className="w-24 px-2 py-1.5 rounded-lg border border-blue-100 bg-blue-50/50 text-sm"
+                                                        className="w-24 px-2 py-1.5 rounded-lg border border-blue-100 dark:border-blue-500/20 bg-blue-50/50 dark:bg-blue-900/10 text-sm dark:text-white"
                                                         placeholder="Adj (+/-)"
                                                     />
                                                 </div>
@@ -1534,7 +1533,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                                                                 liabilities: { ...prev.anav_input.liabilities, [key]: parseFloat(e.target.value) }
                                                             }
                                                         }))}
-                                                        className={`${getInputClassName(`anav_liabilities_${key}`)} w-24 px-2 py-1.5 rounded-lg border border-white/30 bg-white/50 text-sm`}
+                                                        className={`${getInputClassName(`anav_liabilities_${key}`)} w-24 px-2 py-1.5 rounded-lg border border-white/30 dark:border-white/10 bg-white/50 dark:bg-white/5 text-sm dark:text-white`}
                                                         placeholder="Book Value"
                                                     />
                                                     <input
@@ -1547,7 +1546,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                                                                 adjustments: { ...prev.anav_input.adjustments, [key]: parseFloat(e.target.value) }
                                                             }
                                                         }))}
-                                                        className="w-24 px-2 py-1.5 rounded-lg border border-blue-100 bg-blue-50/50 text-sm"
+                                                        className="w-24 px-2 py-1.5 rounded-lg border border-blue-100 dark:border-blue-500/20 bg-blue-50/50 dark:bg-blue-900/10 text-sm dark:text-white"
                                                         placeholder="Adj (+/-)"
                                                     />
                                                 </div>
@@ -1569,7 +1568,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {Object.entries(formData.method_weights).map(([method, weight]) => (
-                                    <div key={method} className="bg-white/40 backdrop-blur-sm p-6 rounded-2xl border border-white/50 shadow-sm">
+                                    <div key={method} className="bg-white/40 dark:bg-white/5 backdrop-blur-sm p-6 rounded-2xl border border-white/50 dark:border-white/10 shadow-sm">
                                         <label className="block text-sm font-medium text-gray-700 mb-4 capitalize flex justify-between">
                                             <span>{method.replace('_', ' ').toUpperCase()} Weight</span>
                                             <span className="text-system-blue font-bold">{(Number(weight) * 100).toFixed(0)}%</span>
@@ -1587,7 +1586,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                                                     [method]: parseFloat(e.target.value)
                                                 }
                                             }))}
-                                            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-system-blue"
+                                            className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-system-blue"
                                         />
                                     </div>
                                 ))}
@@ -1599,7 +1598,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                     activeMethod === 'lbo' && (
                         <>
                             {!formData.lbo_input ? (
-                                <div className="p-8 text-center text-gray-500 glass-panel">
+                                <div className="p-8 text-center text-gray-500 dark:text-gray-400 glass-panel">
                                     <p>Initializing LBO Module...</p>
                                     <button
                                         type="button"

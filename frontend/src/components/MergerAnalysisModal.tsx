@@ -128,27 +128,27 @@ export const MergerAnalysisModal: React.FC<MergerAnalysisModalProps> = ({ isOpen
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-            <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto border border-white/20 flex flex-col">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 dark:bg-black/80 backdrop-blur-sm p-4">
+            <div className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto border border-white/20 dark:border-white/10 flex flex-col">
 
                 {/* Header */}
-                <div className="p-6 border-b border-gray-200 flex justify-between items-center bg-white/50 sticky top-0 z-10">
+                <div className="p-6 border-b border-gray-200 dark:border-white/10 flex justify-between items-center bg-white/50 dark:bg-white/5 sticky top-0 z-10 backdrop-blur-md">
                     <div>
-                        <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-                            <Building2 className="w-6 h-6 text-system-blue" />
+                        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                            <Building2 className="w-6 h-6 text-system-blue dark:text-blue-400" />
                             M&A Impact Analysis
                         </h2>
-                        <p className="text-gray-500 text-sm">Accretion / Dilution Modeler</p>
+                        <p className="text-gray-500 dark:text-gray-400 text-sm">Accretion / Dilution Modeler</p>
                     </div>
-                    <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-                        <X className="w-6 h-6 text-gray-500" />
+                    <button onClick={onClose} className="p-2 hover:bg-gray-100 dark:hover:bg-white/10 rounded-full transition-colors">
+                        <X className="w-6 h-6 text-gray-500 dark:text-gray-400" />
                     </button>
                 </div>
 
                 {/* Progress Bar */}
-                <div className="w-full bg-gray-100 h-1.5">
+                <div className="w-full bg-gray-100 dark:bg-gray-800 h-1.5">
                     <div
-                        className="bg-system-blue h-1.5 transition-all duration-500 ease-out"
+                        className="bg-system-blue dark:bg-blue-500 h-1.5 transition-all duration-500 ease-out shadow-[0_0_10px_rgba(59,130,246,0.5)]"
                         style={{ width: `${(step / 4) * 100}%` }}
                     />
                 </div>
@@ -161,25 +161,25 @@ export const MergerAnalysisModal: React.FC<MergerAnalysisModalProps> = ({ isOpen
                         <div className="space-y-8 animate-fade-in-up">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 {/* Acquirer */}
-                                <div className="bg-blue-50/50 p-6 rounded-xl border border-blue-100">
-                                    <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
-                                        <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs">A</span>
+                                <div className="bg-blue-50/50 dark:bg-blue-900/10 p-6 rounded-xl border border-blue-100 dark:border-blue-500/20">
+                                    <h3 className="font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+                                        <span className="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-300 flex items-center justify-center text-xs border border-blue-200 dark:border-blue-500/30">A</span>
                                         Acquirer
                                     </h3>
                                     <div className="space-y-4">
                                         <div>
-                                            <label className="text-xs font-medium text-gray-500 uppercase">Ticker</label>
+                                            <label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Ticker</label>
                                             <div className="flex gap-2">
                                                 <input
                                                     type="text"
                                                     value={acquirer.ticker}
                                                     onChange={(e) => setAcquirer({ ...acquirer, ticker: e.target.value })}
-                                                    className="glass-input"
+                                                    className="flex-1 px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-blue-500/50"
                                                     placeholder="AAPL"
                                                 />
                                                 <button
                                                     onClick={() => fetchCompanyData(acquirer.ticker, 'acquirer')}
-                                                    className="px-3 py-2 bg-white text-blue-600 border border-blue-200 rounded-lg text-sm font-medium hover:bg-blue-50"
+                                                    className="px-3 py-2 bg-white dark:bg-gray-800 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-500/30 rounded-lg text-sm font-medium hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
                                                 >
                                                     Load
                                                 </button>
@@ -187,56 +187,56 @@ export const MergerAnalysisModal: React.FC<MergerAnalysisModalProps> = ({ isOpen
                                         </div>
                                         <div className="grid grid-cols-2 gap-4">
                                             <div>
-                                                <label className="text-xs font-medium text-gray-500 uppercase">Share Price</label>
-                                                <input type="number" value={acquirer.share_price} onChange={e => setAcquirer({ ...acquirer, share_price: parseFloat(e.target.value) })} className="glass-input" />
+                                                <label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Share Price</label>
+                                                <input type="number" value={acquirer.share_price} onChange={e => setAcquirer({ ...acquirer, share_price: parseFloat(e.target.value) })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-blue-500/50" />
                                             </div>
                                             <div>
-                                                <label className="text-xs font-medium text-gray-500 uppercase">Shares (M)</label>
-                                                <input type="number" value={acquirer.shares_outstanding} onChange={e => setAcquirer({ ...acquirer, shares_outstanding: parseFloat(e.target.value) })} className="glass-input" />
+                                                <label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Shares (M)</label>
+                                                <input type="number" value={acquirer.shares_outstanding} onChange={e => setAcquirer({ ...acquirer, shares_outstanding: parseFloat(e.target.value) })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-blue-500/50" />
                                             </div>
                                             <div>
-                                                <label className="text-xs font-medium text-gray-500 uppercase">EPS ($)</label>
-                                                <input type="number" value={acquirer.eps} onChange={e => setAcquirer({ ...acquirer, eps: parseFloat(e.target.value) })} className="glass-input" />
+                                                <label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">EPS ($)</label>
+                                                <input type="number" value={acquirer.eps} onChange={e => setAcquirer({ ...acquirer, eps: parseFloat(e.target.value) })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-blue-500/50" />
                                             </div>
                                             <div>
-                                                <label className="text-xs font-medium text-gray-500 uppercase">Tax Rate</label>
-                                                <input type="number" step="0.01" value={acquirer.tax_rate} onChange={e => setAcquirer({ ...acquirer, tax_rate: parseFloat(e.target.value) })} className="glass-input" />
+                                                <label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Tax Rate</label>
+                                                <input type="number" step="0.01" value={acquirer.tax_rate} onChange={e => setAcquirer({ ...acquirer, tax_rate: parseFloat(e.target.value) })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-blue-500/50" />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* Target */}
-                                <div className="bg-green-50/50 p-6 rounded-xl border border-green-100">
-                                    <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
-                                        <span className="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-xs">T</span>
+                                <div className="bg-green-50/50 dark:bg-green-900/10 p-6 rounded-xl border border-green-100 dark:border-green-500/20">
+                                    <h3 className="font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+                                        <span className="w-6 h-6 rounded-full bg-green-100 dark:bg-green-500/20 text-green-600 dark:text-green-300 flex items-center justify-center text-xs border border-green-200 dark:border-green-500/30">T</span>
                                         Target
                                     </h3>
                                     <div className="space-y-4">
                                         <div>
-                                            <label className="text-xs font-medium text-gray-500 uppercase">Ticker (Optional)</label>
+                                            <label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Ticker (Optional)</label>
                                             <div className="flex gap-2">
                                                 <input
                                                     type="text"
                                                     value={target.ticker}
                                                     onChange={(e) => setTarget({ ...target, ticker: e.target.value })}
-                                                    className="glass-input"
+                                                    className="flex-1 px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-green-500/50"
                                                     placeholder="Private Co."
                                                 />
                                             </div>
                                         </div>
                                         <div className="grid grid-cols-2 gap-4">
                                             <div>
-                                                <label className="text-xs font-medium text-gray-500 uppercase">Net Income (M)</label>
-                                                <input type="number" value={target.net_income} onChange={e => setTarget({ ...target, net_income: parseFloat(e.target.value) })} className="glass-input" />
+                                                <label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Net Income (M)</label>
+                                                <input type="number" value={target.net_income} onChange={e => setTarget({ ...target, net_income: parseFloat(e.target.value) })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-green-500/50" />
                                             </div>
                                             <div>
-                                                <label className="text-xs font-medium text-gray-500 uppercase">Shares (M)</label>
-                                                <input type="number" value={target.shares_outstanding} onChange={e => setTarget({ ...target, shares_outstanding: parseFloat(e.target.value) })} className="glass-input" />
+                                                <label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Shares (M)</label>
+                                                <input type="number" value={target.shares_outstanding} onChange={e => setTarget({ ...target, shares_outstanding: parseFloat(e.target.value) })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-green-500/50" />
                                             </div>
                                             <div>
-                                                <label className="text-xs font-medium text-gray-500 uppercase">Current Price</label>
-                                                <input type="number" value={target.current_share_price} onChange={e => setTarget({ ...target, current_share_price: parseFloat(e.target.value) })} className="glass-input" />
+                                                <label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Current Price</label>
+                                                <input type="number" value={target.current_share_price} onChange={e => setTarget({ ...target, current_share_price: parseFloat(e.target.value) })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-green-500/50" />
                                             </div>
                                         </div>
                                     </div>
@@ -248,32 +248,32 @@ export const MergerAnalysisModal: React.FC<MergerAnalysisModalProps> = ({ isOpen
                     {/* Step 2: Deal Structure */}
                     {step === 2 && (
                         <div className="space-y-8 animate-fade-in-up max-w-2xl mx-auto">
-                            <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                                <h3 className="text-lg font-bold text-gray-900 mb-6">Offer Details</h3>
+                            <div className="bg-white dark:bg-white/5 p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm">
+                                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-6">Offer Details</h3>
                                 <div className="space-y-6">
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">Offer Price Per Share ($)</label>
+                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Offer Price Per Share ($)</label>
                                         <div className="relative">
                                             <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                                             <input
                                                 type="number"
                                                 value={deal.offer_price}
                                                 onChange={e => setDeal({ ...deal, offer_price: parseFloat(e.target.value) })}
-                                                className="glass-input pl-10 text-lg font-semibold"
+                                                className="w-full pl-10 px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white text-lg font-semibold outline-none focus:ring-2 focus:ring-blue-500"
                                             />
                                         </div>
                                         {target.current_share_price && (
-                                            <p className="text-sm text-gray-500 mt-2">
-                                                Premium: <span className="font-medium text-green-600">{((deal.offer_price / target.current_share_price - 1) * 100).toFixed(1)}%</span>
+                                            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                                                Premium: <span className="font-medium text-green-600 dark:text-green-400">{((deal.offer_price / target.current_share_price - 1) * 100).toFixed(1)}%</span>
                                             </p>
                                         )}
                                     </div>
 
                                     <div className="space-y-4">
-                                        <label className="block text-sm font-medium text-gray-700">Consideration Mix</label>
+                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Consideration Mix</label>
 
                                         <div>
-                                            <div className="flex justify-between text-sm mb-1">
+                                            <div className="flex justify-between text-sm mb-1 text-gray-600 dark:text-gray-400">
                                                 <span>Cash</span>
                                                 <span className="font-medium">{(deal.percent_cash * 100).toFixed(0)}%</span>
                                             </div>
@@ -284,12 +284,12 @@ export const MergerAnalysisModal: React.FC<MergerAnalysisModalProps> = ({ isOpen
                                                     const val = parseFloat(e.target.value);
                                                     setDeal({ ...deal, percent_cash: val, percent_stock: 1 - val - deal.percent_debt });
                                                 }}
-                                                className="w-full accent-green-500"
+                                                className="w-full accent-green-500 dark:accent-green-400 h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer"
                                             />
                                         </div>
 
                                         <div>
-                                            <div className="flex justify-between text-sm mb-1">
+                                            <div className="flex justify-between text-sm mb-1 text-gray-600 dark:text-gray-400">
                                                 <span>Stock</span>
                                                 <span className="font-medium">{(deal.percent_stock * 100).toFixed(0)}%</span>
                                             </div>
@@ -300,23 +300,23 @@ export const MergerAnalysisModal: React.FC<MergerAnalysisModalProps> = ({ isOpen
                                                     const val = parseFloat(e.target.value);
                                                     setDeal({ ...deal, percent_stock: val, percent_cash: 1 - val - deal.percent_debt });
                                                 }}
-                                                className="w-full accent-blue-500"
+                                                className="w-full accent-blue-500 dark:accent-blue-400 h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer"
                                             />
                                         </div>
                                     </div>
 
-                                    <div className="grid grid-cols-2 gap-6 pt-4 border-t border-gray-100">
+                                    <div className="grid grid-cols-2 gap-6 pt-4 border-t border-gray-100 dark:border-white/10">
                                         <div>
-                                            <label className="text-xs font-medium text-gray-500 uppercase">Interest on Debt</label>
+                                            <label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Interest on Debt</label>
                                             <div className="relative mt-1">
-                                                <input type="number" step="0.001" value={deal.interest_rate_on_debt} onChange={e => setDeal({ ...deal, interest_rate_on_debt: parseFloat(e.target.value) })} className="glass-input pr-8" />
+                                                <input type="number" step="0.001" value={deal.interest_rate_on_debt} onChange={e => setDeal({ ...deal, interest_rate_on_debt: parseFloat(e.target.value) })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500" />
                                                 <Percent className="absolute right-3 top-1/2 -translate-y-1/2 w-3 h-3 text-gray-400" />
                                             </div>
                                         </div>
                                         <div>
-                                            <label className="text-xs font-medium text-gray-500 uppercase">Interest on Cash</label>
+                                            <label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Interest on Cash</label>
                                             <div className="relative mt-1">
-                                                <input type="number" step="0.001" value={deal.interest_rate_on_cash} onChange={e => setDeal({ ...deal, interest_rate_on_cash: parseFloat(e.target.value) })} className="glass-input pr-8" />
+                                                <input type="number" step="0.001" value={deal.interest_rate_on_cash} onChange={e => setDeal({ ...deal, interest_rate_on_cash: parseFloat(e.target.value) })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500" />
                                                 <Percent className="absolute right-3 top-1/2 -translate-y-1/2 w-3 h-3 text-gray-400" />
                                             </div>
                                         </div>
@@ -329,29 +329,29 @@ export const MergerAnalysisModal: React.FC<MergerAnalysisModalProps> = ({ isOpen
                     {/* Step 3: Synergies */}
                     {step === 3 && (
                         <div className="space-y-8 animate-fade-in-up max-w-2xl mx-auto">
-                            <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                                <h3 className="text-lg font-bold text-gray-900 mb-6">Synergies & Fees</h3>
+                            <div className="bg-white dark:bg-white/5 p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm">
+                                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-6">Synergies & Fees</h3>
                                 <div className="space-y-6">
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">Pre-Tax Synergies ($M)</label>
+                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Pre-Tax Synergies ($M)</label>
                                         <input
                                             type="number"
                                             value={target.pre_tax_synergies}
                                             onChange={e => setTarget({ ...target, pre_tax_synergies: parseFloat(e.target.value) })}
-                                            className="glass-input text-lg"
+                                            className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white text-lg font-semibold outline-none focus:ring-2 focus:ring-blue-500"
                                         />
-                                        <p className="text-sm text-gray-500 mt-2">Annual run-rate cost and revenue synergies.</p>
+                                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">Annual run-rate cost and revenue synergies.</p>
                                     </div>
 
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">Transaction Fees ($M)</label>
+                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Transaction Fees ($M)</label>
                                         <input
                                             type="number"
                                             value={target.transaction_fees}
                                             onChange={e => setTarget({ ...target, transaction_fees: parseFloat(e.target.value) })}
-                                            className="glass-input"
+                                            className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white font-medium outline-none focus:ring-2 focus:ring-blue-500"
                                         />
-                                        <p className="text-sm text-gray-500 mt-2">Advisory, legal, and accounting fees (one-time).</p>
+                                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">Advisory, legal, and accounting fees (one-time).</p>
                                     </div>
                                 </div>
                             </div>
@@ -363,61 +363,61 @@ export const MergerAnalysisModal: React.FC<MergerAnalysisModalProps> = ({ isOpen
                         <div className="space-y-8 animate-fade-in-up">
                             {/* Summary Cards */}
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                <div className={`p-6 rounded-2xl border ${result.accretion_dilution_amount >= 0 ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
-                                    <h4 className={`text-sm font-bold uppercase tracking-wider mb-2 ${result.accretion_dilution_amount >= 0 ? 'text-green-700' : 'text-red-700'}`}>
+                                <div className={`p-6 rounded-2xl border ${result.accretion_dilution_amount >= 0 ? 'bg-green-50 dark:bg-green-900/10 border-green-200 dark:border-green-500/20' : 'bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-500/20'}`}>
+                                    <h4 className={`text-sm font-bold uppercase tracking-wider mb-2 ${result.accretion_dilution_amount >= 0 ? 'text-green-700 dark:text-green-400' : 'text-red-700 dark:text-red-400'}`}>
                                         {result.accretion_dilution_amount >= 0 ? 'Accretion' : 'Dilution'}
                                     </h4>
                                     <div className="flex items-baseline gap-2">
-                                        <span className={`text-4xl font-bold ${result.accretion_dilution_amount >= 0 ? 'text-green-900' : 'text-red-900'}`}>
+                                        <span className={`text-4xl font-bold ${result.accretion_dilution_amount >= 0 ? 'text-green-900 dark:text-green-300' : 'text-red-900 dark:text-red-300'}`}>
                                             {(result.accretion_dilution_percent * 100).toFixed(1)}%
                                         </span>
-                                        <span className={`text-lg font-medium ${result.accretion_dilution_amount >= 0 ? 'text-green-700' : 'text-red-700'}`}>
+                                        <span className={`text-lg font-medium ${result.accretion_dilution_amount >= 0 ? 'text-green-700 dark:text-green-400' : 'text-red-700 dark:text-red-400'}`}>
                                             (${Math.abs(result.accretion_dilution_amount).toFixed(2)})
                                         </span>
                                     </div>
                                 </div>
 
-                                <div className="bg-white p-6 rounded-2xl border border-gray-200">
-                                    <h4 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">Pro Forma EPS</h4>
+                                <div className="bg-white dark:bg-white/5 p-6 rounded-2xl border border-gray-200 dark:border-white/10">
+                                    <h4 className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Pro Forma EPS</h4>
                                     <div className="flex items-baseline gap-2">
-                                        <span className="text-4xl font-bold text-gray-900">${result.pro_forma_eps.toFixed(2)}</span>
-                                        <span className="text-sm text-gray-500">vs ${acquirer.eps.toFixed(2)}</span>
+                                        <span className="text-4xl font-bold text-gray-900 dark:text-white">${result.pro_forma_eps.toFixed(2)}</span>
+                                        <span className="text-sm text-gray-500 dark:text-gray-400">vs ${acquirer.eps.toFixed(2)}</span>
                                     </div>
                                 </div>
 
-                                <div className="bg-white p-6 rounded-2xl border border-gray-200">
-                                    <h4 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">Breakeven Synergies</h4>
+                                <div className="bg-white dark:bg-white/5 p-6 rounded-2xl border border-gray-200 dark:border-white/10">
+                                    <h4 className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Breakeven Synergies</h4>
                                     <div className="flex items-baseline gap-2">
-                                        <span className="text-4xl font-bold text-gray-900">${result.breakeven_synergies.toFixed(1)}M</span>
+                                        <span className="text-4xl font-bold text-gray-900 dark:text-white">${result.breakeven_synergies.toFixed(1)}M</span>
                                     </div>
                                 </div>
                             </div>
 
                             {/* Detailed Table */}
-                            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                            <div className="bg-white dark:bg-white/5 rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
                                 <table className="w-full text-sm text-left">
-                                    <thead className="bg-gray-50 border-b border-gray-200">
+                                    <thead className="bg-gray-50 dark:bg-white/5 border-b border-gray-200 dark:border-white/10">
                                         <tr>
-                                            <th className="px-6 py-3 font-medium text-gray-500">Metric</th>
-                                            <th className="px-6 py-3 font-medium text-gray-900 text-right">Value</th>
+                                            <th className="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">Metric</th>
+                                            <th className="px-6 py-3 font-medium text-gray-900 dark:text-gray-100 text-right">Value</th>
                                         </tr>
                                     </thead>
-                                    <tbody className="divide-y divide-gray-100">
+                                    <tbody className="divide-y divide-gray-100 dark:divide-white/5">
                                         <tr>
-                                            <td className="px-6 py-3 text-gray-600">Total Purchase Price</td>
-                                            <td className="px-6 py-3 text-gray-900 text-right font-medium">${result.total_purchase_price.toLocaleString()}M</td>
+                                            <td className="px-6 py-3 text-gray-600 dark:text-gray-300">Total Purchase Price</td>
+                                            <td className="px-6 py-3 text-gray-900 dark:text-gray-100 text-right font-medium">${result.total_purchase_price.toLocaleString()}M</td>
                                         </tr>
                                         <tr>
-                                            <td className="px-6 py-3 text-gray-600">New Shares Issued</td>
-                                            <td className="px-6 py-3 text-gray-900 text-right font-medium">{result.new_shares_issued.toFixed(1)}M</td>
+                                            <td className="px-6 py-3 text-gray-600 dark:text-gray-300">New Shares Issued</td>
+                                            <td className="px-6 py-3 text-gray-900 dark:text-gray-100 text-right font-medium">{result.new_shares_issued.toFixed(1)}M</td>
                                         </tr>
                                         <tr>
-                                            <td className="px-6 py-3 text-gray-600">Interest Expense (After-Tax)</td>
-                                            <td className="px-6 py-3 text-red-600 text-right font-medium">(${result.interest_expense_impact.toFixed(1)}M)</td>
+                                            <td className="px-6 py-3 text-gray-600 dark:text-gray-300">Interest Expense (After-Tax)</td>
+                                            <td className="px-6 py-3 text-red-600 dark:text-red-400 text-right font-medium">(${result.interest_expense_impact.toFixed(1)}M)</td>
                                         </tr>
                                         <tr>
-                                            <td className="px-6 py-3 text-gray-600">Foregone Interest (After-Tax)</td>
-                                            <td className="px-6 py-3 text-red-600 text-right font-medium">(${result.foregone_interest_impact.toFixed(1)}M)</td>
+                                            <td className="px-6 py-3 text-gray-600 dark:text-gray-300">Foregone Interest (After-Tax)</td>
+                                            <td className="px-6 py-3 text-red-600 dark:text-red-400 text-right font-medium">(${result.foregone_interest_impact.toFixed(1)}M)</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -427,11 +427,11 @@ export const MergerAnalysisModal: React.FC<MergerAnalysisModalProps> = ({ isOpen
                 </div>
 
                 {/* Footer */}
-                <div className="p-6 border-t border-gray-200 bg-gray-50 flex justify-between items-center sticky bottom-0 z-10">
+                <div className="p-6 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 flex justify-between items-center sticky bottom-0 z-10 backdrop-blur-md">
                     {step > 1 ? (
                         <button
                             onClick={() => setStep(step - 1)}
-                            className="px-6 py-2 text-gray-600 font-medium hover:text-gray-900 transition-colors"
+                            className="px-6 py-2 text-gray-600 dark:text-gray-300 font-medium hover:text-gray-900 dark:hover:text-white transition-colors"
                         >
                             Back
                         </button>
@@ -442,7 +442,7 @@ export const MergerAnalysisModal: React.FC<MergerAnalysisModalProps> = ({ isOpen
                     {step < 3 ? (
                         <button
                             onClick={() => setStep(step + 1)}
-                            className="px-6 py-2 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition-all flex items-center gap-2"
+                            className="px-6 py-2 bg-gray-900 dark:bg-blue-600 text-white rounded-lg font-medium hover:bg-gray-800 dark:hover:bg-blue-700 transition-all flex items-center gap-2 shadow-lg"
                         >
                             Next <ArrowRight className="w-4 h-4" />
                         </button>
@@ -458,7 +458,7 @@ export const MergerAnalysisModal: React.FC<MergerAnalysisModalProps> = ({ isOpen
                     ) : (
                         <button
                             onClick={() => setStep(1)}
-                            className="px-6 py-2 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition-all"
+                            className="px-6 py-2 bg-gray-900 dark:bg-white/10 text-white rounded-lg font-medium hover:bg-gray-800 dark:hover:bg-white/20 transition-all border border-transparent dark:border-white/20"
                         >
                             New Analysis
                         </button>

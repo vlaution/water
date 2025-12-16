@@ -98,19 +98,19 @@ export const CommandPalette: React.FC = () => {
                         initial={{ opacity: 0, scale: 0.95, y: -20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: -20 }}
-                        className="relative w-full max-w-lg bg-[#1e1e1e] border border-white/10 rounded-xl shadow-2xl overflow-hidden flex flex-col"
+                        className="relative w-full max-w-lg glass-panel overflow-hidden flex flex-col"
                     >
                         {/* Search Bar */}
-                        <div className="flex items-center px-4 py-3 border-b border-white/10 gap-3">
-                            <Search className="text-gray-500" size={18} />
+                        <div className="flex items-center px-4 py-3 border-b border-gray-200 dark:border-white/10 gap-3">
+                            <Search className="text-gray-400 dark:text-gray-500" size={18} />
                             <input
                                 autoFocus
                                 value={query}
                                 onChange={e => setQuery(e.target.value)}
                                 placeholder="Type a command or search..."
-                                className="flex-1 bg-transparent text-white placeholder-gray-500 outline-none text-sm"
+                                className="flex-1 bg-transparent text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 outline-none text-sm"
                             />
-                            <div className="px-1.5 py-0.5 rounded bg-white/10 text-[10px] text-gray-400 font-mono">ESC</div>
+                            <div className="px-1.5 py-0.5 rounded bg-gray-100 dark:bg-white/10 text-[10px] text-gray-500 dark:text-gray-400 font-mono">ESC</div>
                         </div>
 
                         {/* List */}
@@ -126,8 +126,10 @@ export const CommandPalette: React.FC = () => {
                                             onClick={() => { cmd.action(); setIsOpen(false); }}
                                             onMouseEnter={() => setSelectedIndex(i)} // Sync mouse hover
                                             className={`
-                                                flex items-center justify-between px-3 py-2 rounded-lg text-sm text-left group
-                                                ${i === selectedIndex ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-white/5'}
+                                                flex items-center justify-between px-3 py-2 rounded-lg text-sm text-left group transition-colors
+                                                ${i === selectedIndex
+                                                    ? 'bg-system-blue text-white'
+                                                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5'}
                                             `}
                                         >
                                             <div className="flex items-center gap-3">
@@ -135,7 +137,7 @@ export const CommandPalette: React.FC = () => {
                                                 <span>{cmd.label}</span>
                                             </div>
                                             {cmd.shortcut && (
-                                                <span className={`text-[10px] font-mono ${i === selectedIndex ? 'text-blue-200' : 'text-gray-500'}`}>
+                                                <span className={`text-[10px] font-mono ${i === selectedIndex ? 'text-blue-200' : 'text-gray-400 dark:text-gray-500'}`}>
                                                     {cmd.shortcut}
                                                 </span>
                                             )}
@@ -145,7 +147,7 @@ export const CommandPalette: React.FC = () => {
                             )}
                         </div>
 
-                        <div className="px-4 py-2 bg-black/20 border-t border-white/5 text-[10px] text-gray-500 flex justify-between">
+                        <div className="px-4 py-2 bg-gray-50 dark:bg-black/20 border-t border-gray-200 dark:border-white/5 text-[10px] text-gray-500 flex justify-between">
                             <span>Semantic OS v2.1</span>
                             <div className="flex gap-2">
                                 <span>↑↓ to navigate</span>

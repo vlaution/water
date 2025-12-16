@@ -9,13 +9,13 @@ The system is architected as a cloud-native, microservice-ready application comp
 
 ```mermaid
 graph TD
-    User[User / Client] -->|HTTPS| LB[Load Balancer / Ingress]
-    LB -->|Static Assets| FE[Frontend Cluster (Nginx + React/Wasm)]
+    User[User / Client] -->|HTTPS| LB[Load Balancer / Ingress]   # 
+    LB -->|Static Assets| FE[Frontend Cluster (Nginx + React/Wasm)]   # no automatic -- resource waste #nginx -- for now, dont.
     LB -->|API Requests| API[Backend API Cluster (FastAPI)]
     
     subgraph "Compute Cluster"
-        API -->|Read/Write| DB[(PostgreSQL Primary)]
-        API -->|Cache/PubSub| Redis[(Redis Cluster)]
+        API -->|Read/Write| DB[(PostgreSQL Primary)] 
+        API -->|Cache/PubSub| Redis[(Redis Cluster)]    # save to db, api data
         API -->|Async Tasks| Queue[Task Queue]
         Queue --> Worker[Celery Worker Cluster]
         Worker -->|Financial Models| Engine[Analysis Engine]

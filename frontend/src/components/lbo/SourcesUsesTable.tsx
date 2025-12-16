@@ -14,20 +14,20 @@ export const SourcesUsesTable: React.FC<SourcesUsesTableProps> = ({ sources, use
         new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 1, notation: "compact" }).format(val);
 
     return (
-        <div className="bg-white/50 border border-white/20 rounded-xl p-6 shadow-sm">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Sources & Uses</h3>
+        <div className="bg-white/50 dark:bg-white/5 border border-white/20 dark:border-white/10 rounded-xl p-6 shadow-sm">
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Sources & Uses</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Sources Column */}
                 <div>
-                    <h4 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3 pb-2 border-b border-gray-200">Sources</h4>
+                    <h4 className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 pb-2 border-b border-gray-200 dark:border-white/10">Sources</h4>
                     <div className="space-y-3">
                         {Object.entries(sources).map(([name, value]) => (
                             <div key={name} className="flex justify-between items-center text-sm">
-                                <span className="text-gray-700">{name}</span>
-                                <span className="font-medium text-gray-900">{formatCurrency(value)}</span>
+                                <span className="text-gray-700 dark:text-gray-300">{name}</span>
+                                <span className="font-medium text-gray-900 dark:text-gray-100">{formatCurrency(value)}</span>
                             </div>
                         ))}
-                        <div className="border-t border-gray-200 pt-3 flex justify-between items-center font-bold text-gray-900">
+                        <div className="border-t border-gray-200 dark:border-white/10 pt-3 flex justify-between items-center font-bold text-gray-900 dark:text-gray-100">
                             <span>Total Sources</span>
                             <span>{formatCurrency(totalSources)}</span>
                         </div>
@@ -36,15 +36,15 @@ export const SourcesUsesTable: React.FC<SourcesUsesTableProps> = ({ sources, use
 
                 {/* Uses Column */}
                 <div>
-                    <h4 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3 pb-2 border-b border-gray-200">Uses</h4>
+                    <h4 className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 pb-2 border-b border-gray-200 dark:border-white/10">Uses</h4>
                     <div className="space-y-3">
                         {Object.entries(uses).map(([name, value]) => (
                             <div key={name} className="flex justify-between items-center text-sm">
-                                <span className="text-gray-700">{name}</span>
-                                <span className="font-medium text-gray-900">{formatCurrency(value)}</span>
+                                <span className="text-gray-700 dark:text-gray-300">{name}</span>
+                                <span className="font-medium text-gray-900 dark:text-gray-100">{formatCurrency(value)}</span>
                             </div>
                         ))}
-                        <div className="border-t border-gray-200 pt-3 flex justify-between items-center font-bold text-gray-900">
+                        <div className="border-t border-gray-200 dark:border-white/10 pt-3 flex justify-between items-center font-bold text-gray-900 dark:text-gray-100">
                             <span>Total Uses</span>
                             <span>{formatCurrency(totalUses)}</span>
                         </div>
