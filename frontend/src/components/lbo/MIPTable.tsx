@@ -1,5 +1,5 @@
 import React from 'react';
-import { Users, PieChart, Info } from 'lucide-react';
+import { Users, Info } from 'lucide-react';
 
 interface MIPTableProps {
     returnsAnalysis: any;

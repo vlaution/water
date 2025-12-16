@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { api } from './config/api';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { Login } from './pages/Login';
 import { Signup } from './pages/Signup';
@@ -13,6 +13,10 @@ import { RecentRuns } from './components/RecentRuns';
 import { DashboardHome } from './components/DashboardHome';
 import { PerformanceDashboard } from './components/admin/PerformanceDashboard';
 import { AuditLogViewer } from './components/admin/AuditLogViewer';
+import { SystemHealthDashboard } from './components/admin/SystemHealthDashboard';
+import { FundSimulator } from './components/analytics/FundSimulator';
+import { DealSourcingDashboard } from './components/analytics/DealSourcingDashboard';
+import { DebtMarketDashboard } from './components/analytics/DebtMarketDashboard';
 import { PermissionGuard } from './components/common/PermissionGuard';
 import { RequirePermission } from './components/common/RequirePermission';
 import { Permissions } from './config/permissions';
@@ -20,21 +24,39 @@ import { GlobalAssumptionsPanel } from './components/dashboard/GlobalAssumptions
 import { Globe } from 'lucide-react';
 import { UserPreferencesProvider } from './context/UserPreferencesContext';
 import { GlobalConfigProvider } from './context/GlobalConfigContext';
-
 import { RiskDashboard } from './pages/RiskDashboard';
-
+import { SecretsModal } from './components/modals/SecretsModal';
 import { ToastProvider, useToast } from './context/ToastContext';
 import { RealTimeProvider } from './context/RealTimeContext';
 import { RealTimeAlerts } from './components/common/RealTimeAlerts';
+import { ComparisonPage } from './pages/ComparisonPage';
+import { SensitivityPage } from './pages/SensitivityPage';
 
-function ProtectedApp() {
+
+import { CommandController } from './components/CommandPalette/CommandController';
+import { BackendSearchController } from './components/CommandPalette/BackendSearchController';
+import { CommandRegistryProvider } from './context/CommandRegistryContext';
+import { CommandPalette } from './components/System/CommandPalette';
+
+const ProtectedApp = () => {
   const { user, loading, token, logout } = useAuth();
   const { showToast } = useToast(); // Use the hook
-  const [step, setStep] = useState<'mode-selection' | 'upload' | 'mapping' | 'manual-entry' | 'dashboard' | 'dashboard-home' | 'risk-dashboard'>('mode-selection');
+  const [step, setStep] = useState<'mode-selection' | 'upload' | 'mapping' | 'manual-entry' | 'dashboard' | 'dashboard-home' | 'risk-dashboard' | 'fund-simulator' | 'deal-sourcing' | 'debt-markets'>('mode-selection');
   const [workbookData, setWorkbookData] = useState<any>(null);
   const [results, setResults] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isGlobalSettingsOpen, setIsGlobalSettingsOpen] = useState(false);
+  const [isSecretsModalOpen, setIsSecretsModalOpen] = useState(false); // New State
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state && (location.state as any).setStep) {
+      setStep((location.state as any).setStep);
+      // Clear state to prevent loop if we add more complex logic, though separate routes handle this well
+      window.history.replaceState({}, document.title);
+    }
+  }, [location]);
 
   if (loading) {
     return (
@@ -177,6 +199,8 @@ function ProtectedApp() {
 
   return (
     <div className="min-h-screen font-sans text-gray-900">
+      <CommandController setStep={setStep} />
+      <BackendSearchController setStep={setStep} />
       <div className="flex">
         {/* Sidebar */}
         {step !== 'mode-selection' && (
@@ -204,7 +228,28 @@ function ProtectedApp() {
                   onClick={() => setStep('risk-dashboard')}
                   className={`glass-button w-full flex items-center justify-center gap-2 text-sm ${step === 'risk-dashboard' ? 'bg-blue-50 border-blue-200' : ''}`}
                 >
-                  ⚠️ Risk Management
+                  Risk Management
+                </button>
+
+                <button
+                  onClick={() => setStep('fund-simulator')}
+                  className={`glass-button w-full flex items-center justify-center gap-2 text-sm ${step === 'fund-simulator' ? 'bg-blue-50 border-blue-200' : ''}`}
+                >
+                  Fund Simulator
+                </button>
+
+                <button
+                  onClick={() => setStep('deal-sourcing')}
+                  className={`glass-button w-full flex items-center justify-center gap-2 text-sm ${step === 'deal-sourcing' ? 'bg-blue-50 border-blue-200' : ''}`}
+                >
+                  Deal Sourcing
+                </button>
+
+                <button
+                  onClick={() => setStep('debt-markets')}
+                  className={`glass-button w-full flex items-center justify-center gap-2 text-sm ${step === 'debt-markets' ? 'bg-blue-50 border-blue-200' : ''}`}
+                >
+                  Debt Markets
                 </button>
 
                 <PermissionGuard permission={Permissions.VIEW_ANALYTICS}>
@@ -212,7 +257,7 @@ function ProtectedApp() {
                     onClick={() => window.location.href = '/admin/performance'}
                     className="glass-button w-full flex items-center justify-center gap-2 text-sm"
                   >
-                    📊 Performance
+                    Performance
                   </button>
                 </PermissionGuard>
 
@@ -221,7 +266,16 @@ function ProtectedApp() {
                     onClick={() => window.location.href = '/admin/audit'}
                     className="glass-button w-full flex items-center justify-center gap-2 text-sm"
                   >
-                    📋 Audit Logs
+                    Audit Logs
+                  </button>
+                </PermissionGuard>
+
+                <PermissionGuard permission={Permissions.CONFIGURE_SYSTEM}>
+                  <button
+                    onClick={() => window.location.href = '/admin/health'}
+                    className="glass-button w-full flex items-center justify-center gap-2 text-sm"
+                  >
+                    System Health
                   </button>
                 </PermissionGuard>
 
@@ -240,6 +294,13 @@ function ProtectedApp() {
                 >
                   <Globe size={16} />
                   Global Assumptions
+                </button>
+                <button
+                  onClick={() => setIsSecretsModalOpen(true)}
+                  className="glass-button w-full flex items-center justify-center gap-2 text-sm text-gray-600 hover:text-system-blue transition-colors mt-2"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                  API Vault
                 </button>
               </div>
             </div>
@@ -289,8 +350,12 @@ function ProtectedApp() {
             />
           )}
           {step === 'risk-dashboard' && <RiskDashboard />}
+          {step === 'fund-simulator' && <FundSimulator />}
+          {step === 'deal-sourcing' && <DealSourcingDashboard />}
+          {step === 'debt-markets' && <DebtMarketDashboard />}
         </main>
         <GlobalAssumptionsPanel isOpen={isGlobalSettingsOpen} onClose={() => setIsGlobalSettingsOpen(false)} />
+        <SecretsModal isOpen={isSecretsModalOpen} onClose={() => setIsSecretsModalOpen(false)} /> {/* Render User Modal */}
       </div>
     </div>
   );
@@ -306,22 +371,32 @@ function App() {
           <ToastProvider>
             <RealTimeProvider>
               <GlobalConfigProvider>
-                <RealTimeAlerts />
-                <Routes>
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/signup" element={<Signup />} />
-                  <Route path="/admin/performance" element={
-                    <RequirePermission permission={Permissions.VIEW_ANALYTICS}>
-                      <PerformanceDashboard />
-                    </RequirePermission>
-                  } />
-                  <Route path="/admin/audit" element={
-                    <RequirePermission permission={Permissions.VIEW_AUDIT_LOGS}>
-                      <AuditLogViewer />
-                    </RequirePermission>
-                  } />
-                  <Route path="/*" element={<ProtectedApp />} />
-                </Routes>
+                <CommandRegistryProvider>
+                  <CommandPalette />
+                  <RealTimeAlerts />
+                  <Routes>
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/signup" element={<Signup />} />
+                    <Route path="/compare" element={<ComparisonPage />} />
+                    <Route path="/sensitivity" element={<SensitivityPage />} />
+                    <Route path="/admin/performance" element={
+                      <RequirePermission permission={Permissions.VIEW_ANALYTICS}>
+                        <PerformanceDashboard />
+                      </RequirePermission>
+                    } />
+                    <Route path="/admin/audit" element={
+                      <RequirePermission permission={Permissions.VIEW_AUDIT_LOGS}>
+                        <AuditLogViewer />
+                      </RequirePermission>
+                    } />
+                    <Route path="/admin/health" element={
+                      <RequirePermission permission={Permissions.CONFIGURE_SYSTEM}>
+                        <SystemHealthDashboard />
+                      </RequirePermission>
+                    } />
+                    <Route path="/*" element={<ProtectedApp />} />
+                  </Routes>
+                </CommandRegistryProvider>
               </GlobalConfigProvider>
             </RealTimeProvider>
           </ToastProvider>

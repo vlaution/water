@@ -43,6 +43,8 @@ class User(Base):
     role = Column(Enum(UserRole), default=UserRole.user)
     auth_provider = Column(Enum(AuthProvider), default=AuthProvider.email)
     external_id = Column(String(255), nullable=True)
+    is_demo = Column(Boolean, default=False)
+    api_keys = Column(Text, nullable=True) # Encrypted JSON blob
     created_at = Column(DateTime, default=datetime.utcnow)
 
 class ValuationRun(Base):
@@ -55,6 +57,12 @@ class ValuationRun(Base):
     results = Column(Text) # JSON string
     user_id = Column(Integer, ForeignKey('users.id'))
     created_at = Column(DateTime, default=datetime.utcnow)
+    
+    # Workflow Fields
+    status = Column(String(50), default="draft") # draft, compliance_check, review, approved, archived
+    reviewer_id = Column(Integer, ForeignKey('users.id'), nullable=True)
+    signoff_timestamp = Column(DateTime, nullable=True)
+    signoff_signature = Column(String(500), nullable=True) # Digital signature linked to audit chain
 
 
 class AuditLog(Base):
@@ -70,6 +78,12 @@ class AuditLog(Base):
     after_state = Column(Text, nullable=True) # JSON snapshot after change
     ip_address = Column(String(45), nullable=True)
     details = Column(Text, nullable=True) # Additional JSON details
+    
+    # Immutable Ledger Fields
+    hash = Column(String(64), index=True, nullable=True) # SHA-256
+    previous_hash = Column(String(64), nullable=True)
+    nonce = Column(Integer, default=0)
+    risk_level = Column(String(20), default="low")
 
 
 class IndustryNorm(Base):
@@ -173,6 +187,101 @@ class HistoricalTransaction(Base):
     __table_args__ = (
         Index('idx_hist_sector_year', 'sector', 'year'),
     )
+
+class ManagementIncentivePlan(Base):
+    __tablename__ = 'management_incentive_plans'
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    valuation_run_id = Column(String(36), ForeignKey('valuation_runs.id'), nullable=True, index=True)
+    company_ticker = Column(String(20), ForeignKey('companies.ticker'), nullable=True, index=True)
+    name = Column(String(100), default="Standard MIP")
+    total_authorized_pool_percent = Column(Float, default=0.10) # e.g. 10%
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+class MIPTranche(Base):
+    __tablename__ = 'mip_tranches'
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    plan_id = Column(Integer, ForeignKey('management_incentive_plans.id'), nullable=False, index=True)
+    name = Column(String(100), nullable=False) # e.g. "Time Vested Options"
+    allocation_percent = Column(Float, nullable=False) # % of the pool (or % of equity, depending on logic. Usually % of Pool)
+    
+    # Vesting Logic
+    vesting_type = Column(String(50), default="time") # "time", "performance", "hybrid"
+    vesting_period_years = Column(Float, default=4.0)
+    cliff_years = Column(Float, default=1.0)
+    
+    # Performance Targets
+    performance_target_moic = Column(Float, nullable=True) # e.g. 2.0x
+    performance_target_irr = Column(Float, nullable=True) # e.g. 0.20
+    
+    # Economics
+    strike_price = Column(Float, default=0.0)
+    
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+class MarketSnapshot(Base):
+    __tablename__ = 'market_snapshots'
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    date = Column(DateTime, default=datetime.utcnow, index=True)
+    
+    # Interest Rates
+    risk_free_rate = Column(Float, nullable=True) # 10Y Treasury
+    corporate_spread_bbb = Column(Float, nullable=True)
+    high_yield_spread = Column(Float, nullable=True)
+    
+    # Multiples (JSON storage for flexibility)
+    # e.g. {"Technology": {"senior": 4.5, "total": 6.5}, ...}
+    sector_leverage_multiples = Column(Text, nullable=True) 
+    
+    # e.g. {"Technology": 15.0, ...}
+    sector_exit_multiples = Column(Text, nullable=True)
+    
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+class EvidenceAttachment(Base):
+    __tablename__ = 'evidence_attachments'
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    valuation_id = Column(String(100), index=True, nullable=False)
+    file_path = Column(String(500), nullable=True) # Local path or S3 key
+    source_url = Column(String(500), nullable=True) # e.g. "https://bloomberg.com/..."
+    description = Column(String(255), nullable=True)
+    uploaded_by = Column(Integer, ForeignKey('users.id'), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+class ReviewComment(Base):
+    __tablename__ = 'review_comments'
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    valuation_id = Column(String(100), index=True, nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=True)
+    text = Column(Text, nullable=False)
+    parent_id = Column(Integer, ForeignKey('review_comments.id'), nullable=True) # For threading
+    status = Column(String(50), default="open") # "open", "resolved"
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+class Regulation(Base):
+    __tablename__ = "regulations"
+    
+    id = Column(Integer, primary_key=True)
+    name = Column(String(100)) # e.g. "ASC 820"
+    agency = Column(String(50)) # "FASB", "SEC"
+    text = Column(Text) # Summary of the rule
+    effective_date = Column(DateTime)
+    version = Column(String(20)) # "2024.1"
+    jurisdiction = Column(String(50), default="US") # "US", "EU", "APAC"
+
+class RegulatoryAlert(Base):
+    __tablename__ = "regulatory_alerts"
+    
+    id = Column(Integer, primary_key=True)
+    regulation_id = Column(Integer, ForeignKey("regulations.id"))
+    severity = Column(String(20)) # "low", "medium", "critical"
+    description = Column(String(255))
+    created_at = Column(DateTime, default=datetime.utcnow)
+    is_read = Column(Boolean, default=False)
 
 # Database setup
 # Database setup

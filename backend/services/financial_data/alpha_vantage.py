@@ -6,6 +6,8 @@ from backend.calculations.models import HistoricalFinancials, MarketAssumptions
 
 from backend.services.financial_data.cache import cache
 from backend.calculations.metrics_calculator import MetricsCalculator
+from backend.services.auth.sso_service import SSOService
+import json
 
 class AlphaVantageProvider(FinancialDataProvider):
     """
@@ -41,6 +43,48 @@ class AlphaVantageProvider(FinancialDataProvider):
         if cached_data:
             return cached_data
 
+        # 0. Check User Mode
+        user = kwargs.get("user")
+        if user:
+            if getattr(user, "is_demo", False):
+                 print(f"Info: User {user.id} is in Demo Mode. Using mock data for {symbol}")
+                 return self._get_mock_data(function, symbol)
+            
+            # Real User: Check for API Key
+            if user.api_keys:
+                try:
+                    keys = json.loads(user.api_keys)
+                    if "ALPHA_VANTAGE_KEY" in keys:
+                        sso = SSOService() # Helper for decryption
+                        encrypted_hex = keys["ALPHA_VANTAGE_KEY"]
+                        decrypted_key = sso.decrypt_secret(bytes.fromhex(encrypted_hex))
+                        
+                        # Use User Key
+                        params = {
+                            "function": function,
+                            "apikey": decrypted_key,
+                            **kwargs
+                        }
+                        if symbol:
+                            params["symbol"] = symbol
+                            
+                        # Single attempt with user key
+                        response = requests.get(self.BASE_URL, params=params, timeout=10)
+                        response.raise_for_status()
+                        data = response.json()
+                        
+                        if "Error Message" in data:
+                             raise ValueError(f"Alpha Vantage API Error (User Key): {data['Error Message']}")
+                        if "Note" in data:
+                             raise ValueError("Alpha Vantage API Limit Reached (User Key).")
+                        
+                        cache.set(cache_key, data)
+                        return data
+                except Exception as e:
+                    print(f"Error using user API key: {e}")
+                    # Fallthrough to system keys or error?
+                    pass
+        
         # MOCK DATA FALLBACK FOR DEMO
         # Use first key check for demo mode simplifiction
         if self.api_keys[0] == "demo" and symbol and symbol.upper() != "IBM":
@@ -154,15 +198,15 @@ class AlphaVantageProvider(FinancialDataProvider):
                 
         return {"annualReports": reports}
 
-    def get_financials(self, ticker: str) -> HistoricalFinancials:
+    def get_financials(self, ticker: str, user: Any = None) -> HistoricalFinancials:
         # Fetch Income Statement
-        income_data = self._make_request("INCOME_STATEMENT", symbol=ticker)
+        income_data = self._make_request("INCOME_STATEMENT", symbol=ticker, user=user)
         # Fetch Balance Sheet
-        balance_data = self._make_request("BALANCE_SHEET", symbol=ticker)
+        balance_data = self._make_request("BALANCE_SHEET", symbol=ticker, user=user)
         # Fetch Cash Flow
-        cash_flow_data = self._make_request("CASH_FLOW", symbol=ticker)
+        cash_flow_data = self._make_request("CASH_FLOW", symbol=ticker, user=user)
         # Fetch Company Overview for Profile
-        overview_data = self._make_request("OVERVIEW", symbol=ticker)
+        overview_data = self._make_request("OVERVIEW", symbol=ticker, user=user)
         
         financials = self._map_to_financials(income_data, balance_data, cash_flow_data, overview_data)
         
@@ -315,6 +359,11 @@ class AlphaVantageProvider(FinancialDataProvider):
         """
         Calculate EV/Revenue and EV/EBITDA multiples for a company.
         """
+        cache_key = f"av_multiples:{ticker}"
+        cached_data = cache.get(cache_key)
+        if cached_data:
+            return cached_data
+
         try:
             # 1. Get Market Cap and Shares
             overview = self._make_request("OVERVIEW", symbol=ticker)
@@ -350,12 +399,17 @@ class AlphaVantageProvider(FinancialDataProvider):
             ev_revenue = enterprise_value / revenue if revenue > 0 else 0
             ev_ebitda = enterprise_value / ebitda if ebitda > 0 else 0
             
-            return {
+            result = {
                 "ev_revenue": round(ev_revenue, 2),
                 "ev_ebitda": round(ev_ebitda, 2),
                 "market_cap": market_cap,
                 "enterprise_value": enterprise_value
             }
+            
+            # Cache the calculated result
+            cache.set(cache_key, result)
+            return result
+            
         except Exception as e:
             print(f"Error calculating multiples for {ticker}: {e}")
             return {}

@@ -1,0 +1,47 @@
+Phase 7: Advanced Reliability & Analytics
+Goal
+Enhance system reliability and analytical depth by implementing scheduled data updates and a backtesting engine.
+
+Proposed Changes
+1. Scheduled Market Data Updates
+[NEW] backend/services/system/scheduler_service.py
+Use APScheduler (BackgroundScheduler).
+Define jobs:
+refresh_market_data: Calls MarketDataService.fetch_interest_rates (and others) with force_refresh=True (need to update service to support this or just clear cache).
+Schedule: Daily at 16:15 ET (Market Close).
+[MODIFY] 
+backend/main.py
+Initialize and start SchedulerService on startup.
+[MODIFY] 
+backend/requirements.txt
+Add apscheduler.
+2. Backtesting Engine
+[NEW] backend/services/analytics/backtesting_service.py
+Method: run_backtest(sector: str, years: int = 5)
+Logic:
+Fetch 
+HistoricalTransaction
+ data for the sector.
+For each transaction:
+Pretend it's "today" (transaction date).
+Run ValuationService using historical inputs (mocked or stored).
+Compare 
+ValuationRun
+ result (EV) vs. Actual Deal Size.
+Calculate Accuracy Metrics: MAPE (Mean Absolute Percentage Error), Bias.
+[NEW] 
+backend/api/analytics_routes.py
+ (Update)
+Add POST /analytics/backtest endpoint.
+[NEW] 
+backend/database/models.py
+Ensure 
+HistoricalTransaction
+ has necessary fields (it does).
+Verification Plan
+Automated Tests
+Scheduler: Verify job is added to scheduler.
+Backtest: Run backtest on mock data and verify it returns a score.
+Manual Verification
+Trigger backtest via API and check logs.
+Verify scheduler logs on startup.

@@ -71,7 +71,7 @@ export const ValuationHeatmap: React.FC<ValuationHeatmapProps> = ({ data, onBubb
                                                 <div className="mt-2 pt-2 border-t border-gray-100">
                                                     {d.validation_warnings.map((w, i) => (
                                                         <p key={i} className="text-xs text-red-500 flex items-center">
-                                                            <span className="mr-1">⚠</span> {w}
+                                                            <span className="mr-1">!</span> {w}
                                                         </p>
                                                     ))}
                                                 </div>

@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  # Database Service (PostgreSQL)
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: valuation_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Redis Service (Caching/Celery Broker)
+  redis:
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+
+  # Backend Service (FastAPI)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app # Hot reload for development (optional, good for verification)
+    depends_on:
+      - db
+      - redis
+    env_file:
+      - ./backend/.env
+    environment:
+      # Override DB URL to use container name
+      - DATABASE_URL=postgresql://user:password@db:5432/valuation_db
+      - REDIS_URL=redis://redis:6379/0
+      - FRONTEND_URL=http://localhost:3000 # Nginx port
+    restart: always
+
+  # Frontend Service (Nginx serving React)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80" # Map host 3000 to container 80
+    depends_on:
+      - backend
+    restart: always
+
+volumes:
+  postgres_data:

@@ -210,3 +210,47 @@ async def refresh_token_endpoint(request: RefreshRequest, db: Session = Depends(
             "name": user.full_name
         }
     }
+
+@router.post("/demo-login", response_model=AuthResponse)
+async def demo_login(db: Session = Depends(get_db)):
+    """Auto-login as a demo user."""
+    email = "demo@example.com"
+    
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        # Create demo user if not exists
+        # Note: Provide a random password hash so no one can login manually easily, 
+        # though this endpoint allows login anyway.
+        user = User(
+            email=email,
+            hashed_password=get_password_hash("demo_password_secure_enough"),
+            full_name="Demo User",
+            is_demo=True,
+            role="user", # Enum value
+            auth_provider="email"
+        )
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+    else:
+        # Ensure is_demo is set if it was existing but updated migration
+        if not user.is_demo:
+            user.is_demo = True
+            db.commit()
+    
+    # Create tokens
+    access_token = create_access_token(data={"sub": str(user.id), "email": user.email})
+    refresh_token = create_refresh_token(data={"sub": str(user.id), "email": user.email})
+    
+    return {
+        "access_token": access_token,
+        "refresh_token": refresh_token,
+        "token_type": "bearer",
+        "user": {
+            "id": str(user.id),
+            "email": user.email,
+            "name": user.full_name,
+            "role": user.role.value if hasattr(user.role, 'value') else user.role,
+            "is_demo": True
+        }
+    }

@@ -20,7 +20,7 @@ export const AISuggestionsButton: React.FC<AISuggestionsButtonProps> = ({
     if (isLoading) {
         return (
             <div className={`flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-500 rounded-lg border border-gray-200 ${className}`}>
-                <span className="animate-spin">⚡</span>
+                <span className="animate-spin">...</span>
                 <span className="text-sm font-medium">Analyzing...</span>
             </div>
         );
@@ -45,7 +45,7 @@ export const AISuggestionsButton: React.FC<AISuggestionsButtonProps> = ({
                     disabled={isLoading}
                     className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-lg transition-colors font-medium disabled:opacity-50"
                 >
-                    <span>✨</span>
+
                     <span>Apply All</span>
                 </button>
 
@@ -75,7 +75,7 @@ export const AISuggestionsButton: React.FC<AISuggestionsButtonProps> = ({
                 `}
             >
                 <h4 className="font-bold text-gray-900 mb-2 flex items-center gap-2">
-                    <span className="text-indigo-600">⚡</span> Quick Impact Preview
+                    Quick Impact Preview
                 </h4>
 
                 <div className="space-y-2 mb-4">

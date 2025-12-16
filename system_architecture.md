@@ -1,83 +1,82 @@
-# System Architecture
+# Production Cluster Architecture
 
-## Overview
-The project is a web-based valuation platform designed to automate and analyze company valuations. It consists of a modern React-based frontend and a robust Python FastAPI backend. The system allows users to upload financial data (Excel), perform valuation calculations (DCF, sensitivity analysis), and visualize results through an interactive dashboard.
+## 1. High-Level Overview
+The system is architected as a cloud-native, microservice-ready application composed of four primary layers:
+1.  **Ingress Layer**: Manages traffic entry, SSL termination, and static asset serving.
+2.  **Application Layer**: Stateless compute containers for API (Python) and Logic (Wasm).
+3.  **Worker Layer**: Asynchronous processing for heavy computations (Valuation/Compliance runs).
+4.  **Data Layer**: Persistent storage and ephemeral caching.
 
-## Frontend Architecture
+```mermaid
+graph TD
+    User[User / Client] -->|HTTPS| LB[Load Balancer / Ingress]
+    LB -->|Static Assets| FE[Frontend Cluster (Nginx + React/Wasm)]
+    LB -->|API Requests| API[Backend API Cluster (FastAPI)]
+    
+    subgraph "Compute Cluster"
+        API -->|Read/Write| DB[(PostgreSQL Primary)]
+        API -->|Cache/PubSub| Redis[(Redis Cluster)]
+        API -->|Async Tasks| Queue[Task Queue]
+        Queue --> Worker[Celery Worker Cluster]
+        Worker -->|Financial Models| Engine[Analysis Engine]
+    end
 
-### Technology Stack
--   **Framework**: React 19 with TypeScript
--   **Build Tool**: Vite
--   **Routing**: React Router DOM v7
--   **Styling**: Tailwind CSS, Vanilla CSS (with custom design tokens)
--   **State Management**: React Hooks (useState, useEffect, Context)
--   **Visualization**: Recharts for charts and graphs
--   **Icons**: Lucide React
+    subgraph "External Services"
+        API -->|Market Data| Alpha[Alpha Vantage API]
+        API -->|Reg Updates| Regs[Regulatory Feeds]
+    end
+```
 
-### Key Components
--   **Dashboard**: The main interface for visualizing valuation results.
-    -   `DashboardHome.tsx`: Orchestrates the dashboard layout.
-    -   `ResultsDashboard.tsx`: Displays key metrics.
-    -   `ScenarioManager.tsx`: Handles scenario analysis.
--   **Valuation Tools**:
-    -   `ManualEntryForm.tsx`: Allows manual input of financial data.
-    -   `SheetMapping.tsx`: Handles mapping of uploaded Excel columns to system fields.
-    -   `DCFViewModal.tsx`: Displays Discounted Cash Flow analysis.
+## 2. Component Details
 
-### Project Structure (`frontend/src`)
--   `components/`: Reusable UI components.
--   `pages/`: Top-level page components.
--   `services/`: API integration logic.
--   `hooks/`: Custom React hooks.
--   `utils/`: Helper functions.
+### A. Frontend Cluster (`water-frontend`)
+*   **Technology**: Nginx serving React (Vite) + WebAssembly.
+*   **Role**: Serves the SPA and static assets. Nginx is configured to handle client-side routing (`index.html` fallback).
+*   **Scaling**: Horizontally scalable (stateless). Setup behind a CDN (Cloudflare/CloudFront) for optimal performance.
+*   **Wasm Integration**: Wasm modules are pre-compiled and served as static assets, executing entirely client-side for zero-latency interactions.
 
-## Backend Architecture
+### B. Backend API Cluster (`water-backend`)
+*   **Technology**: Python 3.9 + FastAPI + Uvicorn.
+*   **Role**: REST API gateway, authentication, and orchestration of business logic.
+*   **Scaling**: Horizontally scalable. Autoscaling based on CPU/Memory utilization.
+*   **Key Middleware**:
+    *   `CORSMiddleware`: Strict origin allowlisting.
+    *   `HealthMonitor`: Metric logging middleware.
+    *   `GlobalExceptionHandler`: Standardized error responses.
 
-### Technology Stack
--   **Language**: Python 3.11
--   **Framework**: FastAPI
--   **Database ORM**: SQLAlchemy
--   **Data Validation**: Pydantic
--   **Data Processing**: Pandas, OpenPyXL (for Excel parsing)
--   **Task Queue**: BackgroundTasks (FastAPI native)
+### C. Worker Layer (`celery-worker`)
+*   **Technology**: Celery + Redis Broker.
+*   **Role**: Handles long-running tasks to prevent blocking the API.
+*   **Queues**:
+    *   `default`: Standard valuation runs.
+    *   `high_priority`: User alerts and immediate validations.
+    *   `low_priority`: Scheduled aggregation and maintenance.
+*   **Scaling**: Independent scaling based on queue depth (KEDA recommended for K8s).
 
-### API Structure (`backend/api/routes.py`)
-The API is RESTful and organized around key resources:
--   **Uploads**: `/upload` - Handles Excel file uploads.
--   **Valuation**:
-    -   `/run/{file_id}`: Triggers valuation on uploaded files.
-    -   `/calculate`: Performs manual valuation calculations.
-    -   `/api/valuation/dcf`: specialized DCF calculations.
--   **Dashboard**:
-    -   `/api/dashboard/portfolio`: Portfolio-level views.
-    -   `/api/dashboard/executive`: Executive summary views.
--   **Export**: `/export/{run_id}` - Exports results to Excel, PDF, Word, PPT.
+### D. Data Layer
+*   **Primary Database (PostgreSQL)**:
+    *   Stores `ValuationRun`, `Company`, `User`, and `Compliance` records.
+    *   Production Recommendation: Managed Service (AWS RDS, Google CloudSQL).
+*   **Cache & Broker (Redis)**:
+    *   Used for: Celery Task Queue, API Response Caching, Real-time Pub/Sub.
+    *   Production Recommendation: Managed Redis (AWS ElastiCache).
 
-### Data Models (`backend/database/models.py`)
--   **User**: Handles authentication and user roles.
--   **ValuationRun**: Stores inputs, results, and metadata for each valuation execution.
--   **Company**: Stores company reference data.
--   **IndustryNorm**: Stores benchmarking data.
--   **AuditLog**: Tracks system usage and changes.
+## 3. Security & Networking
+*   **VPC Design**:
+    *   **Public Subnet**: Load Balancer / Ingress only.
+    *   **Private Subnet**: Application Containers (Frontend/Backend).
+    *   **Isolated Subnet**: Database and Redis (Access only via App Subnet).
+*   **SSL/TLS**: Terminated at Load Balancer. Internal traffic can be HTTP or mTLS depending on compliance requirements.
+*   **Secrets Management**: Environment variables injected via Secret Manager (e.g., Vault, AWS Secrets Manager).
 
-### Key Services (`backend/services/`)
--   `ValuationEngine`: Core logic for valuation calculations.
--   `SheetParser`: Parses uploaded Excel files.
--   `ExcelProcessor`: Processes parsed data and applies mappings.
--   `DashboardService`: Aggregates data for dashboard views.
--   `ReportGeneratorService`: Generates downloadable reports.
+## 4. Deployment Pipeline (CI/CD)
+1.  **Build**: GitHub Actions triggers on `main`.
+    *   Builds Docker images for Frontend and Backend.
+    *   Runs Unit Tests (`pytest`) and Linting.
+2.  **Publish**: Pushes images to Container Registry (ECR/GCR).
+3.  **Deploy**: Updates the Orchestrator (Kubernetes/Docker Swarm) to roll out new image versions zero-downtime.
 
-## Data Flow
-1.  **Input**: User uploads an Excel file or enters data manually via the Frontend.
-2.  **Processing**:
-    -   **Upload**: File is saved to `uploads/` and parsed by `SheetParser`.
-    -   **Mapping**: User maps columns in Frontend; `ExcelProcessor` normalizes data.
-    -   **Calculation**: `ValuationEngine` computes valuation metrics (DCF, etc.).
-3.  **Storage**: Results and inputs are stored in the `ValuationRun` table in the database (SQLite/PostgreSQL).
-4.  **Visualization**: Frontend fetches results via Dashboard APIs and renders charts/tables.
-5.  **Export**: User requests reports; Backend generates files using `ReportGeneratorService`.
-
-## Deployment
--   **Frontend**: Configured for Vercel deployment.
--   **Backend**: Dockerized (Dockerfile present) for containerized deployment.
--   **Database**: SQLite for development/testing, PostgreSQL for production.
+## 5. Monitoring & Observability
+*   **Logs**: Centralized logging (ELK Stack / CloudWatch).
+*   **Metrics**: Prometheus endpoint exposed by Backend.
+*   **Tracing**: Request ID propagation through Nginx -> API -> Celery.

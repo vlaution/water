@@ -94,7 +94,7 @@ export const ExplanationModal: React.FC<ExplanationModalProps> = ({
                     <div className="flex justify-between items-start">
                         <div>
                             <h2 id="modal-title" className="text-2xl font-bold flex items-center gap-2">
-                                <span>✨</span> AI Insight
+                                AI Insight
                             </h2>
                             <p className="text-indigo-100 mt-1">
                                 Analysis for <span className="font-semibold bg-white/20 px-2 py-0.5 rounded ml-1">{suggestion.field.replace(/_/g, ' ')}</span>
@@ -118,7 +118,7 @@ export const ExplanationModal: React.FC<ExplanationModalProps> = ({
                             : 'text-gray-500 border-transparent hover:text-gray-700 hover:bg-gray-50'
                             }`}
                     >
-                        🧠 Reasoning
+                        Reasoning
                     </button>
                     <button
                         onClick={() => setActiveTab('impact')}
@@ -127,7 +127,7 @@ export const ExplanationModal: React.FC<ExplanationModalProps> = ({
                             : 'text-gray-500 border-transparent hover:text-gray-700 hover:bg-gray-50'
                             }`}
                     >
-                        📈 Impact Simulation
+                        Impact Simulation
                     </button>
                     <button
                         onClick={() => setActiveTab('market')}
@@ -136,7 +136,7 @@ export const ExplanationModal: React.FC<ExplanationModalProps> = ({
                             : 'text-gray-500 border-transparent hover:text-gray-700 hover:bg-gray-50'
                             }`}
                     >
-                        📊 Peer Benchmark
+                        Peer Benchmark
                     </button>
                 </div>
 
@@ -146,7 +146,7 @@ export const ExplanationModal: React.FC<ExplanationModalProps> = ({
                         <div className="space-y-6 animate-fade-in">
                             <div className="bg-indigo-50 rounded-xl p-5 border border-indigo-100 shadow-sm">
                                 <h3 className="text-indigo-900 font-semibold mb-2 flex items-center gap-2">
-                                    <span className="text-lg">💡</span> Why this suggestion?
+                                    Why this suggestion?
                                 </h3>
                                 <p className="text-indigo-900/80 leading-relaxed text-base">
                                     {suggestion.reasoning}
@@ -185,7 +185,7 @@ export const ExplanationModal: React.FC<ExplanationModalProps> = ({
                     {activeTab === 'impact' && (
                         <div className="space-y-6 animate-fade-in h-full flex flex-col">
                             <div className="bg-green-50 rounded-xl p-4 border border-green-100 flex items-start gap-4 shadow-sm mb-4">
-                                <div className="text-3xl">🚀</div>
+
                                 <div>
                                     <h3 className="text-green-900 font-bold">Projected Outcome</h3>
                                     <p className="text-green-800 text-sm mt-1">{suggestion.impact}</p>
@@ -290,7 +290,7 @@ export const ExplanationModal: React.FC<ExplanationModalProps> = ({
                         }}
                         className="px-6 py-2.5 bg-indigo-600 text-white hover:bg-indigo-700 rounded-xl transition-colors font-medium shadow-lg hover:shadow-indigo-500/30 flex items-center gap-2"
                     >
-                        <span>✓</span> Apply Suggestion
+                        Apply Suggestion
                     </button>
                 </div>
             </div>

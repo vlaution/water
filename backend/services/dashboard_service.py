@@ -367,7 +367,7 @@ class DashboardService:
             
             # Quality & Warnings
             warnings = []
-            last_updated = run.updated_at if run.updated_at else run.created_at
+            last_updated = run.created_at
             if (datetime.utcnow() - last_updated).days > 30:
                 warnings.append("Valuation outdated (>30 days)")
                 

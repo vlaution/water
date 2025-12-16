@@ -189,7 +189,8 @@ class EnhancedLBOCalculator:
             "waterfall": details['waterfall_summary'],
             "sources": details.get('sources', {}),
             "uses": details.get('uses', {}),
-            "returns_analysis": details.get('returns_analysis', {})
+            "returns_analysis": details.get('returns_analysis', {}),
+            "sensitivity_matrix": details.get('sensitivity_matrix')
         }
         return implied_ev, results
 
@@ -469,18 +470,73 @@ class EnhancedLBOCalculator:
             
         # --- 4. MIP (MANAGEMENT INCENTIVE PLAN) ---
         mip_value = 0.0
+        mip_details = []
+        
         if lbo_input.mip_assumptions:
-            pool_pct = lbo_input.mip_assumptions.option_pool_percent
-            # Simple logic: MIP gets X% of Exit Equity
-            # Dilutes everyone else
-            mip_value = exit_equity * pool_pct
+            assumptions = lbo_input.mip_assumptions
             
-            # Reduce LP profit by MIP share (simplified - implies MIP comes out of LP proceeds or pre-distribution)
-            # Typically comes out of Exit Equity before waterfall.
-            # Let's adjust profit for LP calc
-            profit -= mip_value # Reduce overall profit available
-            dist_capital -= mip_value # Actually it comes from exit equity
-            # Recalculated flow would be cleaner but for now:
+            # Check for new Tranche-based logic
+            if assumptions.tranches:
+                total_mip_value = 0.0
+                for tranche in assumptions.tranches:
+                    # 1. Vesting Calculation
+                    vested_percent = 0.0
+                    
+                    if tranche.vesting_type == "time":
+                        # Simple linear vesting
+                        if lbo_input.holding_period < tranche.cliff_years:
+                            vested_percent = 0.0
+                        else:
+                            vested_percent = min(1.0, lbo_input.holding_period / tranche.vesting_period_years)
+                            
+                    elif tranche.vesting_type == "performance":
+                        # MOIC Target
+                        current_moic = (exit_equity / equity_check) if equity_check > 0 else 0
+                        if tranche.performance_target_moic and current_moic >= tranche.performance_target_moic:
+                            vested_percent = 1.0
+                        else:
+                            vested_percent = 0.0
+                    
+                    # 2. Value Calculation
+                    # Value = (Exit Equity * Allocation %) * Vested %
+                    # Note: This is a simplified "Profit Share" model. 
+                    # For true Options: (Exit Equity / Total Shares * Options) - (Strike * Options)
+                    # We'll stick to the Profit Share / Pool % model for LBO simplicity unless strike is used.
+                    
+                    tranche_value = 0.0
+                    gross_value = exit_equity * tranche.allocation_percent * vested_percent
+                    
+                    # Apply Strike Price deduction if applicable (simplified as a value deduction)
+                    # Assuming allocation_percent represents % of fully diluted equity
+                    if tranche.strike_price > 0:
+                        # This is tricky without share counts. 
+                        # Proxy: Strike Price reduces the net value.
+                        # Net Value = Gross Value - (Strike Price * implied_share_count)
+                        # Let's assume Strike Price is "Total Strike Value for this Tranche" for simplicity in this MVP
+                        # Or better: Strike Price is per share. We need share count.
+                        # Fallback: Ignore strike for MVP unless we have share count.
+                        pass
+                        
+                    tranche_value = gross_value
+                    total_mip_value += tranche_value
+                    
+                    mip_details.append({
+                        "name": tranche.name,
+                        "vested_percent": round(vested_percent * 100, 1),
+                        "value": round(tranche_value, 2)
+                    })
+                
+                mip_value = total_mip_value
+                
+            else:
+                # Legacy Fallback
+                pool_pct = assumptions.option_pool_percent
+                mip_value = exit_equity * pool_pct
+                mip_details.append({"name": "Legacy Pool", "value": mip_value})
+            
+            # Reduce LP profit by MIP share
+            profit -= mip_value 
+            dist_capital -= mip_value # Attribution to exit equity
             lp_profit = profit - gp_carry
         else:
             lp_profit = profit - gp_carry
@@ -506,6 +562,7 @@ class EnhancedLBOCalculator:
             "dist_carry": round(dist_carry, 2),
             # MIP Details
             "mip_value": round(mip_value, 2),
+            "mip_tranches": mip_details,
             "mip_pool_percent": lbo_input.mip_assumptions.option_pool_percent if lbo_input.mip_assumptions else 0.0
         }
 
@@ -538,34 +595,34 @@ class EnhancedLBOCalculator:
         entry_multiples = [base_entry_multiple + (i * 0.5) for i in range(-1, 2)]
         exit_multiples = [lbo_input.exit_ev_ebitda_multiple + (i * 0.5) for i in range(-1, 2)] if lbo_input.exit_ev_ebitda_multiple else [base_entry_multiple + (i * 0.5) for i in range(-1, 2)]
         
+        # Prevent infinite recursion
+        original_sensitivity_flag = lbo_input.include_sensitivity
+        lbo_input.include_sensitivity = False
+        
         matrix = []
-        for exit_mult in exit_multiples:
-            row = []
-            for entry_mult in entry_multiples:
-                # Simplified run for speed - avoiding full waterfall overhead if possible, but 25 runs is fast enough in Python
-                # We need to re-run basic math.
-                # Since _run_waterfall is static and pure, we can call it.
+        try:
+            for exit_mult in exit_multiples:
+                row = []
+                for entry_mult in entry_multiples:
+                    # Note: _run_waterfall assumes exit_ev_ebitda_multiple is in lbo_input.
+                    # We need to override it temporarily.
+                    original_exit = lbo_input.exit_ev_ebitda_multiple
+                    lbo_input.exit_ev_ebitda_multiple = exit_mult
+                    
+                    try:
+                        irr, _, _ = EnhancedLBOCalculator._run_waterfall(lbo_input, entry_mult)
+                        row.append(round(irr, 4))
+                    except:
+                        row.append(0.0)
+                    finally:
+                        lbo_input.exit_ev_ebitda_multiple = original_exit
                 
-                # Clone input for safety (though not strictly needed if we don't mutate)
-                # Just call _run_waterfall with adjusted params
-                
-                # Note: _run_waterfall assumes exit_ev_ebitda_multiple is in lbo_input.
-                # We need to override it temporarily.
-                original_exit = lbo_input.exit_ev_ebitda_multiple
-                lbo_input.exit_ev_ebitda_multiple = exit_mult
-                
-                try:
-                    irr, _, _ = EnhancedLBOCalculator._run_waterfall(lbo_input, entry_mult)
-                    row.append(round(irr, 4))
-                except:
-                    row.append(0.0)
-                finally:
-                    lbo_input.exit_ev_ebitda_multiple = original_exit
-            
-            matrix.append({
-                "exit_multiple": round(exit_mult, 1),
-                "irrs": row
-            })
+                matrix.append({
+                    "exit_multiple": round(exit_mult, 1),
+                    "irrs": row
+                })
+        finally:
+            lbo_input.include_sensitivity = original_sensitivity_flag
             
         return {
             "entry_multiples": [round(m, 1) for m in entry_multiples],

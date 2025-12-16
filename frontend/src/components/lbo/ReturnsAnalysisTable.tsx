@@ -108,7 +108,7 @@ export const ReturnsAnalysisTable: React.FC<ReturnsAnalysisProps> = ({ data }) =
                     {/* GP Carry Total */}
                     <div className="flex justify-between items-center mb-2">
                         <span className="text-sm text-gray-600">Total GP Carry</span>
-                        <span className="text-sm font-medium text-gray-800">{formatCurrency(data.gp_carry)}</span>
+                        <span className="text-sm font-medium text-gray-800">{formatCurrency(data.gp_carry || 0)}</span>
                     </div>
                     {/* LP Profit */}
                     <div className="flex justify-between items-center bg-blue-50/50 p-2 rounded-lg">

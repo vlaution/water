@@ -58,3 +58,18 @@ class PeerFindingService:
         """Helper to get metrics for a ticker if available"""
         return self.ticker_map.get(ticker.upper())
 
+    def search_companies(self, query: str, limit: int = 5) -> List[Dict]:
+        """
+        Search for companies by ticker or name.
+        """
+        query = query.lower()
+        results = []
+        
+        for company in self.companies:
+            if query in company.get("ticker", "").lower() or query in company.get("name", "").lower():
+                results.append(company)
+                if len(results) >= limit:
+                    break
+        
+        return results
+

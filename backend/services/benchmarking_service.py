@@ -3,10 +3,15 @@ import numpy as np
 from backend.calculations.benchmarking_models import CompanyMetrics, BenchmarkResponse, BenchmarkComparison
 from backend.services.financial_data.cache import cache
 from backend.services.financial_data.alpha_vantage import AlphaVantageProvider
+from backend.services.financial_data.transaction_comps_provider import transaction_comps_provider
+
 # In a real app, we'd use dependency injection or a factory
 provider = AlphaVantageProvider()
 
 class BenchmarkingService:
+    def get_transaction_comps(self, sector: str) -> List[Dict]:
+        return transaction_comps_provider.get_recent_transactions(sector)
+
     def get_comparison(self, target_ticker: str, peer_tickers: Optional[List[str]] = None, use_sector: bool = False) -> BenchmarkResponse:
         # 1. Get Target Metrics
         target_metrics = self._get_metrics(target_ticker)

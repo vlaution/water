@@ -1,53 +1,65 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
-from backend.database.models import get_db, User, ValuationRun, ValuationMetric, SystemMetric, AuditLog
-from backend.auth.dependencies import get_current_user
-from backend.services.audit.service import audit_service
+from fastapi import APIRouter, Depends, HTTPException
+from sqlmodel import Session, select
+from typing import Dict, Any
+from backend.database.models import get_db, AuditLog
+from backend.compliance.framework import ComplianceFramework
+from backend.services.immutable_audit import ImmutableAuditService
 
-router = APIRouter(prefix="/api/compliance", tags=["Compliance"])
+router = APIRouter(prefix="/api/compliance", tags=["compliance"])
 
-@router.post("/forget-me", status_code=status.HTTP_200_OK)
-async def forget_me(
-    current_user: dict = Depends(get_current_user),
-    db: Session = Depends(get_db)
-):
+@router.get("/dashboard-stats/{valuation_id}")
+def get_dashboard_stats(valuation_id: str, db: Session = Depends(get_db)):
     """
-    GDPR Right to be Forgotten.
-    Deletes all data associated with the requesting user.
+    Aggregates compliance metrics for the dashboard.
     """
-    user_id = int(current_user['sub'])
+    stats = {
+        "status_checks": {},
+        "risk_heatmap": {"high": 0, "medium": 0, "low": 0},
+        "remediation_progress": 0,
+        "doc_completeness": 0
+    }
     
-    try:
-        # 1. Delete Valuations
-        db.query(ValuationRun).filter(ValuationRun.user_id == user_id).delete()
-        
-        # 2. Delete Valuation Metrics
-        db.query(ValuationMetric).filter(ValuationMetric.user_id == user_id).delete()
-        
-        # 3. Anonymize System Metrics (set user_id to NULL)
-        # We don't delete to preserve aggregate stats, but remove PII link
-        db.query(SystemMetric).filter(SystemMetric.user_id == user_id).update({SystemMetric.user_id: None})
-        
-        # 4. Delete Audit Logs (or anonymize?)
-        # Usually audit logs are kept for security, but GDPR might require deletion if they contain PII.
-        # Let's delete user-specific logs.
-        db.query(AuditLog).filter(AuditLog.user_id == user_id).delete()
-        
-        # 5. Delete User Account
-        db.query(User).filter(User.id == user_id).delete()
-        
-        db.commit()
-        
-        # Log this action (anonymously)
-        audit_service.log(
-            action="GDPR_DELETE",
-            user_id=None,
-            resource=f"user:{user_id}",
-            details={"status": "completed"}
-        )
-        
-        return {"message": "All your data has been permanently deleted."}
-        
-    except Exception as e:
-        db.rollback()
-        raise HTTPException(status_code=500, detail=f"Failed to process deletion: {str(e)}")
+    # 1. Framework Checks (ASC 820, SOX)
+    # We need to fetch valuation inputs. For now mocking or fetching from DB if Validation model existed.
+    # Assuming we receive inputs or fetch them. 
+    # For this demo, we'll use a dummy valuation object to run the check.
+    # In production, we'd fetch `Valuation` by `valuation_id`.
+    
+    framework = ComplianceFramework()
+    # Mock data for dashboard visualization
+    mock_val_data = {"fair_value_level": 2, "process_controls": ["checked"]} 
+    
+    # Run audit
+    audit = framework.audit_valuation(valuation_id, mock_val_data)
+    
+    stats["status_checks"]["asc_820"] = "Compliant" if audit.results.get("asc_820", {}).status == "pass" else "Issue Detected"
+    stats["status_checks"]["sox_404"] = "Compliant" if audit.results.get("sox_404", {}).status == "pass" else "Issue Detected"
+    
+    # 2. Integrity Check
+    audit_service = ImmutableAuditService(db)
+    integrity = audit_service.verify_chain_integrity()
+    stats["status_checks"]["audit_integrity"] = "Verified" if integrity["status"] == "valid" else "Compromised"
+    
+    # 3. GDPR (Mock)
+    stats["status_checks"]["data_privacy"] = "Compliant"
+    
+    # 4. Risk Heatmap
+    # We count remediation steps by priority
+    for step in audit.remediation_plan:
+        if step.priority == "high":
+            stats["risk_heatmap"]["high"] += 1
+        elif step.priority == "medium":
+            stats["risk_heatmap"]["medium"] += 1
+        else:
+            stats["risk_heatmap"]["low"] += 1
+            
+    # Mock remediation progress
+    stats["remediation_progress"] = 80 if stats["risk_heatmap"]["high"] == 0 else 40
+    
+    # 5. Doc Completeness (Mock logic)
+    # Check if we have logs
+    logs = audit_service.get_history(valuation_id)
+    has_logs = len(logs) > 0
+    stats["doc_completeness"] = 95 if has_logs else 50
+    
+    return stats

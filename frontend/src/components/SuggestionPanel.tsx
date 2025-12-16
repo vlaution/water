@@ -56,7 +56,7 @@ export const SuggestionPanel: React.FC<SuggestionPanelProps> = ({ companyData, c
         <div className="glass-panel p-8 animate-fade-in-up">
             <div className="flex justify-between items-center mb-8 pb-4 border-b border-gray-200/50">
                 <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2 tracking-tight">
-                    <span className="text-2xl">✨</span> AI Smart Suggestions
+                    AI Smart Suggestions
                 </h3>
                 <div className="flex gap-3">
                     <select
@@ -140,7 +140,7 @@ export const SuggestionPanel: React.FC<SuggestionPanelProps> = ({ companyData, c
                             onClick={handleApply}
                             className="glass-button bg-green-500/10 text-green-700 border-green-200 hover:bg-green-500/20 px-6 py-2.5 flex items-center gap-2 shadow-none hover:shadow-sm"
                         >
-                            <span>✓</span>
+                            <span>&#10003;</span>
                             <span className="font-semibold">Apply All Improvements</span>
                         </button>
                     </div>

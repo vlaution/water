@@ -18,7 +18,7 @@ import { CovenantTracker } from './lbo/CovenantTracker';
 import { MIPTable } from './lbo/MIPTable';
 import { AIInsightsWidget } from './dashboard/widgets/AIInsightsWidget';
 
-import { ReportGenerator } from './ReportGenerator';
+import { ReportActionCenter } from './ReportActionCenter';
 
 interface ResultsDashboardProps {
     runId?: string;
@@ -29,6 +29,8 @@ export const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ runId, resul
     const [activeTab, setActiveTab] = useState<'dashboard' | 'inputs' | 'financials'>('dashboard');
     const [scenario, setScenario] = useState<'base' | 'bull' | 'bear'>('base');
     const [overrideExitYear, setOverrideExitYear] = useState<number | null>(null);
+    const [showReportCenter, setShowReportCenter] = useState(false);
+    const [reportFormat, setReportFormat] = useState<'pdf' | 'pptx' | 'docx' | 'excel'>('pdf');
 
     // Derived LBO Data for Interactivity
     const getInteractiveLBO = () => {
@@ -158,33 +160,13 @@ export const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ runId, resul
             return;
         }
 
-        if (type === 'pdf') {
-            // Use new secure endpoint for PDF
-            try {
-                const token = localStorage.getItem('auth_token');
-                const response = await fetch(`${api.baseURL}/api/analytics/report/pdf/${runId}`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-
-                if (!response.ok) throw new Error("Failed to generate report");
-
-                const blob = await response.blob();
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `Board_Report_${runId}.pdf`;
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
-                window.URL.revokeObjectURL(url);
-            } catch (error) {
-                console.error("PDF Generation failed:", error);
-                alert("Failed to generate PDF report. Please try again.");
-            }
+        // Open Action Center for supported formats
+        if (['pdf', 'pptx', 'docx'].includes(type)) {
+            setReportFormat(type as any);
+            setShowReportCenter(true);
         } else {
-            // Legacy/Other exports via window.open (might need update later)
+            // Legacy/Excel direct export
+            // Or if type is excel, do we support it via AC? Let's say yes.
             window.open(api.url(`/export/${type}/${runId}`), '_blank');
         }
     };
@@ -334,11 +316,20 @@ export const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ runId, resul
                                 ]}
                                 onGenerateReport={handleGenerateReport}
                             />
-                            {runId && (
-                                <ReportGenerator runId={runId} />
-                            )}
                         </div>
                     </div>
+                </div>
+            )}
+
+            {/* Report Action Center Overlay */}
+            {showReportCenter && runId && (
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <ReportActionCenter
+                        runId={runId}
+                        companyName={results?.company_name || "Company"}
+                        initialFormat={reportFormat}
+                        onClose={() => setShowReportCenter(false)}
+                    />
                 </div>
             )}
 

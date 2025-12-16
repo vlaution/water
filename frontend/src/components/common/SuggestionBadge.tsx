@@ -38,7 +38,7 @@ export const SuggestionBadge: React.FC<SuggestionBadgeProps> = ({
         switch (type) {
             case 'increase': return '↑';
             case 'decrease': return '↓';
-            case 'optimization': return '⚡';
+            case 'optimization': return '';
             case 'warning': return '!';
             default: return '•';
         }

@@ -16,7 +16,7 @@ export const AISettingsModal: React.FC<AISettingsModalProps> = ({ isOpen, onClos
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-scale-in">
                 <div className="bg-gray-50 p-6 border-b border-gray-100 flex justify-between items-center">
                     <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-                        <span>⚙️</span> AI Copilot Settings
+                        AI Copilot Settings
                     </h2>
                     <button
                         onClick={onClose}

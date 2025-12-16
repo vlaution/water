@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { api } from '../config/api';
 
 interface BenchmarkDashboardProps {
     ticker: string;
@@ -20,17 +21,27 @@ interface BenchmarkData {
     peers_used: string[];
 }
 
+interface TransactionComp {
+    date: string;
+    target: string;
+    acquirer: string;
+    deal_size_mm: number;
+    ev_ebitda: number;
+    sector: string;
+}
+
 export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ ticker, token }) => {
     const [data, setData] = useState<BenchmarkData | null>(null);
     const [loading, setLoading] = useState(false);
     const [peers, setPeers] = useState<string>(""); // Comma separated
     const [useSector, setUseSector] = useState(true);
+    const [transactionComps, setTransactionComps] = useState<TransactionComp[]>([]);
 
     const fetchData = async () => {
         setLoading(true);
         try {
             const peerList = peers.split(',').map(p => p.trim()).filter(p => p);
-            const res = await fetch('http://localhost:8000/api/benchmark', {
+            const res = await fetch(api.url('/api/benchmark'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -46,11 +57,29 @@ export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ ticker, 
             if (res.ok) {
                 const result = await res.json();
                 setData(result);
+
+                // Fetch transaction comps if sector is available
+                if (result.target && result.target.sector) {
+                    fetchTransactionComps(result.target.sector);
+                }
             }
         } catch (error) {
             console.error("Failed to fetch benchmark data", error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const fetchTransactionComps = async (sector: string) => {
+        try {
+            const res = await fetch(api.url(`/api/benchmark/transactions/${encodeURIComponent(sector)}`), {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (res.ok) {
+                setTransactionComps(await res.json());
+            }
+        } catch (error) {
+            console.error("Failed to fetch transaction comps", error);
         }
     };
 
@@ -183,6 +212,37 @@ export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ ticker, 
                     </div>
                 </div>
             </div>
+
+            {/* Transaction Comps */}
+            {transactionComps.length > 0 && (
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div className="p-4 border-b border-gray-100">
+                        <h3 className="font-semibold text-gray-900">Recent Transaction Comparables ({transactionComps[0].sector})</h3>
+                    </div>
+                    <table className="w-full text-left text-sm">
+                        <thead className="bg-gray-50 text-gray-500">
+                            <tr>
+                                <th className="px-4 py-3">Date</th>
+                                <th className="px-4 py-3">Target</th>
+                                <th className="px-4 py-3">Acquirer</th>
+                                <th className="px-4 py-3 text-right">Deal Size ($M)</th>
+                                <th className="px-4 py-3 text-right">EV/EBITDA</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-100">
+                            {transactionComps.map((deal, idx) => (
+                                <tr key={idx} className="hover:bg-gray-50">
+                                    <td className="px-4 py-3 text-gray-500">{deal.date}</td>
+                                    <td className="px-4 py-3 font-medium text-gray-900">{deal.target}</td>
+                                    <td className="px-4 py-3 text-gray-600">{deal.acquirer}</td>
+                                    <td className="px-4 py-3 text-right font-mono">${deal.deal_size_mm.toLocaleString()}</td>
+                                    <td className="px-4 py-3 text-right font-mono">{deal.ev_ebitda.toFixed(1)}x</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
         </div>
     );
 };

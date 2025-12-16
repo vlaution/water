@@ -1,6 +1,7 @@
+
 import React from 'react';
-import { Shield, ShieldAlert, CheckCircle, AlertTriangle } from 'lucide-react';
-import { ComposedChart, Line, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine } from 'recharts';
+import { Shield, ShieldAlert, CheckCircle } from 'lucide-react';
+import { ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine } from 'recharts';
 
 interface CovenantTrackerProps {
     schedule: any[];

@@ -33,7 +33,7 @@ export const ValidationTooltip: React.FC<ValidationTooltipProps> = ({ children, 
             )}
             {severity && severity !== 'normal' && (
                 <div className="absolute right-3 top-1/2 -mt-2 pointer-events-none">
-                    {severity === 'critical' ? '🔴' : '⚠️'}
+                    {severity === 'critical' ? '!' : '!'}
                 </div>
             )}
         </div>

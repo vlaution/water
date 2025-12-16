@@ -8,7 +8,7 @@ export const Login: React.FC = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const { login } = useAuth();
+    const { login, demoLogin } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -21,6 +21,19 @@ export const Login: React.FC = () => {
             navigate('/');
         } catch (err: any) {
             setError(err.message || 'Login failed');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleDemoLogin = async () => {
+        setError('');
+        setLoading(true);
+        try {
+            await demoLogin();
+            navigate('/');
+        } catch (err: any) {
+            setError(err.message || 'Demo login failed');
         } finally {
             setLoading(false);
         }
@@ -39,6 +52,26 @@ export const Login: React.FC = () => {
                         {error}
                     </div>
                 )}
+
+                <button
+                    onClick={handleDemoLogin}
+                    disabled={loading}
+                    className="w-full bg-emerald-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-emerald-600 transition-all shadow-lg hover:shadow-emerald-500/30 flex items-center justify-center gap-2 mb-6 group"
+                >
+                    <span className="bg-white/20 p-1 rounded-full group-hover:scale-110 transition-transform">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    </span>
+                    Try Live Demo
+                </button>
+
+                <div className="relative mb-6">
+                    <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-gray-200"></div>
+                    </div>
+                    <div className="relative flex justify-center text-sm">
+                        <span className="px-4 bg-white/50 backdrop-blur-sm text-gray-500">or sign in with email</span>
+                    </div>
+                </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>

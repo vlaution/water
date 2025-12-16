@@ -1,87 +1,34 @@
+import axios from 'axios';
 
-// Simple Analytics Service for tracking AI interactions
-import type { AnalyticsEvent, AnalyticsEventType } from '../types/ai';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
-class AnalyticsService {
-    private queue: AnalyticsEvent[] = [];
-    private isEnabled: boolean = true;
-    private flushInterval: any = null;
-    private readonly FLUSH_DELAY = 10000; // 10s auto-flush
-
-    constructor() {
-        // Auto-flush periodically
-        this.flushInterval = setInterval(() => this.flush(), this.FLUSH_DELAY);
-
-        // Flush on page unload/hide
-        if (typeof window !== 'undefined') {
-            window.addEventListener('visibilitychange', () => {
-                if (document.visibilityState === 'hidden') {
-                    this.flush();
-                }
-            });
-        }
-    }
-
-    log(type: AnalyticsEventType, field?: string, context?: any) {
-        if (!this.isEnabled) return;
-
-        const event: AnalyticsEvent = {
-            type,
-            field,
-            context,
-            timestamp: Date.now()
-        };
-
-        this.queue.push(event);
-
-        // Debug log
-        // console.debug(`[Analytics] ${type}`, event);
-
-        // Flush immediately if critical or queue too large
-        if (type === 'error' || this.queue.length >= 20) {
-            this.flush();
-        }
-    }
-
-    async flush() {
-        if (this.queue.length === 0) return;
-
-        const eventsToSend = [...this.queue];
-        this.queue = [];
-
-        try {
-            const payload = JSON.stringify({ events: eventsToSend });
-            const url = '/api/analytics/events';
-
-            // Try sendBeacon first for reliability during navigation/unload
-            if (navigator.sendBeacon) {
-                const blob = new Blob([payload], { type: 'application/json' });
-                const success = navigator.sendBeacon(url, blob);
-                if (success) return; // Successfully queued
-            }
-
-            // Fallback to fetch
-            await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: payload,
-                keepalive: true // Important for background requests
-            });
-
-        } catch (error) {
-            console.warn('[Analytics] Flush failed:', error);
-            // Optionally re-queue
-            this.queue = [...eventsToSend, ...this.queue].slice(0, 100); // Keep max 100 to prevent overflow
-        }
-    }
-
-    getEvents() {
-        return this.queue;
-    }
-
-    clear() {
-        this.queue = [];
-    }
+export interface SensitivityRequest {
+    lbo_input: any; // Using any for LBOInput to avoid duplicating complex types here for now
+    row_config: { variable: string, label: string, range: number[] };
+    col_config: { variable: string, label: string, range: number[] };
+    output_metric: "irr" | "moic";
 }
 
-export const analytics = new AnalyticsService();
+export interface SensitivityResult {
+    row_label: string;
+    col_label: string;
+    row_values: number[];
+    col_values: number[];
+    matrix: { row_value: number, values: (number | null)[] }[];
+}
+
+export const AnalyticsService = {
+    async runSensitivityAnalysis(request: SensitivityRequest): Promise<SensitivityResult> {
+        const response = await axios.post(`${API_URL}/api/analytics/sensitivity`, request);
+        return response.data;
+    }
+};
+
+// Legacy analytics logger for backward compatibility with other hooks/components
+export const analytics = {
+    log: (eventType: string, field?: string, payload?: Record<string, any>) => {
+        console.log(`[Analytics] ${eventType}`, { field, ...payload });
+        // In production, this would send to an analytics backend
+    }
+};
+

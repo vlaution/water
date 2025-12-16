@@ -37,7 +37,7 @@ export const PatternInsight: React.FC<PatternInsightProps> = ({ pattern, onAccep
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-3">
                         <div className="p-2 bg-indigo-100 rounded-lg text-indigo-600">
-                            🎯
+
                         </div>
                         <div>
                             <div className="text-xs text-gray-500 font-medium uppercase tracking-wider">Matched Archetype</div>
@@ -81,7 +81,7 @@ export const PatternInsight: React.FC<PatternInsightProps> = ({ pattern, onAccep
                                 }}
                                 className="mt-4 w-full py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium flex items-center justify-center gap-2"
                             >
-                                <span>✨</span> Apply Typical Values
+                                Apply Typical Values
                             </button>
                         )}
                     </div>

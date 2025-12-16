@@ -12,6 +12,7 @@ interface AuthContextType {
     user: User | null;
     token: string | null;
     login: (email: string, password: string) => Promise<void>;
+    demoLogin: () => Promise<void>;
     signup: (email: string, password: string, name: string) => Promise<void>;
     logout: () => void;
     loading: boolean;
@@ -88,6 +89,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     };
 
+    const demoLogin = async () => {
+        const response = await fetch(api.url('/auth/demo-login'), {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.detail || 'Demo login failed');
+        }
+
+        const data = await response.json();
+        setUser(data.user);
+        setToken(data.access_token);
+        localStorage.setItem('auth_token', data.access_token);
+        if (data.refresh_token) {
+            localStorage.setItem('refresh_token', data.refresh_token);
+        }
+    };
+
     const signup = async (email: string, password: string, name: string) => {
         const response = await fetch(api.url(api.endpoints.auth.signup), {
             method: 'POST',
@@ -119,7 +142,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     return (
-        <AuthContext.Provider value={{ user, token, login, signup, logout, loading }}>
+        <AuthContext.Provider value={{ user, token, login, demoLogin, signup, logout, loading }}>
             {children}
         </AuthContext.Provider>
     );

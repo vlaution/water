@@ -54,6 +54,20 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
     const { preferences } = useUserPreferences();
     const { config: globalConfig } = useGlobalConfig();
 
+
+    // Effect: Check for pending valuation from Command Palette
+    React.useEffect(() => {
+        const pendingTicker = localStorage.getItem('pending_valuation_ticker');
+        if (pendingTicker) {
+            // Wait a tick for component to mount fully if needed, or just set it
+            setTimeout(() => {
+                setFormData(prev => ({ ...prev, ticker: pendingTicker }));
+                localStorage.removeItem('pending_valuation_ticker');
+                // Optional: Auto-fetch could be triggered here or by the user
+            }, 100);
+        }
+    }, []);
+
     const { state: formData, pushState, undo, redo, canUndo, canRedo } = useChangeHistory({
         company_name: "New Company",
         currency: "USD",
@@ -181,12 +195,13 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
             entry_revenue: 100,
             entry_ebitda: 20,
             entry_ev_ebitda_multiple: 10.0 as number | undefined,
-            target_irr: 0.20,
+            target_irr: 0.20 as number | undefined,
             financing: {
                 tranches: [
                     {
                         name: "Senior Debt",
-                        leverage_multiple: 4.0,
+                        amount: undefined as number | undefined,
+                        leverage_multiple: 4.0 as number | undefined,
                         interest_rate: 0.08,
                         cash_interest: true,
                         amortization_rate: 0.05,
@@ -195,7 +210,8 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                     },
                     {
                         name: "Mezzanine",
-                        leverage_multiple: 1.0,
+                        amount: undefined as number | undefined,
+                        leverage_multiple: 1.0 as number | undefined,
                         interest_rate: 0.12,
                         cash_interest: false, // PIK
                         amortization_rate: 0.0,
@@ -203,8 +219,8 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                         mandatory_cash_sweep_priority: 2
                     }
                 ],
-                total_leverage_ratio: 5.0,
-                equity_contribution_percent: 0.40
+                total_leverage_ratio: 5.0 as number | undefined,
+                equity_contribution_percent: 0.40 as number | undefined
             },
             assumptions: {
                 transaction_fees_percent: 0.02,
@@ -216,7 +232,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
             nwc_percentage: 0.05,
             tax_rate: 0.25,
             holding_period: 5,
-            exit_ev_ebitda_multiple: 10.0
+            exit_ev_ebitda_multiple: 10.0 as number | undefined
         }
     });
 
@@ -556,6 +572,23 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
         });
     };
 
+    const sanitizeData = (data: any): any => {
+        if (typeof data === 'number') {
+            return isNaN(data) ? 0 : data;
+        }
+        if (Array.isArray(data)) {
+            return data.map(item => sanitizeData(item));
+        }
+        if (typeof data === 'object' && data !== null) {
+            const clean: any = {};
+            for (const key in data) {
+                clean[key] = sanitizeData(data[key]);
+            }
+            return clean;
+        }
+        return data;
+    };
+
     return (
         <div className="max-w-6xl mx-auto mt-10 animate-fade-in-up" >
             <ScenarioWizard
@@ -567,7 +600,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
             <form onSubmit={async (e) => {
                 e.preventDefault();
                 await runAudit();
-                onSubmit(formData);
+                onSubmit(sanitizeData(formData));
             }} className="space-y-8">
 
                 <AuditAlert issues={auditIssues} />
@@ -662,11 +695,11 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                             >
                                 {isValidating ? (
                                     <>
-                                        <span className="animate-spin">⚡</span> Analyzing...
+                                        Analyzing...
                                     </>
                                 ) : (
                                     <>
-                                        <span>✨</span> Validate with AI
+                                        Validate with AI
                                     </>
                                 )}
                             </button>
@@ -677,7 +710,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                                 className="p-2.5 bg-white text-gray-600 rounded-xl shadow-sm hover:bg-gray-50 border border-gray-200 transition-colors"
                                 title="AI Settings"
                             >
-                                ⚙️
+
                             </button>
                         </div>
                     </div>
@@ -821,7 +854,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                                 onClick={() => setIsWizardOpen(true)}
                                 className="glass-button text-sm font-medium flex items-center gap-2 text-system-blue"
                             >
-                                <span className="text-lg">✨</span>
+
                                 <span>Scenario Wizard</span>
                             </button>
                         </div>

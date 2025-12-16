@@ -141,12 +141,14 @@ async def run_valuation(
     
     # Audit Log
     try:
-        audit_logger = AuditLogger(db)
-        audit_logger.log_valuation_change(
-            user_id=current_user.id,
-            valuation_id=run_id,
-            action="created_upload",
-            ip_address=req.client.host
+        from backend.services.audit_service import AuditService
+        audit_service = AuditService(db)
+        audit_service.log_event(
+            user_id=str(current_user.id),
+            action="CREATE_VALUATION_UPLOAD",
+            resource_type="valuation",
+            resource_id=run_id,
+            details={"mode": "upload", "ip": req.client.host}
         )
     except Exception as e:
         print(f"Audit log failed: {e}")
@@ -201,12 +203,14 @@ async def calculate_valuation_manual(
     
     # Audit Log
     try:
-        audit_logger = AuditLogger(db)
-        audit_logger.log_valuation_change(
-            user_id=current_user.id,
-            valuation_id=run_id,
-            action="created_manual",
-            ip_address=request.client.host
+        from backend.services.audit_service import AuditService
+        audit_service = AuditService(db)
+        audit_service.log_event(
+            user_id=str(current_user.id),
+            action="CREATE_VALUATION_MANUAL",
+            resource_type="valuation",
+            resource_id=run_id,
+            details={"mode": "manual", "ip": request.client.host}
         )
     except Exception as e:
         print(f"Audit log failed: {e}")
@@ -844,6 +848,16 @@ async def calculate_real_options(request: RealOptionsRequest, db: Session = Depe
         return result
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/api/benchmark/transactions/{sector}")
+async def get_transaction_comps(
+    sector: str,
+    service: BenchmarkingService = Depends(BenchmarkingService)
+):
+    try:
+        return service.get_transaction_comps(sector)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

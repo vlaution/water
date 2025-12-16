@@ -1,21 +1,33 @@
 Technology Stack Overview
+
 Frontend
-Framework: React with TypeScript (TSX) using Next.js for routing/SSR.
-Components: Located under frontend/src/components/ (e.g., VCMethodModal.tsx, ScenarioManager.tsx).
-Styling: Vanilla CSS with custom design tokens, Google Fonts (Inter/Outfit), and glass‑morphism effects defined in index.css.
+Framework: React 19 with TypeScript (TSX) using Vite.
+Components: Located under frontend/src/components/ (80+ components).
+Styling: Vanilla CSS with custom design tokens, Tailwind CSS, Google Fonts (Inter/Outfit), and glass‑morphism effects.
+State: React Context & Hooks.
+
 Backend
 Language: Python 3.11
 Web Framework: FastAPI (backend/api/routes.py).
-Business Logic: Centralized services in backend/services/ (dashboard_service.py, dashboard_config_service.py).
+Business Logic: Modular services in backend/services/ (Valuation, AI, Risk, Benchmarking).
 Data Layer: SQLAlchemy models (backend/database/models.py) with SQLite/PostgreSQL.
 Validation: Pydantic models for request/response schemas.
+Task Queue: Celery / BackgroundTasks.
+
+Excel Add-in
+Framework: React with Office.js.
+Bundler: Webpack.
+Features: Bi-directional sync, Authentication.
+
 Testing & Quality
 Python: PyTest unit & integration tests (test_*.py).
-Frontend: TypeScript type‑checking (tsc), ESLint, and component linting.
+Frontend: TypeScript type‑checking (tsc), ESLint.
+
 CI/CD & Deployment
-Frontend: Vercel (auto‑deploy on push).
-Backend: Docker container built via GitHub Actions; runs as a FastAPI service.
-Demo Mode: Auth bypass flag with a "Try Demo" button in the UI.
+Frontend: Vercel.
+Backend: Docker container.
+Database: PostgreSQL (Prod) / SQLite (Dev).
+
 Miscellaneous
 Version Control: Git repository.
-Documentation: README, API specs, and this tech‑stack file for onboarding.
+Documentation: system_architecture.md, README.md.

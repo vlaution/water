@@ -183,26 +183,26 @@ class ValuationEngine:
         cache.set_sync(cache_key, self.results, ttl=3600)
 
         # Record Metric
-        try:
-            end_time = datetime.utcnow()
-            duration = int((end_time - start_time).total_seconds() * 1000)
+        # try:
+        #     end_time = datetime.utcnow()
+        #     duration = int((end_time - start_time).total_seconds() * 1000)
             
-            db = SessionLocal()
-            metric = ValuationMetric(
-                valuation_id=cache_key, # Using cache key as ID for now
-                method_type="ALL",
-                start_time=start_time,
-                end_time=end_time,
-                duration_ms=duration,
-                cache_hit=False,
-                input_complexity_score=len(str(valuation_input)),
-                user_id=self.user_id
-            )
-            db.add(metric)
-            db.commit()
-            db.close()
-        except Exception as e:
-            print(f"Failed to save valuation metric: {e}")
+        #     db = SessionLocal()
+        #     metric = ValuationMetric(
+        #         valuation_id=cache_key, # Using cache key as ID for now
+        #         method_type="ALL",
+        #         start_time=start_time,
+        #         end_time=end_time,
+        #         duration_ms=duration,
+        #         cache_hit=False,
+        #         input_complexity_score=len(str(valuation_input)),
+        #         user_id=self.user_id
+        #     )
+        #     db.add(metric)
+        #     db.commit()
+        #     db.close()
+        # except Exception as e:
+        #     print(f"Failed to save valuation metric: {e}")
         
         return self.results
 

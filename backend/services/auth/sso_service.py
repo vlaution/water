@@ -9,7 +9,7 @@ from backend.database.models import SSOConfiguration
 import os
 import requests
 from urllib.parse import urlencode
-
+from backend.database.redis_client import redis_client
 
 class SSOService:
     """Service for managing SSO configurations and OIDC flows."""
@@ -72,28 +72,45 @@ class SSOService:
         # OIDC authorization endpoint
         auth_endpoint = f"{config.issuer_url}/authorize"
         
+        state = self._generate_state()
+        # Verify Redis is available
+        if not redis_client.client:
+             raise ValueError("Redis unavailable. Cannot perform secure SSO.")
+        
+        # Store state with 10 minute expiry (CSRF protection)
+        redis_client.set(f"sso_state:{state}", "valid", ex=600)
+
         params = {
             "client_id": config.client_id,
             "redirect_uri": config.redirect_uri,
             "response_type": "code",
             "scope": "openid email profile",
-            "state": self._generate_state()  # TODO: Store state for CSRF protection
+            "state": state 
         }
         
         return f"{auth_endpoint}?{urlencode(params)}"
     
-    def exchange_code(self, provider: str, code: str, db: Session) -> Dict[str, Any]:
+    def exchange_code(self, provider: str, code: str, state: str, db: Session) -> Dict[str, Any]:
         """
         Exchange authorization code for access token.
         
         Args:
             provider: Provider name
             code: Authorization code from IdP
+            state: CSRF state parameter to verify
             db: Database session
             
         Returns:
             Token response from IdP
         """
+        # 1. Verify State (CSRF Protection)
+        stored_state = redis_client.get(f"sso_state:{state}")
+        if not stored_state:
+            raise ValueError("Invalid SOC/CSRF state parameter. Potential attack detected or session expired.")
+        
+        # Delete state after use (one-time use)
+        redis_client.delete(f"sso_state:{state}")
+
         config = self.get_config(provider, db)
         if not config:
             raise ValueError(f"SSO configuration not found for provider: {provider}")

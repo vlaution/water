@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Optional
+from typing import Optional, Any
 from backend.calculations.models import HistoricalFinancials, MarketAssumptions
 
 class FinancialDataProvider(ABC):
@@ -8,7 +8,7 @@ class FinancialDataProvider(ABC):
     """
 
     @abstractmethod
-    def get_financials(self, ticker: str) -> HistoricalFinancials:
+    def get_financials(self, ticker: str, user: Any = None) -> HistoricalFinancials:
         """
         Fetch historical financial data for a given ticker.
         """

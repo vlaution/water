@@ -208,11 +208,21 @@ class CovenantRule(BaseModel):
     start_year: int = 1
     end_year: int = 10
 
+class MIPTrancheInput(BaseModel):
+    name: str = "Time Vested Options"
+    allocation_percent: float = 0.05 # % of Total Equity
+    vesting_type: str = "time" # "time", "performance"
+    vesting_period_years: float = 4.0
+    cliff_years: float = 1.0
+    performance_target_moic: Optional[float] = None
+    strike_price: float = 0.0
+
 class MIPConfig(BaseModel):
-    option_pool_percent: float = 0.10
-    strike_price_discount: float = 0.0 # vs Entry Equity Value
-    vesting_period: int = 4
-    cliff_years: int = 1
+    option_pool_percent: float = 0.10 # Legacy/Override
+    strike_price_discount: float = 0.0 
+    vesting_period: int = 4 # Legacy
+    cliff_years: int = 1 # Legacy
+    tranches: List[MIPTrancheInput] = [] # New detailed support
     
 class TaxConfig(BaseModel):
     enable_nol: bool = False

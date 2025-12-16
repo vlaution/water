@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { SuggestionBadge } from './SuggestionBadge';
-import type { Suggestion, SuggestionType } from '../../types/ai';
+import type { Suggestion } from '../../types/ai';
+
 
 interface EnhancedFormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     label?: string;
