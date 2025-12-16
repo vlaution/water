@@ -1,4 +1,4 @@
-import init, { run_monte_carlo } from '../../wasm-engine/wasm-pkg/wasm_engine';
+import init, { run_monte_carlo } from '@wasm/wasm_engine';
 
 class WasmComputeService {
     private isInitialized = false;
