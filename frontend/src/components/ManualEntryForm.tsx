@@ -39,7 +39,7 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
 
     const getInputClassName = (field: string) => {
         const hasError = !!getFieldError(field);
-        return `glass-input ${hasError ? 'border-red-500 focus:ring-red-500 bg-red-50' : ''}`;
+        return `glass - input ${hasError ? 'border-red-500 focus:ring-red-500 bg-red-50' : ''} `;
     };
 
     const renderErrorMessage = (field: string) => {
@@ -444,14 +444,14 @@ export const ManualEntryForm: React.FC<ManualEntryFormProps> = ({ onSubmit, isLo
                                 key={method.id}
                                 onClick={() => setActiveMethod(method.id as any)}
                                 className={`
-                                    w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200
+w - full flex items - center px - 4 py - 3 text - sm font - medium rounded - xl transition - all duration - 200
                                     ${activeMethod === method.id
                                         ? 'bg-system-blue text-white shadow-lg shadow-blue-500/30 translate-x-1'
                                         : 'text-gray-600 dark:text-gray-400 hover:bg-white/50 dark:hover:bg-white/5 hover:translate-x-1'
                                     }
-                                `}
+`}
                             >
-                                <span className={`mr-3 ${activeMethod === method.id ? 'text-white' : 'text-gray-400'}`}>
+                                <span className={`mr - 3 ${activeMethod === method.id ? 'text-white' : 'text-gray-400'} `}>
                                     {/* Simple Icon placeholder logic */}
                                     {method.icon === 'chart' && <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" /></svg>}
                                     {method.icon === 'cash' && <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}

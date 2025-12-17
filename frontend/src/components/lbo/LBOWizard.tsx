@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronRight, ChevronLeft, Calculator, Activity, Check, BookOpen, Layers, RefreshCw } from 'lucide-react';
-import { MonteCarloModal } from '../modals/MonteCarloModal';
+const MonteCarloModal = React.lazy(() => import('../modals/MonteCarloModal').then(module => ({ default: module.MonteCarloModal })));
 import { TutorialOverlay } from '../common/TutorialOverlay';
 import { MarketDataService } from '../../services/MarketDataService';
 import type { MarketSnapshot, MarketRates, MarketScenarios } from '../../services/MarketDataService';
@@ -384,11 +384,13 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                 )}
             </div>
 
-            <MonteCarloModal
-                isOpen={showMonteCarlo}
-                onClose={() => setShowMonteCarlo(false)}
-                lboData={data}
-            />
+            <React.Suspense fallback={null}>
+                <MonteCarloModal
+                    isOpen={showMonteCarlo}
+                    onClose={() => setShowMonteCarlo(false)}
+                    lboData={data}
+                />
+            </React.Suspense>
 
             <TutorialOverlay
                 isOpen={showTutorial}

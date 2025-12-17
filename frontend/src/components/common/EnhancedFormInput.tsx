@@ -15,7 +15,7 @@ interface EnhancedFormInputProps extends React.InputHTMLAttributes<HTMLInputElem
     wrapperClassName?: string;
 }
 
-export const EnhancedFormInput: React.FC<EnhancedFormInputProps> = ({
+export const EnhancedFormInput = React.memo<EnhancedFormInputProps>(({
     label,
     error,
     suggestion,
@@ -108,4 +108,6 @@ export const EnhancedFormInput: React.FC<EnhancedFormInputProps> = ({
             )}
         </div>
     );
-};
+});
+
+EnhancedFormInput.displayName = 'EnhancedFormInput';
