@@ -97,8 +97,9 @@ async def run_valuation(
     workbook_data.file_id = file_id
     
     # Process Excel Data
+    from fastapi.concurrency import run_in_threadpool
     processor = ExcelProcessor(workbook_data, request.mappings)
-    valuation_input, errors = processor.process()
+    valuation_input, errors = await run_in_threadpool(processor.process)
     
     # Check for critical errors
     critical_errors = [e for e in errors if e.severity == "error"]
@@ -118,7 +119,7 @@ async def run_valuation(
 
     # Run valuation
     engine = ValuationEngine(user_id=current_user.id)
-    results = engine.calculate(valuation_input)
+    results = await run_in_threadpool(engine.calculate, valuation_input)
     
     # Add any non-critical validation warnings to results
     results["validation_warnings"] = [e.dict() for e in errors if e.severity == "warning"]
@@ -695,7 +696,8 @@ async def export_report(run_id: str, db: Session = Depends(get_db)):
         }
         
         service = ReportGeneratorService()
-        html_content = service.generate_report(run_data, run.company_name)
+        from fastapi.concurrency import run_in_threadpool
+        html_content = await run_in_threadpool(service.generate_report, run_data, run.company_name)
         
         return html_content
     except Exception as e:

@@ -28,7 +28,7 @@ import { RequirePermission } from './components/common/RequirePermission';
 import { ThemeToggle } from './components/common/ThemeToggle';
 import { Permissions } from './config/permissions';
 import { GlobalAssumptionsPanel } from './components/dashboard/GlobalAssumptionsPanel';
-import { Globe } from 'lucide-react';
+import { Globe, Menu, ChevronLeft } from 'lucide-react';
 import { UserPreferencesProvider } from './context/UserPreferencesContext';
 import { GlobalConfigProvider } from './context/GlobalConfigContext';
 import { RiskDashboard } from './pages/RiskDashboard';
@@ -47,20 +47,20 @@ import { CommandPalette } from './components/System/CommandPalette';
 
 const ProtectedApp = () => {
   const { user, loading, token, logout } = useAuth();
-  const { showToast } = useToast(); // Use the hook
+  const { showToast } = useToast();
   const [step, setStep] = useState<'mode-selection' | 'upload' | 'mapping' | 'manual-entry' | 'dashboard' | 'dashboard-home' | 'risk-dashboard' | 'fund-simulator' | 'deal-sourcing' | 'debt-markets'>('mode-selection');
   const [workbookData, setWorkbookData] = useState<any>(null);
   const [results, setResults] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isGlobalSettingsOpen, setIsGlobalSettingsOpen] = useState(false);
-  const [isSecretsModalOpen, setIsSecretsModalOpen] = useState(false); // New State
+  const [isSecretsModalOpen, setIsSecretsModalOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const location = useLocation();
 
   useEffect(() => {
     if (location.state && (location.state as any).setStep) {
       setStep((location.state as any).setStep);
-      // Clear state to prevent loop if we add more complex logic, though separate routes handle this well
       window.history.replaceState({}, document.title);
     }
   }, [location]);
@@ -122,7 +122,6 @@ const ProtectedApp = () => {
 
       const data = await response.json();
 
-      // Check for warnings in successful response
       if (data.validation_warnings && data.validation_warnings.length > 0) {
         showToast(`Valuation completed with warnings`, 'warning');
       } else {
@@ -158,7 +157,6 @@ const ProtectedApp = () => {
           showToast(`Validation Errors: ${messages}`, 'error');
           return;
         }
-        // Handle specific 500/400 errors cleanly
         throw new Error(errorData.detail || 'Valuation calculation failed');
       }
 
@@ -170,7 +168,6 @@ const ProtectedApp = () => {
         showToast('Valuation computed successfully', 'success');
       }
 
-      // The /calculate endpoint returns the results directly (including run_id), not wrapped in a 'results' property
       setResults(data);
       setStep('dashboard');
     } catch (error) {
@@ -193,7 +190,6 @@ const ProtectedApp = () => {
         throw new Error('Failed to fetch run');
       }
       const data = await response.json();
-      // Inject the run ID into the results object so it's available for the dashboard
       setResults({ ...data.results, run_id: data.id });
       setStep('dashboard');
     } catch (error) {
@@ -208,22 +204,46 @@ const ProtectedApp = () => {
     <div className="min-h-screen font-sans text-gray-900 dark:text-gray-100 transition-colors duration-300">
       <CommandController setStep={setStep} />
       <BackendSearchController setStep={setStep} />
-      <div className="flex">
+      <div className="flex relative">
+        {/* Toggle Button (Floating when closed) */}
+        {!isSidebarOpen && step !== 'mode-selection' && (
+          <button
+            onClick={() => setIsSidebarOpen(true)}
+            className="absolute top-6 left-6 z-50 p-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all animate-fade-in"
+          >
+            <Menu className="w-5 h-5 text-gray-700 dark:text-gray-200" />
+          </button>
+        )}
+
         {/* Sidebar */}
         {step !== 'mode-selection' && (
-          <aside className="w-80 min-h-screen bg-white/60 backdrop-blur-xl border-r border-white/20 dark:bg-gray-900/60 dark:border-white/10 p-6 shadow-sidebar z-50 transition-all duration-300">
-            <div className="mb-8 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-system-blue rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30">
+          <aside
+            className={`${isSidebarOpen ? 'w-80 translate-x-0' : 'w-0 -translate-x-full opacity-0 overflow-hidden'} 
+              min-h-screen bg-white/60 backdrop-blur-xl border-r border-white/20 dark:bg-gray-900/60 dark:border-white/10 
+              shadow-sidebar z-40 transition-all duration-300 ease-in-out relative flex flex-col`}
+          >
+            <div className="p-6 pb-2 mb-4 flex items-center justify-between">
+              <div className="flex items-center gap-3 overflow-hidden whitespace-nowrap">
+                <div className="w-10 h-10 min-w-[2.5rem] bg-system-blue rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30">
                   <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                   </svg>
                 </div>
                 <h1 className="text-xl font-bold tracking-tight text-gray-900 dark:text-gray-100">Valuation</h1>
               </div>
+              <button
+                onClick={() => setIsSidebarOpen(false)}
+                className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              >
+                <ChevronLeft className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+
+            <div className="px-6 mb-4">
               <ThemeToggle />
             </div>
-            <div className="flex flex-col gap-2">
+
+            <div className="flex flex-col gap-2 px-6 flex-1 overflow-y-auto">
               <PermissionGuard permission={Permissions.CREATE_VALUATION}>
                 <button
                   onClick={() => setStep('mode-selection')}
@@ -297,7 +317,7 @@ const ProtectedApp = () => {
 
             </div>
 
-            <div className="mt-6 border-t border-gray-200/50 pt-6">
+            <div className="mt-6 border-t border-gray-200/50 pt-6 px-6">
               <button
                 onClick={() => setIsGlobalSettingsOpen(true)}
                 className="glass-button w-full flex items-center justify-center gap-2 text-sm text-gray-600 hover:text-system-blue transition-colors"
@@ -314,7 +334,9 @@ const ProtectedApp = () => {
               </button>
             </div>
 
-            <RecentRuns onSelectRun={handleSelectRun} token={token} />
+            <div className="px-6">
+              <RecentRuns onSelectRun={handleSelectRun} token={token} />
+            </div>
           </aside>
         )}
 
