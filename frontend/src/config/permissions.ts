@@ -1,7 +1,10 @@
 export const UserRole = {
     VIEWER: "viewer",
     ANALYST: "analyst",
+    ASSOCIATE: "associate", // Senior Analyst
     MANAGER: "manager",
+    PARTNER: "partner",
+    COMPLIANCE: "compliance",
     ADMIN: "admin",
     USER: "user" // Legacy
 } as const;
@@ -34,14 +37,43 @@ export const ROLE_PERMISSIONS: Record<UserRole, Set<Permission>> = {
         Permissions.EXPORT_DATA,
         Permissions.VIEW_ANALYTICS,
     ]),
+    [UserRole.ASSOCIATE]: new Set([
+        Permissions.VIEW_COMPANY,
+        Permissions.CREATE_VALUATION,
+        Permissions.EDIT_VALUATION,
+        Permissions.APPROVE_VALUATION, // Key addition for QC
+        Permissions.EXPORT_DATA,
+        Permissions.VIEW_ANALYTICS,
+    ]),
     [UserRole.MANAGER]: new Set([
         Permissions.VIEW_COMPANY,
         Permissions.CREATE_VALUATION,
         Permissions.EDIT_VALUATION,
-        Permissions.DELETE_VALUATION,
         Permissions.APPROVE_VALUATION,
+        Permissions.DELETE_VALUATION,
         Permissions.EXPORT_DATA,
         Permissions.VIEW_ANALYTICS,
+        Permissions.MANAGE_USERS, // Executive power
+        Permissions.VIEW_AUDIT_LOGS,
+    ]),
+    [UserRole.PARTNER]: new Set([
+        Permissions.VIEW_COMPANY,
+        Permissions.CREATE_VALUATION,
+        Permissions.EDIT_VALUATION,
+        Permissions.APPROVE_VALUATION,
+        Permissions.DELETE_VALUATION,
+        Permissions.EXPORT_DATA,
+        Permissions.VIEW_ANALYTICS,
+        Permissions.MANAGE_USERS,
+        Permissions.CONFIGURE_SYSTEM, // Strategic control
+        Permissions.VIEW_AUDIT_LOGS,
+    ]),
+    [UserRole.COMPLIANCE]: new Set([
+        Permissions.VIEW_COMPANY,
+        Permissions.VIEW_ANALYTICS,
+        Permissions.VIEW_AUDIT_LOGS,
+        Permissions.EXPORT_DATA,
+        // No Create/Edit permissions
     ]),
     [UserRole.ADMIN]: new Set([
         Permissions.VIEW_COMPANY,
@@ -50,11 +82,9 @@ export const ROLE_PERMISSIONS: Record<UserRole, Set<Permission>> = {
         Permissions.DELETE_VALUATION,
         Permissions.APPROVE_VALUATION,
         Permissions.EXPORT_DATA,
-        Permissions.MANAGE_USERS,
-        Permissions.CONFIGURE_SYSTEM,
-        Permissions.VIEW_AUDIT_LOGS,
         Permissions.VIEW_ANALYTICS,
     ]),
+
     [UserRole.USER]: new Set([
         Permissions.VIEW_COMPANY,
         Permissions.CREATE_VALUATION,

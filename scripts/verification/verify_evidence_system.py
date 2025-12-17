@@ -4,7 +4,9 @@ from datetime import datetime
 from sqlmodel import Session, create_engine, SQLModel
 
 # Ensure backend can be imported
-sys.path.append(os.getcwd())
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.abspath(os.path.join(current_dir, "..", ".."))
+sys.path.append(project_root)
 
 from backend.database.models import Base, EvidenceAttachment, ReviewComment
 from backend.services.evidence_service import EvidenceService

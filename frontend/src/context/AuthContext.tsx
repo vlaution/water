@@ -13,7 +13,7 @@ interface AuthContextType {
     token: string | null;
     login: (email: string, password: string) => Promise<void>;
     demoLogin: () => Promise<void>;
-    signup: (email: string, password: string, name: string) => Promise<void>;
+    signup: (email: string, password: string, name: string, role?: string) => Promise<void>;
     logout: () => void;
     loading: boolean;
 }
@@ -111,13 +111,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     };
 
-    const signup = async (email: string, password: string, name: string) => {
+    const signup = async (email: string, password: string, name: string, role: string = 'user') => {
         const response = await fetch(api.url(api.endpoints.auth.signup), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email, password, full_name: name })
+            body: JSON.stringify({ email, password, full_name: name, role })
         });
 
         if (!response.ok) {

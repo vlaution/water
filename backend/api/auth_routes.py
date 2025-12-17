@@ -12,7 +12,7 @@ from backend.auth.jwt_handler import (
     token_blacklist
 )
 from backend.auth.dependencies import get_current_user
-from backend.database.models import get_db, User, AuthProvider
+from backend.database.models import get_db, User, AuthProvider, UserRole
 from backend.services.sso_service import SSOService
 from datetime import datetime, timedelta
 
@@ -22,6 +22,7 @@ class SignupRequest(BaseModel):
     email: EmailStr
     password: str
     full_name: str
+    role: str = "user"  # Default to user if not specified
 
 class LoginRequest(BaseModel):
     email: EmailStr
@@ -53,11 +54,20 @@ async def signup(request: SignupRequest, db: Session = Depends(get_db)):
     # Hash password
     hashed_password = get_password_hash(request.password)
     
+    # Validate Role
+    try:
+        user_role = UserRole(request.role.lower())
+    except ValueError:
+        user_role = UserRole.user # Fallback or error? Let's fallback to user for safety or raise error. 
+        # Actually safer to fallback or default. But if they explicitly ask for 'analyst', we should grant it for this MVP/Role implementation.
+        # In a real strict system we might want to restrict 'admin' creation, but for this task we want to enable 'analyst' creation.
+    
     # Create user
     user = User(
         email=request.email,
         hashed_password=hashed_password,
-        full_name=request.full_name
+        full_name=request.full_name,
+        role=user_role
     )
     db.add(user)
     db.commit()

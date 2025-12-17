@@ -4,6 +4,12 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-route
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { Login } from './pages/Login';
 import { Signup } from './pages/Signup';
+import { AnalystDashboard } from './pages/AnalystDashboard';
+import { AssociateDashboard } from './pages/AssociateDashboard';
+import { ManagerDashboard } from './pages/ManagerDashboard';
+import { PartnerDashboard } from './pages/PartnerDashboard';
+import { ComplianceDashboard } from './pages/ComplianceDashboard';
+import { AdminDashboard } from './pages/AdminDashboard';
 import { FileUpload } from './components/FileUpload';
 import { SheetMapping } from './components/SheetMapping';
 import { ResultsDashboard } from './components/ResultsDashboard';
@@ -199,7 +205,7 @@ const ProtectedApp = () => {
   };
 
   return (
-    <div className="min-h-screen font-sans text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-slate-950 transition-colors duration-300">
+    <div className="min-h-screen font-sans text-gray-900 dark:text-gray-100 transition-colors duration-300">
       <CommandController setStep={setStep} />
       <BackendSearchController setStep={setStep} />
       <div className="flex">
@@ -350,11 +356,25 @@ const ProtectedApp = () => {
           )}
           {step === 'dashboard' && <ResultsDashboard results={results} runId={results?.run_id} />}
           {step === 'dashboard-home' && (
-            <DashboardHome
-              onSelectRun={handleSelectRun}
-              token={token}
-              onOpenGlobalSettings={() => setIsGlobalSettingsOpen(true)}
-            />
+            user?.role === 'analyst' ? (
+              <AnalystDashboard onCreateValuation={() => setStep('mode-selection')} />
+            ) : user?.role === 'associate' ? (
+              <AssociateDashboard />
+            ) : user?.role === 'manager' ? (
+              <ManagerDashboard />
+            ) : user?.role === 'partner' ? (
+              <PartnerDashboard />
+            ) : user?.role === 'compliance' ? (
+              <ComplianceDashboard />
+            ) : user?.role === 'admin' ? (
+              <AdminDashboard />
+            ) : (
+              <DashboardHome
+                onSelectRun={handleSelectRun}
+                token={token}
+                onOpenGlobalSettings={() => setIsGlobalSettingsOpen(true)}
+              />
+            )
           )}
           {step === 'risk-dashboard' && <RiskDashboard />}
           {step === 'fund-simulator' && <FundSimulator />}

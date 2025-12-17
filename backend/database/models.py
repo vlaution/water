@@ -10,11 +10,14 @@ Base = declarative_base()
 # ... (existing enums and classes)
 
 class UserRole(str, enum.Enum):
-    admin = "admin"
     user = "user"
     viewer = "viewer"
     analyst = "analyst"
+    associate = "associate"
     manager = "manager"
+    partner = "partner"
+    compliance = "compliance"
+    admin = "admin"
 
 class AuthProvider(str, enum.Enum):
     email = "email"

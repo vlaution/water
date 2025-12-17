@@ -5,8 +5,11 @@ import json
 from datetime import datetime
 from sqlmodel import Session, create_engine, SQLModel
 
-# Ensure backend can be imported
-sys.path.append(os.getcwd())
+# Ensure backend can be imported by adding project root to path
+# We are in scripts/verification, so root is two levels up
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.abspath(os.path.join(current_dir, "..", ".."))
+sys.path.append(project_root)
 
 from backend.database.models import Base, ValuationRun, User, Regulation
 from backend.services.immutable_audit import ImmutableAuditService
@@ -16,12 +19,13 @@ from backend.models.compliance import ComplianceAudit
 
 # Setup Test DB (InMemory for speed benchmarking, or File for persistence check?)
 # User asked for < 5s latency and < 1min doc gen. File DB is more realistic.
+db_path = os.path.join(project_root, "data", "test_metrics.db")
 try:
-    os.remove("./test_metrics.db")
+    os.remove(db_path)
 except FileNotFoundError:
     pass
 
-sqlite_url = "sqlite:///./test_metrics.db"
+sqlite_url = f"sqlite:///{db_path}"
 engine = create_engine(sqlite_url)
 Base.metadata.create_all(engine)
 session = Session(engine)

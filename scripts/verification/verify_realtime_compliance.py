@@ -3,7 +3,9 @@ import sys
 import os
 
 # Ensure backend can be imported
-sys.path.append(os.getcwd())
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.abspath(os.path.join(current_dir, "..", ".."))
+sys.path.append(project_root)
 
 from backend.compliance.assistant import ComplianceAssistant
 

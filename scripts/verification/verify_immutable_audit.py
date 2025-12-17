@@ -4,7 +4,9 @@ import time
 from datetime import datetime
 
 # Ensure backend can be imported
-sys.path.append(os.getcwd())
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.abspath(os.path.join(current_dir, "..", ".."))
+sys.path.append(project_root)
 
 from sqlmodel import SQLModel, create_engine, Session, select
 from backend.models.audit import AuditLog

@@ -19,6 +19,8 @@ export default {
                 'system-indigo': '#5856D6',
                 'system-teal': '#5AC8FA',
                 'apple-gray': '#F5F5F7',
+                'premium-bg': '#F8FAFC', // Soft cool slate-50
+                'premium-border': '#E2E8F0', // Slate-200
             },
             backdropBlur: {
                 'xs': '2px',

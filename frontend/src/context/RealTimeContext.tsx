@@ -17,7 +17,10 @@ export const RealTimeProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
     const connect = () => {
-        if (socketRef.current?.readyState === WebSocket.OPEN) return;
+        // Prevent multiple connections if one is already open or connecting
+        if (socketRef.current && (socketRef.current.readyState === WebSocket.OPEN || socketRef.current.readyState === WebSocket.CONNECTING)) {
+            return;
+        }
 
         // Robust URL construction
         let baseUrl = api.baseURL || 'http://localhost:8000'; // Fallback
@@ -31,14 +34,17 @@ export const RealTimeProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         console.log(`[RealTime] Connecting to: ${wsUrl}`);
 
         const socket = new WebSocket(wsUrl);
+        socketRef.current = socket;
 
         socket.onopen = () => {
+            if (socket !== socketRef.current) return;
             console.log("[RealTime] Connected");
             setIsConnected(true);
             // Request initial data immediately if needed
         };
 
         socket.onmessage = (event) => {
+            if (socket !== socketRef.current) return;
             try {
                 const data = JSON.parse(event.data);
                 setLastMessage(data);
@@ -48,25 +54,36 @@ export const RealTimeProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         };
 
         socket.onclose = () => {
+            // Ignore close events from old/replaced sockets
+            if (socket !== socketRef.current) return;
+
             console.log("WebSocket disconnected");
             setIsConnected(false);
             socketRef.current = null;
 
             // Auto reconnect after 5s
+            if (reconnectTimeoutRef.current) clearTimeout(reconnectTimeoutRef.current);
             reconnectTimeoutRef.current = setTimeout(connect, 5000);
         };
 
         socket.onerror = (error) => {
+            if (socket !== socketRef.current) return;
             console.error("WebSocket error:", error);
             socket.close();
         };
-
-        socketRef.current = socket;
     };
 
     const disconnect = () => {
         if (reconnectTimeoutRef.current) clearTimeout(reconnectTimeoutRef.current);
-        socketRef.current?.close();
+
+        const socket = socketRef.current;
+        if (socket) {
+            // Prevent auto-reconnect logic if we are intentionally disconnecting
+            socket.onclose = null;
+            socket.close();
+            socketRef.current = null;
+            setIsConnected(false);
+        }
     };
 
     useEffect(() => {
