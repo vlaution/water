@@ -1,24 +1,24 @@
-import openpyxl
 import pandas as pd
-import sys
+import os
 
-FILE_PATH = "c:/Users/Abhiram/Desktop/water/valuation_automation_dashboard.xlsm"
+file_path = "C:\\Users\\Abhiram\\Desktop\\water\\Valuation_Automation_Dashboard_Draft 12_AJ.xlsm"
 
-def inspect_excel(file_path):
-    try:
-        print(f"Loading {file_path}...")
-        wb = openpyxl.load_workbook(file_path, read_only=True, data_only=True)
-        print(f"Sheet names: {wb.sheetnames}")
-        
-        for sheet_name in wb.sheetnames:
-            print(f"\n--- Sheet: {sheet_name} ---")
-            ws = wb[sheet_name]
-            # Print first 5 rows to identify headers
-            for i, row in enumerate(ws.iter_rows(max_row=5, values_only=True)):
-                print(f"Row {i+1}: {row}")
-                
-    except Exception as e:
-        print(f"Error: {e}")
+pd.set_option('display.max_rows', 50)
+pd.set_option('display.max_columns', 20)
+pd.set_option('display.width', 1000)
 
-if __name__ == "__main__":
-    inspect_excel(FILE_PATH)
+try:
+    xls = pd.ExcelFile(file_path)
+    target_sheets = ['Tab 1. User Input>>', 'Inp_1']
+    
+    for sheet in target_sheets:
+        if sheet in xls.sheet_names:
+            df = pd.read_excel(xls, sheet_name=sheet, nrows=20)
+            with open('excel_dump.txt', 'a') as f:
+                f.write(f"\n{'='*20} Sheet: {sheet} {'='*20}\n")
+                f.write(df.to_string())
+        else:
+            print(f"Sheet {sheet} not found.")
+
+except Exception as e:
+    print(f"Error: {e}")

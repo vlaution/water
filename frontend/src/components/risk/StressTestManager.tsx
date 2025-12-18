@@ -87,23 +87,23 @@ export const StressTestManager: React.FC = () => {
     };
 
     return (
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        <div className="bg-white dark:bg-white/5 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-white/10">
             <div className="mb-6">
-                <h3 className="text-lg font-semibold text-gray-900">Scenario Stress Testing</h3>
-                <p className="text-sm text-gray-500 mt-1">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Scenario Stress Testing</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                     Simulate macroeconomic shocks to see their impact on portfolio valuation.
                 </p>
             </div>
 
             <div className="flex gap-4 items-end mb-8">
                 <div className="flex-1 max-w-md">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Select Scenario
                     </label>
                     <select
                         value={selectedScenario}
                         onChange={(e) => setSelectedScenario(e.target.value)}
-                        className="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        className="w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100"
                     >
                         {scenarios.map((s) => (
                             <option key={s.name} value={s.name}>
@@ -131,9 +131,9 @@ export const StressTestManager: React.FC = () => {
                 <div className="space-y-6 animate-fade-in">
                     {/* Summary Cards */}
                     <div className="grid grid-cols-3 gap-4">
-                        <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-                            <div className="text-sm text-gray-500">Base Portfolio Value</div>
-                            <div className="text-xl font-bold text-gray-900">
+                        <div className="p-4 bg-gray-50 dark:bg-white/5 rounded-lg border border-gray-200 dark:border-white/10">
+                            <div className="text-sm text-gray-500 dark:text-gray-400">Base Portfolio Value</div>
+                            <div className="text-xl font-bold text-gray-900 dark:text-gray-100">
                                 {formatCurrency(results.total_base_value)}
                             </div>
                         </div>
@@ -143,38 +143,38 @@ export const StressTestManager: React.FC = () => {
                                 {formatCurrency(results.total_stressed_value)}
                             </div>
                         </div>
-                        <div className="p-4 bg-white rounded-lg border border-gray-200">
-                            <div className="text-sm text-gray-500">Impact</div>
-                            <div className={`text-xl font-bold ${results.total_change_percent < 0 ? 'text-red-600' : 'text-green-600'}`}>
+                        <div className="p-4 bg-white dark:bg-white/5 rounded-lg border border-gray-200 dark:border-white/10">
+                            <div className="text-sm text-gray-500 dark:text-gray-400">Impact</div>
+                            <div className={`text-xl font-bold ${results.total_change_percent < 0 ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'}`}>
                                 {formatPercent(results.total_change_percent)}
                             </div>
                         </div>
                     </div>
 
                     {/* Detailed Table */}
-                    <div className="overflow-hidden rounded-lg border border-gray-200">
-                        <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-gray-50">
+                    <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-white/10">
+                        <table className="min-w-full divide-y divide-gray-200 dark:divide-white/10">
+                            <thead className="bg-gray-50 dark:bg-white/5">
                                 <tr>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company</th>
-                                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Base Value</th>
-                                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Stressed Value</th>
-                                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Change</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Company</th>
+                                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Base Value</th>
+                                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Stressed Value</th>
+                                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Change</th>
                                 </tr>
                             </thead>
-                            <tbody className="bg-white divide-y divide-gray-200">
+                            <tbody className="bg-white dark:bg-transparent divide-y divide-gray-200 dark:divide-white/10">
                                 {results.company_results.map((res, idx) => (
-                                    <tr key={idx} className="hover:bg-gray-50">
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    <tr key={idx} className="hover:bg-gray-50 dark:hover:bg-white/5">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
                                             {res.company_name}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 text-right">
                                             {formatCurrency(res.base_value)}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right font-medium">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 text-right font-medium">
                                             {formatCurrency(res.stressed_value)}
                                         </td>
-                                        <td className={`px-6 py-4 whitespace-nowrap text-sm text-right font-bold ${res.change_percent < 0 ? 'text-red-600' : 'text-green-600'}`}>
+                                        <td className={`px-6 py-4 whitespace-nowrap text-sm text-right font-bold ${res.change_percent < 0 ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'}`}>
                                             {formatPercent(res.change_percent)}
                                         </td>
                                     </tr>

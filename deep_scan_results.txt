@@ -1,0 +1,50 @@
+=== SHEET LIST ===
+['Cover', 'Tab 1. User Input>>', 'Inp_1', 'Inp_2', 'Inp_3', 'Inp_4', 'Tab 2. Valuation>>', 'Method_Selc', 'GPC', 'Exit_M', 'GTM', 'IC', 'RCM', 'ANAV', 'DCF_FCFF', 'DCF_FCFE', 'Tab 3. Val Summary>>', 'ValSum ', 'Backend Input>>', 'GPC Input', 'GTM Input', 'IC Input', 'Back_end_links', 'WC & Capex']
+
+=== Valuation Summary (Back_end_links) ===
+Empty DataFrame
+Columns: []
+Index: []
+
+=== WACC / Cost of Capital Search ===
+
+[FOUND KEYWORDS IN Inp_4]
+     0                                                1    2                                            3                            4    5    6       7
+0  NaN  Step 4: Weighted average Cost of Capital (WACC)  NaN                                          NaN                          NaN  NaN  NaN     NaN
+2  NaN          Weighted average Cost of Capital (WACC)  NaN                                          NaN                          NaN  NaN  NaN    0.25
+5  NaN                                              NaN  0.0                                     Option 2  Comparable companies's WaCC  NaN  NaN     NaN
+11 NaN                                              NaN  NaN                                     Option 2  Comparable companies's WaCC  NaN  NaN   0.165
+24 NaN                                              NaN  NaN                                         WACC                          NaN  NaN  NaN  0.1499
+26 NaN                                              NaN  NaN                               Cost of Equity                          NaN  NaN  NaN     NaN
+27 NaN                                              NaN  NaN                           Risk Free Rate (a)                          NaN  NaN  NaN    0.05
+29 NaN                                              NaN  NaN                                    Beta (c)                           NaN  NaN  NaN     1.2
+30 NaN                                              NaN  NaN  Beta Adjusted Equity Risk Premium (d= b xc)                          NaN  NaN  NaN   0.084
+32 NaN                                              NaN  NaN          Concluded Cost of Equity (a + d +e)                          NaN  NaN  NaN   0.182
+
+[FOUND KEYWORDS IN DCF_FCFF]
+      0                                        1               2    3    4    5    6    7
+26  NaN  Step 2: Present value of Terminal value             NaN  NaN  NaN  NaN  NaN  NaN
+30  NaN                           Terminal Value  1059933.333333  NaN  NaN  NaN  NaN  NaN
+32  NaN          Present value of Terminal Value   388314.396254  NaN  NaN  NaN  NaN  NaN
+36  NaN                           Terminal Value  1059933.333333  NaN  NaN  NaN  NaN  NaN
+44  NaN                           Terminal Value  1446556.634921  NaN  NaN  NaN  NaN  NaN
+52  NaN                           Terminal Value      8687388.75  NaN  NaN  NaN  NaN  NaN
+57  NaN          Present value of Terminal Value   388314.396254  NaN  NaN  NaN  NaN  NaN
+
+[FOUND KEYWORDS IN DCF_FCFE]
+      0                                        1               2    3    4    5    6    7
+30  NaN  Step 2: Present value of Terminal value             NaN  NaN  NaN  NaN  NaN  NaN
+34  NaN                           Terminal Value      8687388.75  NaN  NaN  NaN  NaN  NaN
+36  NaN          Present value of Terminal Value  4093649.087132  NaN  NaN  NaN  NaN  NaN
+40  NaN                           Terminal Value  1171733.333333  NaN  NaN  NaN  NaN  NaN
+48  NaN                           Terminal Value  2364920.938967  NaN  NaN  NaN  NaN  NaN
+56  NaN                           Terminal Value      8687388.75  NaN  NaN  NaN  NaN  NaN
+61  NaN          Present value of Terminal Value  4093649.087132  NaN  NaN  NaN  NaN  NaN
+
+[FOUND KEYWORDS IN GPC Input]
+   0      1           2             3                     4                      5           6                          7                       8                      9   10                            11  12       13  14  15  16            17  18  19  20      21  22  23  24          25  26  27   28    29  30                31  32          33   34   35   36               37   38   39   40         41   42   43   44   45   46   47   48
+3 NaN  S No.  S&P Tikcer  Company Name  Business Description  Market Capitalization  Total Debt  Cash and Cash Equivalents  Short Term Investments  Long-Term Investments NaN  Preferred Capital-Redeemable NaN  Revenue NaN NaN NaN  Gross Profit NaN NaN NaN  EBITDA NaN NaN NaN  Net Profit NaN NaN  NaN  WACC NaN  Enterprise Value NaN  EV/Revenue  NaN  NaN  NaN  EV/Gross Profit  NaN  NaN  NaN  EV/EBITDA  NaN  NaN  NaN  P/E  NaN  NaN  NaN
+
+[FOUND KEYWORDS IN Back_end_links]
+                                   0    1    2    3   4   5    6    7    8    9    10   11
+12  Terminal value calcuation methods  NaN  NaN  NaN NaN NaN  NaN  NaN  NaN  NaN  NaN  NaN

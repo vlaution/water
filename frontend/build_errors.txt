@@ -1,0 +1,31 @@
+﻿
+> frontend@0.0.0 build
+> tsc -b && vite build
+
+src/components/dashboard/SensitivityMatrix.tsx(9,77): error TS6133: 'baseValue' is declared but its value is never read.
+src/components/InputReview.tsx(182,30): error TS2304: Cannot find name 'valuation_results'.
+src/components/lbo/LBOWizard.tsx(23,11): error TS6133: 'token' is declared but its value is never read.
+src/components/lbo/LBOWizard.tsx(27,24): error TS6133: 'setBenchmarks' is declared but its value is never read.
+src/components/lbo/LBOWizard.tsx(212,36): error TS6133: 'sector' is declared but its value is never read.
+src/components/lbo/steps/LBOStep1_Structure.tsx(5,38): error TS2307: Cannot find module '../../../../services/MarketDataService' or its corresponding type declarations.
+src/components/lbo/steps/LBOStep2_Financing.tsx(5,43): error TS6196: 'CovenantRule' is declared but never used.
+src/components/lbo/steps/LBOStep2_Financing.tsx(6,50): error TS2307: Cannot find module '../../../../services/MarketDataService' or its corresponding type declarations.
+src/components/ManualEntry/CompanyInputPanel.tsx(2,10): error TS6133: 'api' is declared but its value is never read.
+src/components/ManualEntry/ManualEntryHeader.tsx(48,21): error TS2322: Type '{ isCopilotActive: boolean; onClick: () => void; hasNewSuggestions: boolean; }' is not assignable to type 'IntrinsicAttributes & AISuggestionsButtonProps'.
+  Property 'isCopilotActive' does not exist on type 'IntrinsicAttributes & AISuggestionsButtonProps'.
+src/components/ManualEntryForm.tsx(26,88): error TS6133: 'errors' is declared but its value is never read.
+src/components/ManualEntryForm.tsx(125,21): error TS2322: Type 'string | null' is not assignable to type 'string'.
+  Type 'null' is not assignable to type 'string'.
+src/components/ManualEntryForm.tsx(155,82): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'string'.
+  Type 'null' is not assignable to type 'string'.
+src/components/ManualEntryForm.tsx(179,37): error TS2322: Type '{ solve_for: string; entry_revenue: number; entry_ebitda: number; entry_ev_ebitda_multiple: number; target_irr: number; financing: { tranches: { name: string; interest_rate: number; cash_interest: boolean; amortization_rate: number; maturity: number; mandatory_cash_sweep_priority: number; }[]; total_leverage_ratio: ...' is not assignable to type 'LBOInputState'.
+  Types of property 'solve_for' are incompatible.
+    Type 'string' is not assignable to type '"moic" | "entry_price" | "target_irr" | "exit_multiple" | "optimal_refinancing"'.
+src/components/ManualEntryForm.tsx(213,25): error TS2322: Type '{ isOpen: true; onClose: () => void; title: string; content: string; }' is not assignable to type 'IntrinsicAttributes & ExplanationModalProps'.
+  Property 'title' does not exist on type 'IntrinsicAttributes & ExplanationModalProps'.
+src/components/ManualEntryForm.tsx(221,25): error TS2322: Type '{ isOpen: true; onClose: () => void; preferences: any; onUpdatePreferences: () => void; }' is not assignable to type 'IntrinsicAttributes & AISettingsModalProps'.
+  Property 'preferences' does not exist on type 'IntrinsicAttributes & AISettingsModalProps'.
+src/components/SuggestionPanel.tsx(95,25): error TS2322: Type '(isRefresh?: boolean) => Promise<void>' is not assignable to type 'MouseEventHandler<HTMLButtonElement>'.
+  Types of parameters 'isRefresh' and 'event' are incompatible.
+    Type 'MouseEvent<HTMLButtonElement, MouseEvent>' is not assignable to type 'boolean | undefined'.
+src/hooks/useValuationForm.ts(1,10): error TS6133: 'useRef' is declared but its value is never read.

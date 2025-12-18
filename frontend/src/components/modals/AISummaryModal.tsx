@@ -18,11 +18,12 @@ export const AISummaryModal: React.FC<AISummaryModalProps> = ({ isOpen, onClose,
         }
     }, [isOpen, runId]);
 
-    const generateSummary = async () => {
+    const generateSummary = async (isRefresh: boolean = false) => {
         if (!runId) return;
         setLoading(true);
         try {
-            const response = await fetch(`http://localhost:8000/api/reports/ai-summary/${runId}`, {
+            const url = `http://localhost:8000/api/reports/ai-summary/${runId}${isRefresh ? '?refresh=true' : ''}`;
+            const response = await fetch(url, {
                 method: 'POST',
             });
             if (response.ok) {
@@ -88,7 +89,7 @@ export const AISummaryModal: React.FC<AISummaryModalProps> = ({ isOpen, onClose,
                 {/* Footer */}
                 <div className="p-6 border-t border-gray-100 bg-gray-50 rounded-b-xl flex justify-between items-center">
                     <button
-                        onClick={generateSummary}
+                        onClick={() => generateSummary(true)}
                         disabled={loading}
                         className="flex items-center gap-2 text-gray-600 hover:text-purple-600 transition-colors text-sm font-medium"
                     >

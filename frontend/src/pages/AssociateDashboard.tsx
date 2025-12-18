@@ -25,7 +25,7 @@ export const AssociateDashboard: React.FC = () => {
                     <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300">
                         Quality Control Center
                     </h1>
-                    <p className="text-gray-500 dark:text-gray-400 mt-1">Senior Analyst Dashboard • {user?.name}</p>
+                    <p className="text-gray-500 dark:text-gray-400 mt-1">Senior Analyst Portfolio • {user?.name}</p>
                 </div>
                 <div className="flex gap-3">
                     <button className="glass-button bg-amber-50/50 text-amber-900 border-amber-200/50 hover:bg-amber-100 hover:border-amber-300 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-900/50 shadow-sm hover:shadow-amber-500/10 transition-all duration-300">
@@ -91,8 +91,8 @@ export const AssociateDashboard: React.FC = () => {
                                 <div className="absolute inset-0 bg-gradient-to-r from-amber-50/0 via-amber-50/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                                 <div className="flex items-center gap-5 relative z-10">
                                     <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xs font-bold shadow-sm ${item.riskScore === 'High'
-                                            ? 'bg-red-50 text-red-600 border border-red-100'
-                                            : 'bg-gray-50 text-gray-600 border border-gray-200'
+                                        ? 'bg-red-50 text-red-600 border border-red-100'
+                                        : 'bg-gray-50 text-gray-600 border border-gray-200'
                                         }`}>
                                         {item.riskScore === 'High' ? '!!!' : 'Val'}
                                     </div>
@@ -114,8 +114,8 @@ export const AssociateDashboard: React.FC = () => {
                                 </div>
                                 <div className="flex items-center gap-4 relative z-10">
                                     <span className={`text-xs px-3 py-1.5 rounded-full font-bold uppercase tracking-wider shadow-sm ${item.status === 'High Risk'
-                                            ? 'bg-red-100 text-red-700 border border-red-200'
-                                            : 'bg-amber-50 text-amber-700 border border-amber-200'
+                                        ? 'bg-red-100 text-red-700 border border-red-200'
+                                        : 'bg-amber-50 text-amber-700 border border-amber-200'
                                         }`}>
                                         {item.status}
                                     </span>

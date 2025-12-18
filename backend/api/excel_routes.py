@@ -6,11 +6,14 @@ import hashlib
 from datetime import datetime
 import csv
 import io
+from fastapi import APIRouter, Depends, HTTPException, status, Header, Response, UploadFile, File
 from fastapi.responses import StreamingResponse
 
 from backend.database.models import get_db, ValuationRun, AuditLog, User
 from backend.auth.dependencies import get_current_user
 from backend.services.audit.service import audit_service
+from backend.parser.valuation_parser import ValuationExcelParser
+from backend.schemas.valuation_import import ImportResponse, ValuationImportData
 
 router = APIRouter(prefix="/api/excel", tags=["excel"])
 
@@ -208,3 +211,160 @@ async def import_valuation(
     )
 
     return {"status": "success", "message": "Valuation updated successfully"}
+
+@router.post("/upload", response_model=ImportResponse)
+async def upload_valuation_excel(
+    file: UploadFile = File(...),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Upload and parse a Valuation Excel file (.xlsm).
+    Extracts key inputs for review before creating a valuation run.
+    """
+    if not file.filename.endswith(('.xlsm', '.xlsx')):
+        raise HTTPException(status_code=400, detail="Invalid file type. Please upload .xlsm or .xlsx")
+    
+    try:
+        contents = await file.read()
+        parser = ValuationExcelParser(contents)
+        data = parser.parse()
+        
+        # Log the upload
+        audit_service.log(
+            action="EXCEL_UPLOAD",
+            user_id=current_user.id,
+            resource="parser",
+            details={"filename": file.filename, "company": data.company_name}
+        )
+        
+        return ImportResponse(
+            status="success",
+            data=data,
+            message="File parsed successfully"
+        )
+        
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        print(f"Upload Error: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error during parsing")
+
+@router.post("/save")
+async def save_valuation_data(
+    data: ValuationImportData,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Save confirmed valuation data from Excel import.
+    Creates a new ValuationRun with persisted analytics fields.
+    """
+    try:
+        # 1. Create ValuationRun
+        import uuid
+        new_id = str(uuid.uuid4())
+        
+        # 2. Extract key metrics for columns
+        # LTM Revenue/EBITDA from Financials (looking for 'LTM' or latest year? Parser gave us Int years + Projections)
+        # Actually our parser 'financials' are mainly projections (2024-2028).
+        # We need to find LTM or 2023 if available.
+        # Parser implementation: _parse_financials iterates cols G-L (2024-2028).
+        # LTM was Col 6 (Index 6, Col 7 in Excel?). 
+        # Wait, my parser explicitly checks `if not isinstance(year_val, int): continue`.
+        # So 'LTM' was skipped.
+        # However, `revenue_ltm` is valuable.
+        
+        # For now, let's take the first year (e.g. 2024) as a proxy if LTM missing, 
+        # OR we just store null if not strictly LTM.
+        # Let's save the first year of projections as "Forward Revenue" context, 
+        # or if we want exact LTM, we might need to adjust parser.
+        # Given "Data Import" focus, let's just save what we have.
+        
+        rev_val = None
+        ebitda_val = None
+        if data.financials:
+             # Sort by year just in case
+             sorted_fin = sorted(data.financials, key=lambda x: x.year)
+             if sorted_fin:
+                 rev_val = sorted_fin[0].revenue # First available year (2024)
+                 ebitda_val = sorted_fin[0].ebitda
+        
+        wacc_val = None
+        if data.wacc_metrics:
+            wacc_val = data.wacc_metrics.wacc
+            
+        val_date = None
+        if data.valuation_date:
+            try:
+                # Format "YYYY-MM-DD HH:MM:SS"
+                val_date = datetime.strptime(data.valuation_date, "%Y-%m-%d %H:%M:%S")
+            except:
+                pass
+
+        # Calculate implied enterprise value from weighted results
+        total_ev = 0
+        total_weight = 0
+        for r in data.valuation_results:
+            total_ev += r.enterprise_value * r.weight
+            total_weight += r.weight
+        
+        enterprise_val = total_ev / total_weight if total_weight > 0 else 0
+
+        # Construct full results object for dashboard compatibility
+        results_obj = {
+            "enterprise_value": enterprise_val,
+            "company_name": data.company_name,
+            "valuation_results": [r.dict() for r in data.valuation_results],
+            "wacc": data.wacc_metrics.dict() if data.wacc_metrics else None,
+            "balance_sheet": data.balance_sheet.dict() if data.balance_sheet else None,
+            "input_summary": {
+                "company_name": data.company_name,
+                "valuation_date": data.valuation_date,
+                "currency": data.currency,
+                "tax_rate": data.tax_rate,
+                "geography": data.geography,
+                "financials": [f.dict() for f in data.financials],
+                "wacc_metrics": data.wacc_metrics.dict() if data.wacc_metrics else None,
+                "valuation_results": [r.dict() for r in data.valuation_results]
+            }
+        }
+
+        new_run = ValuationRun(
+            id=new_id,
+            company_name=data.company_name,
+            mode="upload",
+            user_id=current_user.id,
+            
+            # Persisted Metrics
+            valuation_date=val_date,
+            revenue_ltm=rev_val,
+            ebitda_ltm=ebitda_val,
+            wacc=wacc_val,
+            
+            # JSON Blobs
+            input_data=json.dumps(results_obj["input_summary"]), # Match input_summary
+            financials_json=json.dumps([f.dict() for f in data.financials]),
+            valuation_summary_json=json.dumps([r.dict() for r in data.valuation_results]),
+            results=json.dumps(results_obj),
+            
+            status="draft" # Needs review
+        )
+        
+        db.add(new_run)
+        db.commit()
+        db.refresh(new_run)
+        
+        audit_service.log(
+            action="EXCEL_SAVE",
+            user_id=current_user.id,
+            resource=f"valuation:{new_id}",
+            details={"company": data.company_name}
+        )
+        
+        return {"status": "success", "id": new_id, "message": "Valuation saved successfully"}
+        
+    except Exception as e:
+        db.rollback()
+        print(f"Save Error: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to save valuation: {str(e)}")

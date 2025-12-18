@@ -1,5 +1,6 @@
 import React from 'react';
 import { AlertTriangle } from 'lucide-react';
+import { SensitivityMatrix } from '../SensitivityMatrix';
 
 interface StrategyViewProps {
     data: any;
@@ -41,9 +42,11 @@ export const StrategyView: React.FC<StrategyViewProps> = ({ data }) => {
                     </div>
                 </div>
 
-                <div className="glass-panel p-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Sensitivity Analysis</h3>
-                    <p className="text-gray-500 text-sm">Sensitivity matrix data visualization would go here.</p>
+                <div className="glass-panel p-6 border-white/20 dark:border-white/10 ring-1 ring-black/5 shadow-xl">
+                    <SensitivityMatrix
+                        data={data.sensitivity_data || {}}
+                        baseValue={data.enterprise_value}
+                    />
                 </div>
             </div>
         </div>

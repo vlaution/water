@@ -1,0 +1,28 @@
+
+=== Inp_1 (Rows 40-100, Cols A-M) ===
+Empty DataFrame
+Columns: []
+Index: []
+
+=== WC & Capex (Rows 0-20) ===
+    0                                                1                    2                    3                    4                    5                    6                    7                    8                    9                    10
+0  NaN                                              NaN                  NaN                  NaN                  NaN                  NaN                  NaN                  NaN                  NaN                  NaN                  NaN
+1  NaN                            Working Capital (USD)  2021-12-31 00:00:00  2022-12-31 00:00:00  2023-12-31 00:00:00  2024-06-30 00:00:00  2024-12-31 00:00:00  2025-12-31 00:00:00  2026-12-31 00:00:00  2027-12-31 00:00:00  2028-12-31 00:00:00
+2  NaN                                Trade Receivables                60000                66000                73000                80000                88000                97000               107000               118000               130000
+3  NaN                       Prepaid Expenses/ Advances                70000                77000                85000                94000               103000               113000               124000               136000               150000
+4  NaN                                        Inventory                20000                22000                24000                26000                29000                32000                35000                39000                43000
+5  NaN                             Other Current Assets                50000                55000                61000                67000                74000                81000                89000                98000               108000
+6  NaN                                   Current Assets               210000               231000               255000               280000               308000               338000               372000               410000               452000
+7  NaN                                              NaN                  NaN                  NaN                  NaN                  NaN                  NaN                  NaN                  NaN                  NaN                  NaN
+8  NaN                                   Trade Payables                80000                88000                97000               107000               118000               130000               143000               157000               173000
+9  NaN                                 Accrued Expenses                20000                22000                24000                26000                29000                32000                35000                39000                43000
+10 NaN                        Other Current Liabilities                 5000                 6000                 7000                 8000                 9000                10000                11000                12000                13000
+11 NaN                              Current Liabilities               105000               116000               128000               141000               156000               172000               189000               208000               229000
+12 NaN                                              NaN                  NaN                  NaN                  NaN                  NaN                  NaN                  NaN                  NaN                  NaN                  NaN
+13 NaN                                  Working Capital               105000               115000               127000               139000               152000               166000               183000               202000               223000
+14 NaN                        Change in Working Capital                  NMF                10000                12000                12000                13000                14000                17000                19000                21000
+15 NaN                                              NaN                  NaN                  NaN                  NaN                  NaN                  NaN                  NaN                  NaN                  NaN                  NaN
+16 NaN                                              NaN                  NaN                  NaN                  NaN                  NaN                  NaN                  NaN                  NaN                  NaN                  NaN
+17 NaN  Other Operating Assets/ Liabilities (Net) (USD)  2021-12-31 00:00:00  2022-12-31 00:00:00  2023-12-31 00:00:00  2024-06-30 00:00:00  2024-12-31 00:00:00  2025-12-31 00:00:00  2026-12-31 00:00:00  2027-12-31 00:00:00  2028-12-31 00:00:00
+18 NaN                            Long-term Investments                90000                99000               109000               120000               132000               145000               160000               176000               194000
+19 NaN                           Other Operating Assets                12000                13000                14000                15000                17000                19000                21000                23000                25000

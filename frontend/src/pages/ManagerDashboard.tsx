@@ -1,8 +1,44 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { api } from '../config/api';
+
+interface PortfolioSummary {
+    total_valuation: number;
+    run_count: number;
+    average_ev: number;
+    companies: number;
+}
 
 export const ManagerDashboard: React.FC = () => {
-    const { user } = useAuth();
+    const { user, token } = useAuth();
+    const [summary, setSummary] = useState<PortfolioSummary | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchPortfolio = async () => {
+            try {
+                const response = await fetch(api.url('/dashboard/portfolio/summary'), {
+                    headers: token ? { Authorization: `Bearer ${token}` } : {}
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    setSummary(data);
+                }
+            } catch (error) {
+                console.error("Error fetching portfolio summary:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (token) fetchPortfolio();
+    }, [token]);
+
+    const formatCurrency = (val: number) => {
+        if (val >= 1000000000) return `$${(val / 1000000000).toFixed(1)} B`;
+        if (val >= 1000000) return `$${(val / 1000000).toFixed(1)} M`;
+        return `$${val.toLocaleString()}`;
+    };
 
     return (
         <div className="space-y-8 animate-fade-in-up">
@@ -15,12 +51,12 @@ export const ManagerDashboard: React.FC = () => {
                     <h1 className="text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-700 to-slate-800 dark:from-white dark:via-gray-200 dark:to-gray-400 font-serif">
                         Portfolio Command
                     </h1>
-                    <p className="text-slate-500 dark:text-gray-400 mt-2 font-medium tracking-wide text-sm uppercase">Executive Dashboard • {user?.name}</p>
+                    <p className="text-slate-500 dark:text-gray-400 mt-2 font-medium tracking-wide text-sm uppercase">Executive Portfolio • {user?.name}</p>
                 </div>
                 <div className="flex gap-4">
                     <button className="glass-button bg-white/80 text-slate-600 border-slate-200 hover:bg-slate-50 dark:bg-white/5 dark:text-gray-300 dark:border-white/10 shadow-sm transition-all duration-300 backdrop-blur-md">
                         <span className="text-xs font-bold uppercase tracking-wider text-slate-400 mr-2">Period</span>
-                        Q4 2024
+                        Current
                     </button>
                     <button className="glass-button-primary bg-slate-900 hover:bg-black dark:bg-white dark:text-slate-900 dark:hover:bg-gray-100 shadow-2xl shadow-slate-900/20 border border-slate-700/50">
                         Generate Board Report
@@ -33,10 +69,12 @@ export const ManagerDashboard: React.FC = () => {
                 <div className="glass-panel p-6 relative overflow-hidden group hover:shadow-2xl hover:shadow-slate-200/50 dark:hover:shadow-black/50 transition-all duration-500 border-t-4 border-t-indigo-500">
                     <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     <div className="relative z-10">
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Total Assets</p>
-                        <h3 className="text-4xl font-serif font-bold text-slate-900 dark:text-white mt-3 tracking-tight">$2.4 B</h3>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Total Valuations (EV)</p>
+                        <h3 className="text-4xl font-serif font-bold text-slate-900 dark:text-white mt-3 tracking-tight">
+                            {loading ? "Loading..." : summary ? formatCurrency(summary.total_valuation) : "$0"}
+                        </h3>
                         <div className="flex items-center gap-2 mt-2">
-                            <span className="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full">+5.2% YTD</span>
+                            <span className="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full">Active</span>
                         </div>
                     </div>
                 </div>
@@ -44,10 +82,12 @@ export const ManagerDashboard: React.FC = () => {
                 <div className="glass-panel p-6 relative overflow-hidden group hover:shadow-2xl hover:shadow-slate-200/50 dark:hover:shadow-black/50 transition-all duration-500 border-t-4 border-t-emerald-500">
                     <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     <div className="relative z-10">
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Weighted IRR</p>
-                        <h3 className="text-4xl font-serif font-bold text-slate-900 dark:text-white mt-3 tracking-tight">24.3%</h3>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Deal Count</p>
+                        <h3 className="text-4xl font-serif font-bold text-slate-900 dark:text-white mt-3 tracking-tight">
+                            {loading ? "-" : summary?.run_count || 0}
+                        </h3>
                         <div className="flex items-center gap-2 mt-2">
-                            <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">Exceeds Target</span>
+                            <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">Companies: {summary?.companies || 0}</span>
                         </div>
                     </div>
                 </div>
@@ -55,10 +95,12 @@ export const ManagerDashboard: React.FC = () => {
                 <div className="glass-panel p-6 relative overflow-hidden group hover:shadow-2xl hover:shadow-slate-200/50 dark:hover:shadow-black/50 transition-all duration-500 border-t-4 border-t-cyan-500">
                     <div className="absolute inset-0 bg-gradient-to-br from-cyan-50/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     <div className="relative z-10">
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Recurring Revenue</p>
-                        <h3 className="text-4xl font-serif font-bold text-slate-900 dark:text-white mt-3 tracking-tight">$84 K</h3>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Average EV</p>
+                        <h3 className="text-4xl font-serif font-bold text-slate-900 dark:text-white mt-3 tracking-tight">
+                            {loading ? "-" : summary ? formatCurrency(summary.average_ev) : "$0"}
+                        </h3>
                         <div className="flex items-center gap-2 mt-2">
-                            <span className="text-xs font-bold text-cyan-600 bg-cyan-50 px-2 py-0.5 rounded-full">Monthly</span>
+                            <span className="text-xs font-bold text-cyan-600 bg-cyan-50 px-2 py-0.5 rounded-full">Mean</span>
                         </div>
                     </div>
                 </div>
@@ -69,13 +111,13 @@ export const ManagerDashboard: React.FC = () => {
                         <div className="flex justify-between items-start">
                             <div>
                                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Risk Exposure</p>
-                                <h3 className="text-4xl font-serif font-bold text-slate-900 dark:text-white mt-3 tracking-tight">7.2</h3>
+                                <h3 className="text-4xl font-serif font-bold text-slate-900 dark:text-white mt-3 tracking-tight">Low</h3>
                             </div>
                             <div className="h-12 w-12 rounded-full border-[3px] border-amber-400/30 flex items-center justify-center text-xs font-bold text-amber-600 bg-amber-50">
-                                /10
+                                A
                             </div>
                         </div>
-                        <p className="text-xs text-amber-600 mt-2 font-bold tracking-wide">MODERATE WATCH</p>
+                        <p className="text-xs text-amber-600 mt-2 font-bold tracking-wide">STABLE</p>
                     </div>
                 </div>
             </div>

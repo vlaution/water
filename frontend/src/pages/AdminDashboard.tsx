@@ -1,8 +1,4 @@
-import React from 'react';
-import { useAuth } from '../context/AuthContext';
-
 export const AdminDashboard: React.FC = () => {
-    const { user } = useAuth();
 
     return (
         <div className="space-y-8 animate-fade-in-up font-sans text-slate-900 dark:text-gray-100">

@@ -58,6 +58,15 @@ class ValuationRun(Base):
     mode = Column(String(50)) # 'manual' or 'upload'
     input_data = Column(Text) # JSON string
     results = Column(Text) # JSON string
+    
+    # New Persisted Fields for Analytics
+    valuation_date = Column(DateTime, nullable=True)
+    revenue_ltm = Column(Float, nullable=True)
+    ebitda_ltm = Column(Float, nullable=True)
+    wacc = Column(Float, nullable=True)
+    financials_json = Column(Text, nullable=True) # Full historical/projected schedule
+    valuation_summary_json = Column(Text, nullable=True) # DCF/Comps results
+    
     user_id = Column(Integer, ForeignKey('users.id'))
     created_at = Column(DateTime, default=datetime.utcnow)
     
@@ -288,9 +297,7 @@ class RegulatoryAlert(Base):
 
 # Database setup
 # Database setup
-# DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./valuation_v2.db")
-# Using local SQLite explicitly as the configured Postgres instance is unreachable
-DATABASE_URL = "sqlite:///./valuation_v2.db"
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./valuation_v2.db")
 
 print(f"DEBUG: Raw DATABASE_URL: '{DATABASE_URL}'")
 

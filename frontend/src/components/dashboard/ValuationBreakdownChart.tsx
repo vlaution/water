@@ -6,9 +6,9 @@ interface ValuationBreakdownChartProps {
 }
 
 export const ValuationBreakdownChart: React.FC<ValuationBreakdownChartProps> = ({ data }) => {
-    const chartData = Object.entries(data).map(([method, value]) => ({
+    const chartData = Object.entries(data || {}).map(([method, val]: [string, any]) => ({
         method: method.toUpperCase(),
-        value: value,
+        value: typeof val === 'object' ? val?.value || 0 : val,
     })).filter(item => item.value > 0);
 
     const COLORS = ['#3B82F6', '#8B5CF6', '#10B981', '#F59E0B', '#6366F1'];

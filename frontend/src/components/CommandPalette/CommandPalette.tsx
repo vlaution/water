@@ -1,20 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
+import { Search } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useCommandRegistry } from '../../context/CommandRegistryContext';
-import { CommandInput } from './CommandInput';
 import { ResultItem } from './ResultItem';
 
-
 export const CommandPalette: React.FC = () => {
-    const { isOpen, setIsOpen, boostAction, query, setQuery, results } = useCommandRegistry();
+    // Connect to Registry
+    const {
+        isOpen,
+        setIsOpen,
+        query,
+        setQuery,
+        results,
+        boostAction
+    } = useCommandRegistry();
+
     const [selectedIndex, setSelectedIndex] = useState(0);
 
-    // Reset selection when query changes
+    // Reset selection when query changes or when opening
     useEffect(() => {
         setSelectedIndex(0);
     }, [query, isOpen]);
 
-    // Handle Keyboard Navigation
+    // Key Handler for Navigation within the open palette
     useEffect(() => {
         if (!isOpen) return;
 
@@ -22,98 +30,95 @@ export const CommandPalette: React.FC = () => {
             if (e.key === 'ArrowDown') {
                 e.preventDefault();
                 setSelectedIndex(prev => (prev + 1) % results.length);
-            } else if (e.key === 'ArrowUp') {
+            }
+            if (e.key === 'ArrowUp') {
                 e.preventDefault();
                 setSelectedIndex(prev => (prev - 1 + results.length) % results.length);
-            } else if (e.key === 'Enter') {
+            }
+            if (e.key === 'Enter') {
                 e.preventDefault();
-                if (results[selectedIndex]) {
-                    const action = results[selectedIndex];
-                    action.perform();
-                    boostAction(action.id);
+                const selected = results[selectedIndex];
+                if (selected) {
+                    selected.perform();
+                    boostAction(selected.id);
                     setIsOpen(false);
-                    setQuery('');
                 }
-            } else if (e.key === 'Escape') {
-                e.preventDefault();
-                setIsOpen(false);
             }
         };
-
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [isOpen, results, selectedIndex, boostAction, setIsOpen]);
+    }, [isOpen, results, selectedIndex, setIsOpen, boostAction]);
 
     return (
         <AnimatePresence>
             {isOpen && (
-                <>
+                <div className="fixed inset-0 z-50 flex items-start justify-center pt-[20vh] px-4">
                     {/* Backdrop */}
                     <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
+                        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                         onClick={() => setIsOpen(false)}
-                        className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-start justify-center pt-[15vh]"
+                        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+                    />
+
+                    {/* Window */}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95, y: -20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95, y: -20 }}
+                        className="relative w-full max-w-lg glass-panel overflow-hidden flex flex-col shadow-2xl"
                     >
-                        {/* Modal Container: Premium Dark Glass */}
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.98, y: -10 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.98, y: -10 }}
-                            transition={{ duration: 0.2, ease: "easeOut" }}
-                            onClick={e => e.stopPropagation()}
-                            className="w-full max-w-[640px] rounded-2xl overflow-hidden flex flex-col max-h-[600px] shadow-2xl ring-1 ring-white/20"
-                            style={{
-                                background: "rgba(30, 30, 30, 0.60)", // Dark glass base
-                                backdropFilter: "blur(24px) saturate(180%)",
-                                WebkitBackdropFilter: "blur(24px) saturate(180%)",
-                                boxShadow: "0 20px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1)"
-                            }}
-                        >
-                            <div className="p-3 pb-0">
-                                <CommandInput value={query} onChange={setQuery} />
-                            </div>
+                        {/* Search Bar */}
+                        <div className="flex items-center px-4 py-3 border-b border-gray-200 dark:border-white/10 gap-3">
+                            <Search className="text-gray-400 dark:text-gray-500" size={18} />
+                            <input
+                                autoFocus
+                                value={query}
+                                onChange={e => setQuery(e.target.value)}
+                                placeholder="Type a command or search..."
+                                className="flex-1 bg-transparent text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 outline-none text-sm"
+                            />
+                            <div className="px-1.5 py-0.5 rounded bg-gray-100 dark:bg-white/10 text-[10px] text-gray-500 dark:text-gray-400 font-mono">ESC</div>
+                        </div>
 
-                            <div className="flex flex-col overflow-hidden min-h-[100px] p-3">
-                                <div className="flex-1 overflow-y-auto custom-scrollbar">
-                                    {results.length === 0 ? (
-                                        <div className="flex flex-col items-center justify-center py-12 text-gray-500">
-                                            <p className="text-sm font-medium opacity-60">No results found</p>
-                                        </div>
-                                    ) : (
-                                        <ul className="space-y-1">
-                                            {results.map((action, index) => (
-                                                <ResultItem
-                                                    key={action.id}
-                                                    action={action}
-                                                    isActive={index === selectedIndex}
-                                                    onSelect={() => {
-                                                        action.perform();
-                                                        boostAction(action.id);
-                                                        setIsOpen(false);
-                                                    }}
-                                                    onMouseEnter={() => setSelectedIndex(index)}
-                                                />
-                                            ))}
-                                        </ul>
-                                    )}
+                        {/* List */}
+                        <div className="max-h-[350px] overflow-y-auto py-2 px-2 scrollbar-hide">
+                            {results.length === 0 ? (
+                                <div className="px-4 py-12 text-center">
+                                    <div className="w-12 h-12 bg-gray-100 dark:bg-white/5 rounded-full flex items-center justify-center mx-auto mb-3 text-gray-400">
+                                        <Search size={20} />
+                                    </div>
+                                    <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">
+                                        {query ? 'No matching commands found.' : 'Type a command to start...'}
+                                    </p>
                                 </div>
-                            </div>
+                            ) : (
+                                <ul className="flex flex-col">
+                                    {results.map((cmd, i) => (
+                                        <ResultItem
+                                            key={cmd.id}
+                                            action={cmd}
+                                            isActive={i === selectedIndex}
+                                            onSelect={() => {
+                                                cmd.perform();
+                                                boostAction(cmd.id);
+                                                setIsOpen(false);
+                                            }}
+                                            onMouseEnter={() => setSelectedIndex(i)}
+                                        />
+                                    ))}
+                                </ul>
+                            )}
+                        </div>
 
-                            {/* Minimal Footer */}
-                            <div className="px-5 py-3 flex justify-between items-center text-[10px] text-gray-500 border-t border-white/5 bg-white/5 backdrop-blur-[4px]">
-                                <div className="flex gap-4">
-                                    <span className="opacity-70">Search Projects, Actions, and Teams</span>
-                                </div>
-                                <div className="flex gap-3 text-white/40">
-                                    <span className="flex items-center gap-1">Select <kbd className="font-sans">↵</kbd></span>
-                                    <span className="flex items-center gap-1">Navigate <kbd className="font-sans">↑↓</kbd></span>
-                                </div>
+                        <div className="px-4 py-2 bg-gray-50 dark:bg-black/20 border-t border-gray-200 dark:border-white/5 text-[10px] text-gray-500 flex justify-between">
+                            <span>Semantic OS v2.1</span>
+                            <div className="flex gap-2">
+                                <span>↑↓ to navigate</span>
+                                <span>↵ to select</span>
                             </div>
-                        </motion.div>
+                        </div>
                     </motion.div>
-                </>
+                </div>
             )}
         </AnimatePresence>
     );

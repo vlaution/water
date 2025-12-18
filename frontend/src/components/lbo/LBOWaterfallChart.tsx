@@ -68,7 +68,7 @@ export const LBOWaterfallChart: React.FC<LBOWaterfallChartProps> = ({ schedule }
                         axisLine={false}
                         tickLine={false}
                         tick={{ fill: axisTextColor, fontSize: 12 }}
-                        tickFormatter={(val) => `$${val / 1000000}M`}
+                        tickFormatter={(val) => `$${val}M`}
                     />
                     <Tooltip
                         contentStyle={{
@@ -80,7 +80,7 @@ export const LBOWaterfallChart: React.FC<LBOWaterfallChartProps> = ({ schedule }
                         }}
                         itemStyle={{ color: tooltipText }}
                         labelStyle={{ color: tooltipText, marginBottom: '0.5rem', fontWeight: 600 }}
-                        formatter={(value: number) => [`$${(value / 1000000).toFixed(1)}M`, ""]}
+                        formatter={(value: number) => [`$${value.toFixed(1)}M`, ""]}
                     />
                     <Legend iconType="circle" />
                     {trancheNames.map((name, index) => (

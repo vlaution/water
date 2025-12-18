@@ -2,7 +2,7 @@ import React from 'react';
 import { EnhancedFormInput } from '../../common/EnhancedFormInput';
 import { SectorMultiplesHeatmap } from '../../common/SectorMultiplesHeatmap';
 import type { LBOInputState, BenchmarkData } from '../../../types/lbo';
-import type { MarketScenarios } from '../../../../services/MarketDataService';
+import type { MarketScenarios } from '../../../services/MarketDataService';
 
 interface LBOStep1Props {
     data: LBOInputState;

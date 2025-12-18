@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import os
 import time
+from datetime import datetime
 from backend.services.system.health_monitor import health_monitor_service
 
 # Load environment variables from .env file
@@ -41,8 +42,11 @@ async def global_exception_handler(request: Request, exc: Exception):
 @app.on_event("startup")
 async def startup_event():
     # Run synchronous DB initialization in a separate thread to avoid blocking the event loop
-    from fastapi.concurrency import run_in_threadpool
-    await run_in_threadpool(init_db)
+    # In production, migrations should be handled externally (e.g., via alembic upgrade head early in CD)
+    if os.getenv("ENV") != "production":
+        from fastapi.concurrency import run_in_threadpool
+        await run_in_threadpool(init_db)
+    
     
     from backend.database.views import create_views
     await run_in_threadpool(create_views)
@@ -98,9 +102,10 @@ if frontend_url:
 
 # Include routers
 # Include routers
-from backend.api import performance_routes, compliance_routes, audit_routes, excel_routes, risk_routes, validation_routes, feedback_routes, suggestion_routes, historical_routes, historical_market_data, market_data, settings, advisory, evidence_routes, workflow_routes, regulatory_routes
+from backend.api import performance_routes, compliance_routes, audit_routes, excel_routes, risk_routes, validation_routes, feedback_routes, suggestion_routes, historical_routes, historical_market_data, market_data, settings, advisory, evidence_routes, workflow_routes, regulatory_routes, realtime_routes
 
 # Specific routers first to avoid shadowing by generic routes
+app.include_router(realtime_routes.router)
 app.include_router(market_data.router)
 app.include_router(historical_market_data.router)
 
@@ -123,17 +128,7 @@ app.include_router(feedback_routes.router)
 app.include_router(suggestion_routes.router, prefix="/api/ai", tags=["AI Suggestions"])
 app.include_router(historical_routes.router)
 
-# Real-time Routes
-from backend.api import realtime_routes
-app.include_router(realtime_routes.router)
 
-# Analytics Routes
-from backend.api import analytics_routes
-app.include_router(analytics_routes.router)
-
-# Monte Carlo Routes
-from backend.api import monte_carlo_routes
-app.include_router(monte_carlo_routes.router)
 
 # Admin Routes
 from backend.api import admin_routes
@@ -180,4 +175,24 @@ app.add_middleware(
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the Enterprise Valuation Automation API"}
+
+@app.get("/health")
+async def health_check():
+    """
+    Standard health check endpoint for container orchestrators.
+    """
+    try:
+        # Check DB connectivity
+        db = SessionLocal()
+        db.execute("SELECT 1")
+        db.close()
+        db_status = "connected"
+    except Exception as e:
+        db_status = f"unreachable: {str(e)}"
+
+    return {
+        "status": "healthy",
+        "database": db_status,
+        "timestamp": datetime.now().isoformat()
+    }
 

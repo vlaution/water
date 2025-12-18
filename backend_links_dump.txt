@@ -1,0 +1,12 @@
+=== Back_end_links (Rows 19-28) ===
+                   0   1                   2   3   4   5       6                    7                    8                    9                    10                   11
+0  Multiplier Working NaN                 NaN NaN NaN NaN     NaN                  NaN                  NaN                  NaN                  NaN                  NaN
+1                 USD NaN  Respective Mutiple NaN NaN NaN     LTM                 2024                 2025                 2026                 2027                 2028
+2             Revenue NaN          EV/Revenue NaN NaN NaN  610000               480000               580000               700000               840000              1010000
+3        Gross Profit NaN     EV/Gross Profit NaN NaN NaN  470000               360000               440000               530000               640000               770000
+4              EBITDA NaN           EV/EBITDA NaN NaN NaN  370000               280000               340000               410000               500000               600000
+5          Net Income NaN                 P/E NaN NaN NaN  271500               202800               247000               297800               363200               436000
+6                 NaN NaN                 NaN NaN NaN NaN     NaN                  NaN                  NaN                  NaN                  NaN                  NaN
+7           Exit Date NaN                 NaN NaN NaN NaN     NaN  2024-12-31 00:00:00  2025-12-31 00:00:00  2026-12-31 00:00:00  2027-12-31 00:00:00  2028-12-31 00:00:00
+8       Year fraction NaN                 NaN NaN NaN NaN       0                  0.5                  1.5                  2.5                  3.5                  4.5
+9           PV factor NaN                 NaN NaN NaN NaN       1             0.894427             0.715542             0.572433             0.457947             0.366357

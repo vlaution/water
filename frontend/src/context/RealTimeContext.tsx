@@ -80,7 +80,9 @@ export const RealTimeProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         if (socket) {
             // Prevent auto-reconnect logic if we are intentionally disconnecting
             socket.onclose = null;
-            socket.close();
+            if (socket.readyState === WebSocket.OPEN || socket.readyState === WebSocket.CONNECTING) {
+                socket.close();
+            }
             socketRef.current = null;
             setIsConnected(false);
         }

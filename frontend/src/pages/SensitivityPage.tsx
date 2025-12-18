@@ -19,18 +19,18 @@ const SensitivityDashboard = () => {
 
     return (
         <div className="flex flex-col h-screen w-full p-6 overflow-hidden">
-            <h1 className="text-2xl font-bold mb-6 flex items-center gap-3 text-gray-900">
-                Sensitivity 2.0 <span className="text-xs px-2 py-0.5 rounded bg-blue-100 text-blue-700 border border-blue-200">PRO</span>
+            <h1 className="text-2xl font-bold mb-6 flex items-center gap-3 text-gray-900 dark:text-white">
+                Sensitivity 2.0 <span className="text-xs px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">PRO</span>
             </h1>
 
             <PerformanceMonitor />
 
             <div className="grid grid-cols-12 gap-6 h-full">
                 {/* Controls Sidebar */}
-                <div className="col-span-3 flex flex-col gap-6">
+                <div className="col-span-3 flex flex-col gap-6 overflow-y-auto no-scrollbar h-full pb-10">
                     {/* Model Drivers */}
                     <div className="glass-panel p-6">
-                        <h2 className="text-xs font-bold text-gray-500 mb-4 uppercase tracking-wider">Model Drivers</h2>
+                        <h2 className="text-xs font-bold text-gray-500 dark:text-gray-400 mb-4 uppercase tracking-wider">Model Drivers</h2>
                         <div className="space-y-4">
                             <ParameterSlider
                                 label="WACC"
@@ -61,7 +61,7 @@ const SensitivityDashboard = () => {
 
                     {/* Scenario Painter */}
                     <div className="glass-panel p-6 flex-1">
-                        <h2 className="text-xs font-bold text-gray-500 mb-4 uppercase tracking-wider">Scenario Paint</h2>
+                        <h2 className="text-xs font-bold text-gray-500 dark:text-gray-400 mb-4 uppercase tracking-wider">Scenario Paint</h2>
                         <ScenarioPainter />
                     </div>
 
@@ -73,30 +73,30 @@ const SensitivityDashboard = () => {
                 </div>
 
                 {/* Main Visualization Area */}
-                <div className="col-span-9 flex flex-col gap-6 h-[calc(100vh-120px)]">
+                <div className="col-span-9 flex flex-col gap-6 h-[calc(100vh-120px)] overflow-y-auto no-scrollbar pb-10">
                     {/* Active Pair Info & View Toggle */}
                     <div className="glass-panel p-6 shrink-0 relative overflow-hidden group flex justify-between items-start">
                         <div className="relative z-10">
-                            <div className="absolute inset-0 bg-gradient-to-r from-blue-50/50 to-purple-50/50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-                            <h2 className="text-xl font-bold text-gray-900 mb-2 relative">
+                            <div className="absolute inset-0 bg-gradient-to-r from-blue-50/50 to-purple-50/50 dark:from-blue-900/10 dark:to-purple-900/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2 relative">
                                 {activePair ? `${activePair.xVar.label} vs ${activePair.yVar.label}` : 'Select Analysis'}
                             </h2>
-                            <p className="text-sm text-gray-600 relative max-w-lg">
+                            <p className="text-sm text-gray-600 dark:text-gray-400 relative max-w-lg">
                                 {activePair?.insight}
                             </p>
                         </div>
 
                         {/* View Toggle */}
-                        <div className="flex bg-gray-100/50 p-1 rounded-lg border border-gray-200 relative z-20">
+                        <div className="flex bg-gray-100/50 dark:bg-gray-800/50 p-1 rounded-lg border border-gray-200 dark:border-white/10 relative z-20">
                             <button
                                 onClick={() => setViewMode('2d')}
-                                className={`px-4 py-2 rounded-md text-xs font-bold transition-all flex items-center gap-2 ${viewMode === '2d' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                                className={`px-4 py-2 rounded-md text-xs font-bold transition-all flex items-center gap-2 ${viewMode === '2d' ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'}`}
                             >
                                 <Grid size={14} /> 2D Heatmap
                             </button>
                             <button
                                 onClick={() => setViewMode('3d')}
-                                className={`px-4 py-2 rounded-md text-xs font-bold transition-all flex items-center gap-2 ${viewMode === '3d' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                                className={`px-4 py-2 rounded-md text-xs font-bold transition-all flex items-center gap-2 ${viewMode === '3d' ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'}`}
                             >
                                 <Box size={14} /> 3D Volumetric
                             </button>
@@ -109,13 +109,13 @@ const SensitivityDashboard = () => {
                             <button
                                 key={idx}
                                 onClick={() => setActivePair(pair)}
-                                className={`p-4 rounded-xl border text-left transition-all ${activePair === pair ? 'bg-white border-blue-400 shadow-md ring-1 ring-blue-100' : 'bg-white/40 border-white/40 hover:bg-white/60 hover:shadow-sm'
+                                className={`p-4 rounded-xl border text-left transition-all ${activePair === pair ? 'bg-white dark:bg-gray-700 border-blue-400 shadow-md ring-1 ring-blue-100 dark:ring-blue-900/40' : 'bg-white/40 dark:bg-white/5 border-white/40 dark:border-white/10 hover:bg-white/60 dark:hover:bg-white/10 hover:shadow-sm'
                                     } backdrop-blur-md`}
                             >
-                                <div className="text-xs text-blue-600 font-bold tracking-wide mb-1">
+                                <div className="text-xs text-blue-600 dark:text-blue-400 font-bold tracking-wide mb-1">
                                     {(pair.correlationStrength * 100).toFixed(0)}% Correlation
                                 </div>
-                                <div className="text-sm font-medium text-gray-800">
+                                <div className="text-sm font-medium text-gray-800 dark:text-gray-200">
                                     {pair.xVar.label} & {pair.yVar.label}
                                 </div>
                             </button>

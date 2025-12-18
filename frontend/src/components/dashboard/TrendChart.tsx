@@ -25,12 +25,12 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data }) => {
     return (
         <div className="glass-panel p-6 h-full flex flex-col">
             <div className="flex justify-between items-center mb-6">
-                <h3 className="text-sm font-semibold text-gray-900">EBITDA + Cash Flow Projection</h3>
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-white">EBITDA + Cash Flow Projection</h3>
                 <div className="flex gap-2">
-                    <span className="flex items-center gap-1 text-[10px] text-gray-500">
+                    <span className="flex items-center gap-1 text-[10px] text-gray-500 dark:text-gray-400">
                         <span className="w-2 h-2 rounded-full bg-system-blue"></span> EBITDA
                     </span>
-                    <span className="flex items-center gap-1 text-[10px] text-gray-500">
+                    <span className="flex items-center gap-1 text-[10px] text-gray-500 dark:text-gray-400">
                         <span className="w-2 h-2 rounded-full bg-system-green"></span> Cash Flow
                     </span>
                 </div>
@@ -45,28 +45,30 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data }) => {
                                 <stop offset="95%" stopColor="#007AFF" stopOpacity={0} />
                             </linearGradient>
                         </defs>
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.3)" />
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(156, 163, 175, 0.2)" />
                         <XAxis
                             dataKey="year"
                             axisLine={false}
                             tickLine={false}
-                            tick={{ fontSize: 12, fill: '#6B7280' }}
+                            tick={{ fontSize: 12, fill: 'currentColor', className: 'text-gray-500 dark:text-gray-400' }}
                             dy={10}
                         />
                         <YAxis
                             axisLine={false}
                             tickLine={false}
-                            tick={{ fontSize: 12, fill: '#6B7280' }}
+                            tick={{ fontSize: 12, fill: 'currentColor', className: 'text-gray-500 dark:text-gray-400' }}
                             tickFormatter={formatYAxis}
                         />
                         <Tooltip
                             contentStyle={{
-                                backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                                backgroundColor: 'rgb(255 255 255 / 0.8)',
+                                color: '#111827',
                                 backdropFilter: 'blur(10px)',
                                 borderRadius: '12px',
                                 border: '1px solid rgba(255, 255, 255, 0.5)',
                                 boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                             }}
+                            itemStyle={{ color: '#111827' }}
                             formatter={(value: number) => [`$${(value / 1000000).toFixed(1)}M`, '']}
                         />
                         <Line

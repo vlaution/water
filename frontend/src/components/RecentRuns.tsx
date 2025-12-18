@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { api } from '../config/api';
 
 interface Run {
     id: string;
@@ -21,9 +22,11 @@ export const RecentRuns: React.FC<RecentRunsProps> = ({ onSelectRun, token }) =>
         fetchRuns();
     }, []);
 
+
+
     const fetchRuns = async () => {
         try {
-            const response = await fetch('http://localhost:8000/runs', {
+            const response = await fetch(api.url('/runs'), {
                 headers: token ? {
                     'Authorization': `Bearer ${token}`
                 } : {}

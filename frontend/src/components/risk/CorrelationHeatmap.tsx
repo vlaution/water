@@ -60,15 +60,15 @@ export const CorrelationHeatmap: React.FC = () => {
     if (!data || data.companies.length === 0) return <div className="p-4">No portfolio data available for correlation.</div>;
 
     return (
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        <div className="bg-white dark:bg-white/5 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-white/10">
             <div className="flex justify-between items-center mb-6">
-                <h3 className="text-lg font-semibold text-gray-900">Portfolio Correlation Matrix</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Portfolio Correlation Matrix</h3>
                 <div className="flex gap-2">
                     <button
                         onClick={() => setMode('financial')}
                         className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${mode === 'financial'
-                            ? 'bg-blue-100 text-blue-700 font-medium'
-                            : 'text-gray-600 hover:bg-gray-100'
+                            ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-medium'
+                            : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/10'
                             }`}
                     >
                         Financial
@@ -76,8 +76,8 @@ export const CorrelationHeatmap: React.FC = () => {
                     <button
                         onClick={() => setMode('qualitative')}
                         className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${mode === 'qualitative'
-                            ? 'bg-blue-100 text-blue-700 font-medium'
-                            : 'text-gray-600 hover:bg-gray-100'
+                            ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-medium'
+                            : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/10'
                             }`}
                     >
                         Qualitative
@@ -94,7 +94,7 @@ export const CorrelationHeatmap: React.FC = () => {
                         <div className="h-10"></div> {/* Empty top-left */}
                         {data.companies.map((company, i) => (
                             <div key={i} className="h-32 flex items-end justify-center pb-2">
-                                <span className="transform -rotate-45 text-xs text-gray-500 whitespace-nowrap origin-bottom-left translate-x-4">
+                                <span className="transform -rotate-45 text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap origin-bottom-left translate-x-4">
                                     {company}
                                 </span>
                             </div>
@@ -105,7 +105,7 @@ export const CorrelationHeatmap: React.FC = () => {
                             <React.Fragment key={i}>
                                 {/* Row Label */}
                                 <div className="h-10 flex items-center justify-end pr-4">
-                                    <span className="text-xs text-gray-600 font-medium truncate max-w-[120px]" title={rowCompany}>
+                                    <span className="text-xs text-gray-600 dark:text-gray-300 font-medium truncate max-w-[120px]" title={rowCompany}>
                                         {rowCompany}
                                     </span>
                                 </div>
@@ -113,7 +113,7 @@ export const CorrelationHeatmap: React.FC = () => {
                                 {data.matrix[i].map((value, j) => (
                                     <div
                                         key={`${i}-${j}`}
-                                        className="h-10 border border-gray-50 flex items-center justify-center text-xs relative group cursor-default"
+                                        className="h-10 border border-gray-50 dark:border-white/5 flex items-center justify-center text-xs relative group cursor-default"
                                         style={{ backgroundColor: getColor(value) }}
                                     >
                                         <span className="opacity-0 group-hover:opacity-100 font-medium text-gray-800 drop-shadow-sm transition-opacity">

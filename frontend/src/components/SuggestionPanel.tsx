@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { api } from '../config/api';
+import { useAuth } from '../context/AuthContext';
 
 interface SuggestionPanelProps {
     companyData: any;
@@ -10,27 +11,40 @@ interface SuggestionPanelProps {
 export const SuggestionPanel: React.FC<SuggestionPanelProps> = ({ companyData, currentAssumptions, onApplySuggestions }) => {
     const [loading, setLoading] = useState(false);
     const [suggestions, setSuggestions] = useState<any>(null);
+    const { token } = useAuth();
     const [context, setContext] = useState({
         use_case: 'fundraising',
         risk_tolerance: 'moderate'
     });
 
-    const fetchSuggestions = async () => {
+    const fetchSuggestions = async (isRefresh = false) => {
         setLoading(true);
         try {
-            const response = await fetch(api.url('/api/ai/suggestions'), {
+            const headers: any = { 'Content-Type': 'application/json' };
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+
+            const url = api.url(`/api/ai/suggestions${isRefresh ? '?refresh=true' : ''}`);
+            const response = await fetch(url, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: headers,
                 body: JSON.stringify({
                     company_data: companyData,
                     current_assumptions: currentAssumptions,
                     context: context
                 })
             });
+
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+            }
+
             const data = await response.json();
             setSuggestions(data);
         } catch (error) {
             console.error("Failed to fetch suggestions:", error);
+            // Optional: Set an error state to show in UI
         } finally {
             setLoading(false);
         }
@@ -78,7 +92,7 @@ export const SuggestionPanel: React.FC<SuggestionPanelProps> = ({ companyData, c
                         <option value="aggressive">Aggressive</option>
                     </select>
                     <button
-                        onClick={fetchSuggestions}
+                        onClick={() => fetchSuggestions()}
                         disabled={loading}
                         className="glass-button-primary text-sm shadow-indigo-500/20"
                     >

@@ -1,0 +1,12 @@
+C:\Users\Abhiram\Desktop\water\frontend\wasm-engine\target\wasm32-unknown-unknown\debug\deps\serde-f884f48193c992a0.d: C:\Users\Ayush\ Kumbhar\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\lib.rs C:\Users\Ayush\ Kumbhar\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\integer128.rs C:\Users\Ayush\ Kumbhar\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\mod.rs C:\Users\Ayush\ Kumbhar\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\de.rs C:\Users\Ayush\ Kumbhar\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\ser.rs C:\Users\Abhiram\Desktop\water\frontend\wasm-engine\target\wasm32-unknown-unknown\debug\build\serde-141b1c507dbf0caf\out/private.rs
+
+C:\Users\Abhiram\Desktop\water\frontend\wasm-engine\target\wasm32-unknown-unknown\debug\deps\libserde-f884f48193c992a0.rmeta: C:\Users\Ayush\ Kumbhar\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\lib.rs C:\Users\Ayush\ Kumbhar\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\integer128.rs C:\Users\Ayush\ Kumbhar\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\mod.rs C:\Users\Ayush\ Kumbhar\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\de.rs C:\Users\Ayush\ Kumbhar\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\ser.rs C:\Users\Abhiram\Desktop\water\frontend\wasm-engine\target\wasm32-unknown-unknown\debug\build\serde-141b1c507dbf0caf\out/private.rs
+
+C:\Users\Ayush\ Kumbhar\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\lib.rs:
+C:\Users\Ayush\ Kumbhar\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\integer128.rs:
+C:\Users\Ayush\ Kumbhar\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\mod.rs:
+C:\Users\Ayush\ Kumbhar\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\de.rs:
+C:\Users\Ayush\ Kumbhar\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\ser.rs:
+C:\Users\Abhiram\Desktop\water\frontend\wasm-engine\target\wasm32-unknown-unknown\debug\build\serde-141b1c507dbf0caf\out/private.rs:
+
+# env-dep:OUT_DIR=C:\\Users\\Abhiram\\Desktop\\water\\frontend\\wasm-engine\\target\\wasm32-unknown-unknown\\debug\\build\\serde-141b1c507dbf0caf\\out

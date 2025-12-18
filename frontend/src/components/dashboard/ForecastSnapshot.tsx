@@ -12,11 +12,13 @@ interface ForecastSnapshotProps {
 export const ForecastSnapshot: React.FC<ForecastSnapshotProps> = ({ data }) => {
     // Transform data for Recharts
     // Assuming data arrays are aligned by year
+    if (!data || !data.revenue) return <div className="p-4 text-center text-gray-500">No forecast data available</div>;
+
     const chartData = data.revenue.map((rev, idx) => ({
         year: `Y${idx + 1}`,
         Revenue: rev,
-        EBITDA: data.ebitda[idx] || 0,
-        FCF: data.fcf[idx] || 0
+        EBITDA: (data.ebitda && data.ebitda[idx]) || 0,
+        FCF: (data.fcf && data.fcf[idx]) || 0
     }));
 
     return (

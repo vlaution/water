@@ -1,0 +1,28 @@
+
+==================== Sheet: Tab 1. User Input>> ====================
+
+==================== Sheet: Tab 1. User Input>> ====================
+Empty DataFrame
+Columns: []
+Index: []
+==================== Sheet: Inp_1 ====================
+    Unnamed: 0 Step 1: Company Specific details (General Information)           Unnamed: 2
+0          NaN                                                    NaN                  NaN
+1          NaN                                           Company Name     ABC_Fintech_Inc.
+2          NaN                                                    NaN                  NaN
+3          NaN                                         Valuation Date  2024-06-30 00:00:00
+4          NaN                                                    NaN                  NaN
+5          NaN                                               Currency                  USD
+6          NaN                                                    NaN                  NaN
+7          NaN                                               Tax Rate                 0.25
+8          NaN                                                    NaN                  NaN
+9          NaN                                              Geography        Please Select
+10         NaN                                                 Global                False
+11         NaN                                                    USA                False
+12         NaN                                                 Europe                False
+13         NaN                                                     UK                False
+14         NaN                                                   MENA                False
+15         NaN                                                  Asian                False
+16         NaN                                                  India                False
+17         NaN                                              Australia                False
+18         NaN                                                 Others                False

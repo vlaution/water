@@ -12,6 +12,7 @@ import { ComplianceDashboard } from './pages/ComplianceDashboard';
 import { AdminDashboard } from './pages/AdminDashboard';
 import { FileUpload } from './components/FileUpload';
 import { SheetMapping } from './components/SheetMapping';
+import { InputReview } from './components/InputReview';
 import { ResultsDashboard } from './components/ResultsDashboard';
 import { ModeSelection } from './components/ModeSelection';
 import { ManualEntryForm } from './components/ManualEntryForm';
@@ -43,18 +44,22 @@ import { SensitivityPage } from './pages/SensitivityPage';
 import { CommandController } from './components/CommandPalette/CommandController';
 import { BackendSearchController } from './components/CommandPalette/BackendSearchController';
 import { CommandRegistryProvider } from './context/CommandRegistryContext';
-import { CommandPalette } from './components/System/CommandPalette';
+import { CommandPalette } from './components/CommandPalette/CommandPalette';
 
-const ProtectedApp = () => {
+interface ProtectedAppProps {
+  isSidebarOpen: boolean;
+  setIsSidebarOpen: (isOpen: boolean) => void;
+}
+
+const ProtectedApp = ({ isSidebarOpen, setIsSidebarOpen }: ProtectedAppProps) => {
   const { user, loading, token, logout } = useAuth();
   const { showToast } = useToast();
-  const [step, setStep] = useState<'mode-selection' | 'upload' | 'mapping' | 'manual-entry' | 'dashboard' | 'dashboard-home' | 'risk-dashboard' | 'fund-simulator' | 'deal-sourcing' | 'debt-markets'>('mode-selection');
+  const [step, setStep] = useState<'mode-selection' | 'upload' | 'mapping' | 'excel-review' | 'manual-entry' | 'dashboard' | 'portfolio-home' | 'risk-dashboard' | 'fund-simulator' | 'deal-sourcing' | 'debt-markets'>('mode-selection');
   const [workbookData, setWorkbookData] = useState<any>(null);
   const [results, setResults] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isGlobalSettingsOpen, setIsGlobalSettingsOpen] = useState(false);
   const [isSecretsModalOpen, setIsSecretsModalOpen] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const location = useLocation();
 
@@ -77,20 +82,55 @@ const ProtectedApp = () => {
     return <Navigate to="/login" replace />;
   }
 
-  const handleModeSelect = (mode: 'upload' | 'manual' | 'dashboard') => {
+  const handleModeSelect = (mode: 'upload' | 'manual' | 'portfolio') => {
     if (mode === 'upload') {
       setStep('upload');
     } else if (mode === 'manual') {
       setStep('manual-entry');
     } else {
-      setStep('dashboard-home');
+      setStep('portfolio-home');
     }
   };
 
-  const handleUploadSuccess = (data: any) => {
-    setWorkbookData(data);
-    setStep('mapping');
+  const handleUploadSuccess = (response: any) => {
+    // Parser returns { status: "success", data: ValuationImportData, message: "..." }
+    if (response.data) {
+      setWorkbookData(response.data);
+      setStep('excel-review');
+    } else {
+      setWorkbookData(response);
+      setStep('mapping');
+    }
     showToast('File uploaded successfully', 'success');
+  };
+
+  const handleExcelSave = async (confirmedData: any) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(api.url('/api/excel/save'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(confirmedData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save valuation');
+      }
+
+      const result = await response.json();
+      showToast('Valuation saved and persisted!', 'success');
+
+      // Load the saved run
+      handleSelectRun(result.id);
+    } catch (error) {
+      console.error('Error saving valuation:', error);
+      showToast('Failed to save valuation', 'error');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleMappingConfirm = async (mappings: Record<string, string>) => {
@@ -202,8 +242,6 @@ const ProtectedApp = () => {
 
   return (
     <div className="min-h-screen font-sans text-gray-900 dark:text-gray-100 transition-colors duration-300">
-      <CommandController setStep={setStep} />
-      <BackendSearchController setStep={setStep} />
       <div className="flex relative">
         {/* Toggle Button (Floating when closed) */}
         {!isSidebarOpen && step !== 'mode-selection' && (
@@ -252,6 +290,13 @@ const ProtectedApp = () => {
                   <span>←</span> New Valuation
                 </button>
               </PermissionGuard>
+
+              <button
+                onClick={() => setStep('portfolio-home')}
+                className={`glass-button w-full flex items-center justify-center gap-2 text-sm ${step === 'portfolio-home' ? 'nav-item-active' : ''}`}
+              >
+                Valuation Portfolio
+              </button>
 
               <button
                 onClick={() => setStep('risk-dashboard')}
@@ -308,12 +353,7 @@ const ProtectedApp = () => {
                 </button>
               </PermissionGuard>
 
-              <button
-                onClick={logout}
-                className="glass-button w-full flex items-center justify-center gap-2 text-sm bg-red-50 hover:bg-red-100"
-              >
-                Logout ({user.name})
-              </button>
+
 
             </div>
 
@@ -331,6 +371,15 @@ const ProtectedApp = () => {
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
                 API Vault
+              </button>
+
+              <div className="h-px bg-gray-200/50 dark:bg-gray-700/50 my-4" />
+
+              <button
+                onClick={logout}
+                className="glass-button w-full flex items-center justify-center gap-2 text-sm bg-red-50 hover:bg-red-100 dark:bg-red-500/10 dark:hover:bg-red-500/20 text-red-600 dark:text-red-400"
+              >
+                Logout ({user.name})
               </button>
             </div>
 
@@ -366,6 +415,27 @@ const ProtectedApp = () => {
 
           {step === 'mode-selection' && <ModeSelection onSelectMode={handleModeSelect} />}
           {step === 'upload' && <FileUpload onUploadSuccess={handleUploadSuccess} />}
+          {step === 'excel-review' && (
+            <div className="max-w-6xl mx-auto space-y-8">
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-bold">Review Valuation Import</h2>
+                <div className="flex gap-4">
+                  <button onClick={() => setStep('upload')} className="glass-button">Back</button>
+                  <button
+                    onClick={() => handleExcelSave(workbookData)}
+                    disabled={isLoading}
+                    className="glass-button bg-system-blue text-white hover:bg-blue-600 shadow-lg shadow-blue-400/20"
+                  >
+                    {isLoading ? 'Saving...' : 'Confirm & Save to Portfolio'}
+                  </button>
+                </div>
+              </div>
+              <InputReview
+                inputs={workbookData}
+                onUpdate={(updatedData) => setWorkbookData(updatedData)}
+              />
+            </div>
+          )}
           {step === 'mapping' && (
             <SheetMapping
               workbookData={workbookData}
@@ -377,7 +447,7 @@ const ProtectedApp = () => {
             <ManualEntryForm onSubmit={handleManualSubmit} isLoading={isLoading} />
           )}
           {step === 'dashboard' && <ResultsDashboard results={results} runId={results?.run_id} />}
-          {step === 'dashboard-home' && (
+          {step === 'portfolio-home' && (
             user?.role === 'analyst' ? (
               <AnalystDashboard onCreateValuation={() => setStep('mode-selection')} />
             ) : user?.role === 'associate' ? (
@@ -413,6 +483,8 @@ const ProtectedApp = () => {
 
 
 function App() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
   return (
     <BrowserRouter>
       <AuthProvider>
@@ -421,6 +493,8 @@ function App() {
             <RealTimeProvider>
               <GlobalConfigProvider>
                 <CommandRegistryProvider>
+                  <CommandController toggleSidebar={() => setIsSidebarOpen(prev => !prev)} />
+                  <BackendSearchController />
                   <CommandPalette />
                   <RealTimeAlerts />
                   <Routes>
@@ -443,7 +517,7 @@ function App() {
                         <SystemHealthDashboard />
                       </RequirePermission>
                     } />
-                    <Route path="/*" element={<ProtectedApp />} />
+                    <Route path="/*" element={<ProtectedApp isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />} />
                   </Routes>
                 </CommandRegistryProvider>
               </GlobalConfigProvider>

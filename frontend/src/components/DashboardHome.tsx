@@ -210,7 +210,7 @@ export const DashboardHome: React.FC<DashboardHomeProps> = ({ onSelectRun, token
             {/* Header & Actions */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
+                    <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">
                         {latestRun ? latestRun.company_name : 'Dashboard'}
                     </h1>
                     <p className="text-gray-500 mt-1">
@@ -302,7 +302,7 @@ export const DashboardHome: React.FC<DashboardHomeProps> = ({ onSelectRun, token
                                     onClick={() => !isCustomizing && setActiveView(view.id as any)}
                                     className={`${activeView === view.id
                                         ? 'border-system-blue text-system-blue'
-                                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                        : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:border-gray-300 dark:hover:border-gray-600'
                                         } ${isCustomizing ? 'opacity-100 cursor-default' : ''} 
                                     whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 transition-colors`}
                                 >

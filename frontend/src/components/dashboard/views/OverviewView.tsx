@@ -26,8 +26,8 @@ export const OverviewView: React.FC<OverviewViewProps> = ({ data }) => {
     };
 
     const tvData = [
-        { name: 'Terminal Value', value: data.terminal_value_split.terminal_value },
-        { name: 'Explicit Period', value: data.terminal_value_split.explicit_period },
+        { name: 'Terminal Value', value: data?.terminal_value_split?.terminal_value || 0 },
+        { name: 'Explicit Period', value: data?.terminal_value_split?.explicit_period || 0 },
     ];
     const COLORS = ['#3B82F6', '#10B981'];
 
@@ -95,11 +95,11 @@ export const OverviewView: React.FC<OverviewViewProps> = ({ data }) => {
                     <div className="flex justify-center gap-4 text-xs text-gray-500 mt-4">
                         <div className="flex items-center gap-1">
                             <div className="w-2 h-2 rounded-full bg-blue-500" />
-                            <span>Terminal ({(data.terminal_value_split.terminal_value / (data.terminal_value_split.terminal_value + data.terminal_value_split.explicit_period) * 100).toFixed(0)}%)</span>
+                            <span>Terminal ({(tvData[0].value / ((tvData[0].value + tvData[1].value) || 1) * 100).toFixed(0)}%)</span>
                         </div>
                         <div className="flex items-center gap-1">
                             <div className="w-2 h-2 rounded-full bg-green-500" />
-                            <span>Explicit ({(data.terminal_value_split.explicit_period / (data.terminal_value_split.terminal_value + data.terminal_value_split.explicit_period) * 100).toFixed(0)}%)</span>
+                            <span>Explicit ({(tvData[1].value / ((tvData[0].value + tvData[1].value) || 1) * 100).toFixed(0)}%)</span>
                         </div>
                     </div>
                 </div>

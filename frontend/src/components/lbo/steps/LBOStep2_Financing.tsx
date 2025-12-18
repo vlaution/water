@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { EnhancedFormInput } from '../../common/EnhancedFormInput';
 import { MarketRateInput } from '../../common/MarketRateInput';
 import { History, Zap, RefreshCw, BarChart2, TrendingUp, Plus, Trash2 } from 'lucide-react';
-import type { LBOInputState, DebtTranche, CovenantRule } from '../../../types/lbo';
-import type { MarketSnapshot, MarketRates } from '../../../../services/MarketDataService';
+import type { LBOInputState, DebtTranche } from '../../../types/lbo';
+import type { MarketSnapshot, MarketRates } from '../../../services/MarketDataService';
 import { api } from '../../../config/api';
 
 interface LBOStep2Props {
@@ -93,7 +93,6 @@ export const LBOStep2_Financing: React.FC<LBOStep2Props> = ({
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    // 'Authorization': `Bearer ${token}` 
                 },
                 body: JSON.stringify({
                     current_debt_amount: totalDebt,

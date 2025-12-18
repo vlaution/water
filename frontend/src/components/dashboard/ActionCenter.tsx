@@ -16,7 +16,7 @@ interface ActionCenterProps {
 export const ActionCenter: React.FC<ActionCenterProps> = ({ actions, auditIssues, onGenerateReport }) => {
     return (
         <div className="glass-panel p-6 h-full flex flex-col">
-            <h3 className="text-sm font-semibold text-gray-900 mb-4">Action Center</h3>
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-4">Action Center</h3>
 
             {auditIssues && auditIssues.length > 0 && (
                 <div className="mb-6">

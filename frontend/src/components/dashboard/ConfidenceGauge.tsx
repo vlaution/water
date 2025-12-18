@@ -22,11 +22,11 @@ export const ConfidenceGauge: React.FC<ConfidenceGaugeProps> = ({ score }) => {
 
     return (
         <div className="glass-panel p-6 h-full flex flex-col items-center justify-center relative">
-            <h3 className="absolute top-6 left-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Confidence Score</h3>
+            <h3 className="absolute top-6 left-6 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Confidence Score</h3>
 
             <div className="relative w-40 h-20 mt-4 overflow-hidden">
                 {/* Background Arc */}
-                <div className="absolute top-0 left-0 w-40 h-40 rounded-full border-[12px] border-gray-200/50 box-border"></div>
+                <div className="absolute top-0 left-0 w-40 h-40 rounded-full border-[12px] border-gray-200/50 dark:border-white/10 box-border"></div>
 
                 {/* Colored Arc (using clip-path or rotation trick) */}
                 <div
@@ -40,7 +40,7 @@ export const ConfidenceGauge: React.FC<ConfidenceGaugeProps> = ({ score }) => {
 
             <div className="text-center -mt-6 z-10">
                 <span className={`text-3xl font-bold ${colorClass}`}>{score}%</span>
-                <p className="text-xs font-medium text-gray-500 mt-1">{label}</p>
+                <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mt-1">{label}</p>
             </div>
         </div>
     );

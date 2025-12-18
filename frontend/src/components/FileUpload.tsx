@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { api } from '../config/api';
+import { useAuth } from '../context/AuthContext';
 
 interface FileUploadProps {
     onUploadSuccess?: (data: any) => void;
@@ -10,6 +12,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onUploadSuccess }) => {
     const [file, setFile] = useState<File | null>(null);
     const [uploading, setUploading] = useState(false);
     const { showToast } = useToast();
+    const { token } = useAuth(); // Use token from context
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
@@ -25,9 +28,11 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onUploadSuccess }) => {
         formData.append('file', file);
 
         try {
-            // Assuming backend is running on port 8000
-            const response = await fetch('http://localhost:8000/upload', {
+            const response = await fetch(api.url('/api/excel/upload'), {
                 method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
                 body: formData,
             });
 

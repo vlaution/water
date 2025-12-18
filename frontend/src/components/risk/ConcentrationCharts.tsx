@@ -61,8 +61,8 @@ export const ConcentrationCharts: React.FC = () => {
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Sector Concentration */}
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Sector Concentration</h3>
+            <div className="bg-white dark:bg-white/5 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-white/10">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Sector Concentration</h3>
                 <div className="h-64">
                     <ResponsiveContainer width="100%" height="100%">
                         <PieChart>
@@ -86,7 +86,7 @@ export const ConcentrationCharts: React.FC = () => {
                 </div>
                 <div className="mt-4 flex flex-wrap gap-2 justify-center">
                     {sectorChartData.map((entry, index) => (
-                        <div key={index} className="flex items-center text-xs text-gray-600">
+                        <div key={index} className="flex items-center text-xs text-gray-600 dark:text-gray-400">
                             <span className="w-3 h-3 rounded-full mr-1" style={{ backgroundColor: COLORS[index % COLORS.length] }}></span>
                             {entry.name}
                         </div>
@@ -95,8 +95,8 @@ export const ConcentrationCharts: React.FC = () => {
             </div>
 
             {/* Stage Concentration */}
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Stage Concentration</h3>
+            <div className="bg-white dark:bg-white/5 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-white/10">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Stage Concentration</h3>
                 <div className="h-64">
                     <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={stageChartData}>
@@ -112,22 +112,22 @@ export const ConcentrationCharts: React.FC = () => {
 
             {/* Power Law Metrics */}
             {powerLawData && (
-                <div className="col-span-1 md:col-span-2 bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Power Law Compliance</h3>
+                <div className="col-span-1 md:col-span-2 bg-white dark:bg-white/5 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-white/10">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Power Law Compliance</h3>
                     <div className="grid grid-cols-3 gap-4">
-                        <div className="p-4 bg-gray-50 rounded-lg">
-                            <div className="text-sm text-gray-500">Gini Coefficient</div>
-                            <div className="text-2xl font-bold text-gray-900">
+                        <div className="p-4 bg-gray-50 dark:bg-white/5 rounded-lg">
+                            <div className="text-sm text-gray-500 dark:text-gray-400">Gini Coefficient</div>
+                            <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                                 {powerLawData.gini_coefficient.toFixed(2)}
                             </div>
-                            <div className="text-xs text-gray-500 mt-1">Target: &gt; 0.60</div>
+                            <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">Target: &gt; 0.60</div>
                         </div>
-                        <div className="p-4 bg-gray-50 rounded-lg">
-                            <div className="text-sm text-gray-500">Top 3 Concentration</div>
-                            <div className="text-2xl font-bold text-gray-900">
+                        <div className="p-4 bg-gray-50 dark:bg-white/5 rounded-lg">
+                            <div className="text-sm text-gray-500 dark:text-gray-400">Top 3 Concentration</div>
+                            <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                                 {(powerLawData.top_3_percent * 100).toFixed(1)}%
                             </div>
-                            <div className="text-xs text-gray-500 mt-1">% of Portfolio Value</div>
+                            <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">% of Portfolio Value</div>
                         </div>
                         <div className={`p-4 rounded-lg border ${powerLawData.is_power_law_compliant ? 'bg-green-50 border-green-200' : 'bg-yellow-50 border-yellow-200'}`}>
                             <div className={`text-sm ${powerLawData.is_power_law_compliant ? 'text-green-700' : 'text-yellow-700'}`}>Status</div>

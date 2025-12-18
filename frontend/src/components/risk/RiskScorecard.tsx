@@ -42,8 +42,8 @@ export const RiskScorecard: React.FC = () => {
     if (!data) return null;
 
     return (
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900 mb-6">Portfolio Health Scorecard</h3>
+        <div className="bg-white dark:bg-white/5 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-white/10">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6">Portfolio Health Scorecard</h3>
 
             {/* Top Level Metrics */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
@@ -105,21 +105,21 @@ export const RiskScorecard: React.FC = () => {
 
             {/* Full List (Collapsible or simple table) */}
             <div className="mt-6">
-                <h4 className="text-sm font-semibold text-gray-700 mb-3">Company Details</h4>
+                <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Company Details</h4>
                 <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
+                    <table className="min-w-full divide-y divide-gray-200 dark:divide-white/10">
+                        <thead className="bg-gray-50 dark:bg-white/5">
                             <tr>
-                                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Company</th>
-                                <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Runway</th>
-                                <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Data Quality</th>
-                                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Company</th>
+                                <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Runway</th>
+                                <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Data Quality</th>
+                                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Status</th>
                             </tr>
                         </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
+                        <tbody className="bg-white dark:bg-transparent divide-y divide-gray-200 dark:divide-white/10">
                             {data.company_results.map((company, idx) => (
-                                <tr key={idx} className="hover:bg-gray-50">
-                                    <td className="px-4 py-2 text-sm font-medium text-gray-900">{company.company_name}</td>
+                                <tr key={idx} className="hover:bg-gray-50 dark:hover:bg-white/5">
+                                    <td className="px-4 py-2 text-sm font-medium text-gray-900 dark:text-gray-100">{company.company_name}</td>
                                     <td className="px-4 py-2 text-sm text-gray-500 text-right">
                                         {company.runway_months >= 99 ? '> 24m' : `${company.runway_months.toFixed(1)}m`}
                                     </td>

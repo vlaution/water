@@ -21,27 +21,27 @@ export const EnterpriseValueCard: React.FC<EnterpriseValueCardProps> = ({
             <div className="absolute top-0 right-0 w-32 h-32 bg-system-blue/10 rounded-full blur-3xl -mr-16 -mt-16 transition-all duration-700 group-hover:bg-system-blue/20"></div>
 
             <div>
-                <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">Enterprise Value</h3>
+                <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Enterprise Value</h3>
                 <div className="flex items-baseline gap-2 flex-wrap">
-                    <span className="text-3xl lg:text-4xl font-bold text-gray-900 tracking-tight break-all">
+                    <span className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white tracking-tight break-all">
                         {formattedValue(value)}
                     </span>
-                    <span className="text-sm font-medium text-gray-500 whitespace-nowrap">Weighted Avg</span>
+                    <span className="text-sm font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap">Weighted Avg</span>
                 </div>
             </div>
 
             {medianValue && (
                 <div className="mt-4 pt-4 border-t border-white/30 flex justify-between items-center">
-                    <span className="text-sm text-gray-500">Median Estimate</span>
-                    <span className="text-lg font-semibold text-gray-700">{formattedValue(medianValue)}</span>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">Median Estimate</span>
+                    <span className="text-lg font-semibold text-gray-700 dark:text-gray-200">{formattedValue(medianValue)}</span>
                 </div>
             )}
 
             <div className="mt-2">
-                <div className="w-full bg-gray-200/50 rounded-full h-1.5 overflow-hidden">
+                <div className="w-full bg-gray-200/50 dark:bg-white/10 rounded-full h-1.5 overflow-hidden">
                     <div className="bg-system-blue h-1.5 rounded-full" style={{ width: '75%' }}></div>
                 </div>
-                <div className="flex justify-between mt-1 text-xs text-gray-400">
+                <div className="flex justify-between mt-1 text-xs text-gray-400 dark:text-gray-500">
                     <span>Low</span>
                     <span>High</span>
                 </div>

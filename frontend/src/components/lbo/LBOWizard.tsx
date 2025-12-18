@@ -5,7 +5,6 @@ import { TutorialOverlay } from '../common/TutorialOverlay';
 import { MarketDataService } from '../../services/MarketDataService';
 import type { MarketSnapshot, MarketRates, MarketScenarios } from '../../services/MarketDataService';
 import { SensitivityAnalysis } from '../analytics/SensitivityAnalysis';
-import { useAuth } from '../../context/AuthContext';
 import { LBOStep1_Structure } from './steps/LBOStep1_Structure';
 import { LBOStep2_Financing } from './steps/LBOStep2_Financing';
 import { LBOStep3_TaxCovenants } from './steps/LBOStep3_TaxCovenants';
@@ -20,11 +19,10 @@ interface LBOWizardProps {
 }
 
 export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
-    const { token } = useAuth();
     const [step, setStep] = useState(1);
     const [showMonteCarlo, setShowMonteCarlo] = useState(false);
     const [showTutorial, setShowTutorial] = useState(false);
-    const [benchmarks, setBenchmarks] = useState<BenchmarkData | null>(null);
+    const [benchmarks] = useState<BenchmarkData | null>(null);
     const [isFetchingMarketData, setIsFetchingMarketData] = useState(false);
     const [marketRates, setMarketRates] = useState<MarketRates | null>(null);
     const [scenarios, setScenarios] = useState<MarketScenarios | null>(null);
@@ -209,7 +207,7 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
         { title: "Risk Analysis", content: "Run a Monte Carlo simulation to see the probability of achieving your Target IRR under different scenarios." }
     ];
 
-    const fetchBenchmarks = async (sector: string) => {
+    const fetchBenchmarks = async (_sector: string) => {
         try {
             // Use relative path or env var in real app
             // Mocking for now as per original code structure

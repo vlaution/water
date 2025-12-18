@@ -12,14 +12,20 @@ class AuditService:
         """
         threading.Thread(target=self._log_sync, args=(action, user_id, resource, details, ip_address)).start()
         
-    def _log_sync(self, action, user_id, resource, details, ip_address):
+    def _log_sync(self, action_type, user_id, resource_type, details, ip_address):
         db: Session = SessionLocal()
         try:
+            # Handle resource_type mapping from simple resource string if needed
+            res_id = None
+            if resource_type and ":" in resource_type:
+                resource_type, res_id = resource_type.split(":", 1)
+
             log_entry = AuditLog(
-                action=action,
+                action_type=action_type,
                 user_id=user_id,
-                resource=resource,
-                details=json.dumps(details) if details else None,
+                resource_type=resource_type,
+                resource_id=res_id,
+                details=json.dumps(details) if isinstance(details, dict) else details,
                 ip_address=ip_address,
                 timestamp=datetime.utcnow()
             )
@@ -27,6 +33,8 @@ class AuditService:
             db.commit()
         except Exception as e:
             print(f"Failed to write audit log: {e}")
+            import traceback
+            traceback.print_exc()
         finally:
             db.close()
 

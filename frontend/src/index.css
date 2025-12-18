@@ -24,8 +24,8 @@
 
 @layer components {
   .glass-panel {
-    @apply bg-white/70 backdrop-blur-2xl backdrop-saturate-150 border border-white/50 rounded-2xl transition-all duration-300;
-    @apply dark:bg-gray-900/60 dark:border-white/10 dark:backdrop-blur-3xl dark:backdrop-saturate-100 dark:shadow-xl;
+    @apply bg-white/40 backdrop-blur-xl backdrop-saturate-150 border border-white/60 rounded-2xl transition-all duration-300 shadow-xl shadow-slate-900/5;
+    @apply dark:bg-gray-900/40 dark:border-white/10 dark:backdrop-blur-xl dark:backdrop-saturate-100 dark:shadow-2xl;
 
     /* Premium Cut Glass Look - Inner Highlight */
     box-shadow:
@@ -117,4 +117,17 @@
 
 .animate-scale-in {
   animation: scale-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }

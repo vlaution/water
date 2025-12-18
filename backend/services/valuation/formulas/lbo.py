@@ -590,10 +590,16 @@ class EnhancedLBOCalculator:
 
     @staticmethod
     def _calculate_sensitivity(lbo_input: LBOInput, base_entry_multiple: float) -> Dict[str, Any]:
-        """Generates a 3x3 Sensitivity Matrix for IRR (Entry Multiple vs Exit Multiple)"""
-        # Ranges: Reduced to +/- 1 step to improve performance
+        """
+        Generates a 3x3 Sensitivity Matrix for IRR (Entry Multiple vs Exit Multiple)
+        OPTIMIZED: Runs waterfall once per Entry Multiple (O(N)), then calculates Exit Multiples instantly.
+        """
+        # Ranges
         entry_multiples = [base_entry_multiple + (i * 0.5) for i in range(-1, 2)]
-        exit_multiples = [lbo_input.exit_ev_ebitda_multiple + (i * 0.5) for i in range(-1, 2)] if lbo_input.exit_ev_ebitda_multiple else [base_entry_multiple + (i * 0.5) for i in range(-1, 2)]
+        
+        # Determine Exit Multiples to test
+        base_exit = lbo_input.exit_ev_ebitda_multiple if lbo_input.exit_ev_ebitda_multiple else base_entry_multiple
+        exit_multiples = [base_exit + (i * 0.5) for i in range(-1, 2)]
         
         # Prevent infinite recursion
         original_sensitivity_flag = lbo_input.include_sensitivity
@@ -601,26 +607,62 @@ class EnhancedLBOCalculator:
         
         matrix = []
         try:
-            for exit_mult in exit_multiples:
-                row = []
-                for entry_mult in entry_multiples:
-                    # Note: _run_waterfall assumes exit_ev_ebitda_multiple is in lbo_input.
-                    # We need to override it temporarily.
-                    original_exit = lbo_input.exit_ev_ebitda_multiple
-                    lbo_input.exit_ev_ebitda_multiple = exit_mult
+            # We iterate differently now:
+            # Outer Loop: Entry Multiples (Requires full waterfall calculation)
+            # Inner Loop: Exit Multiples (Just math on the result)
+            
+            # First, pre-calculate the row results for each entry multiple
+            # We store the "End State" of the waterfall for each entry multiple
+            waterfall_results = {} 
+            
+            for entry_mult in entry_multiples:
+                try:
+                    # We pass the default exit multiple to the waterfall, but it doesn't fundamentally change the Schedule/Debt paydown
+                    # It only changes the final "exit_equity" number.
+                    # We need the "Entry Equity" and "Final Net Debt" and "Final EBITDA" from the run.
                     
-                    try:
-                        irr, _, _ = EnhancedLBOCalculator._run_waterfall(lbo_input, entry_mult)
-                        row.append(round(irr, 4))
-                    except:
-                        row.append(0.0)
-                    finally:
-                        lbo_input.exit_ev_ebitda_multiple = original_exit
+                    # Run generic waterfall
+                    _, _, details = EnhancedLBOCalculator._run_waterfall(lbo_input, entry_mult)
+                    
+                    # Extract reusable components
+                    waterfall_results[entry_mult] = {
+                        "equity_check": details['sources']['Total Equity'],
+                        "final_ebitda": details['schedule'][-1]['ebitda'],
+                        "final_net_debt": details['waterfall_summary']['final_debt']
+                    }
+                except:
+                    waterfall_results[entry_mult] = None
+
+            # Now build the matrix in the requested format (Rows = Exit Multiples, Cols = Entry Multiples)
+            # Or usually: Rows = different Exit Multiples, Cols = different Entry Multiples
+            
+            for exit_mult in exit_multiples:
+                row_irrs = []
+                for entry_mult in entry_multiples:
+                    res = waterfall_results.get(entry_mult)
+                    if res:
+                        # Re-calculate IRR instantly without running waterfall
+                        equity_check = res['equity_check']
+                        final_ebitda = res['final_ebitda']
+                        final_net_debt = res['final_net_debt']
+                        
+                        exit_ev = final_ebitda * exit_mult
+                        exit_equity = exit_ev - final_net_debt
+                        
+                        if equity_check <= 0: irr = 10.0 # Edge case
+                        elif exit_equity <= 0: irr = -1.0 # Loss
+                        else:
+                            irr = (exit_equity / equity_check) ** (1 / lbo_input.holding_period) - 1
+                            
+                        row_irrs.append(round(irr, 4))
+                    else:
+                        row_irrs.append(0.0)
                 
                 matrix.append({
                     "exit_multiple": round(exit_mult, 1),
-                    "irrs": row
+                    "irrs": row_irrs
                 })
+                
         finally:
             lbo_input.include_sensitivity = original_sensitivity_flag
             

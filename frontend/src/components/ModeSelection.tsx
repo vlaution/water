@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface ModeSelectionProps {
-    onSelectMode: (mode: 'upload' | 'manual' | 'dashboard') => void;
+    onSelectMode: (mode: 'upload' | 'manual' | 'portfolio') => void;
 }
 
 export const ModeSelection: React.FC<ModeSelectionProps> = ({ onSelectMode }) => {
@@ -48,7 +48,7 @@ export const ModeSelection: React.FC<ModeSelectionProps> = ({ onSelectMode }) =>
 
                 {/* Dashboard Mode Card */}
                 <button
-                    onClick={() => onSelectMode('dashboard')}
+                    onClick={() => onSelectMode('portfolio')}
                     className="glass-panel p-8 text-left group hover:scale-[1.02] active:scale-95 transition-all duration-300 flex flex-col items-start dark:hover:bg-white/10 md:col-span-2 lg:col-span-1"
                 >
                     <div className="w-14 h-14 bg-emerald-50 dark:bg-white/10 rounded-2xl flex items-center justify-center mb-6 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform duration-300">
@@ -57,7 +57,7 @@ export const ModeSelection: React.FC<ModeSelectionProps> = ({ onSelectMode }) =>
                         </svg>
                     </div>
                     <div className="relative z-10 w-full">
-                        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Dashboard</h3>
+                        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Valuation Portfolio</h3>
                         <p className="text-gray-500 dark:text-gray-400 leading-relaxed">
                             View your valuation history, compare runs, and manage your portfolio.
                         </p>

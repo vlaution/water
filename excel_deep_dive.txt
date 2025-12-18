@@ -1,0 +1,15 @@
+=== Inp_1 (Rows 21-220) ===
+     0                       1              2
+0  NaN                     NaN            NaN
+1  NaN                Industry  Please Select
+2  NaN  Communication services          False
+3  NaN  Consumer discretionary          False
+4  NaN        Consumer staples          False
+5  NaN                  Energy          False
+6  NaN               Financial          False
+7  NaN              Healthcare          False
+8  NaN             Industrials          False
+9  NaN  Information Technology          False
+10 NaN               Materials          False
+11 NaN             Real Estate          False
+12 NaN               Utilities          False
