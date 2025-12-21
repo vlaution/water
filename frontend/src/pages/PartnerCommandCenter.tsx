@@ -3,6 +3,8 @@ import { AlertOctagon, CheckCircle2, ShieldCheck, TrendingUp } from 'lucide-reac
 
 export const PartnerCommandCenter: React.FC = () => {
     const [acknowledgedIds, setAcknowledgedIds] = useState<Set<string>>(new Set());
+    const [rationales, setRationales] = useState<{[key: string]: string}>({});
+
 
 
 
@@ -157,12 +159,23 @@ export const PartnerCommandCenter: React.FC = () => {
                                                     <span className="text-sm font-bold text-gray-900 dark:text-gray-100 uppercase text-xs tracking-wider block mb-0.5">Recommended Action</span>
                                                     <span className="text-sm font-medium text-gray-800 dark:text-gray-200">{d.action}</span>
                                                 </div>
-                                                <button 
-                                                    onClick={() => handleAcknowledge(d.decision_id, "ACKNOWLEDGED", "Accepted by Partner")}
-                                                    className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded shadow-sm hover:shadow transition-all whitespace-nowrap active:scale-95"
-                                                >
-                                                    Acknowledge
-                                                </button>
+                                                <div className="flex items-center gap-2">
+                                                    <input 
+                                                        type="text" 
+                                                        placeholder="Enter rationale for decision record..."
+                                                        className="flex-1 text-sm border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 px-3 py-2"
+                                                        value={rationales[d.decision_id] || ""}
+                                                        onChange={(e) => setRationales(prev => ({...prev, [d.decision_id]: e.target.value}))}
+                                                    />
+                                                    <button 
+                                                        onClick={() => handleAcknowledge(d.decision_id, "ACKNOWLEDGED", rationales[d.decision_id] || "No rationale provided")}
+                                                        disabled={!rationales[d.decision_id]}
+                                                        className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-400 text-white text-sm font-bold rounded shadow-sm hover:shadow transition-all whitespace-nowrap active:scale-95"
+                                                    >
+                                                        Acknowledge
+                                                    </button>
+                                                </div>
+
                                             </div>
                                         </div>
                                     </div>

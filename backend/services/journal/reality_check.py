@@ -68,6 +68,7 @@ def generate_weekly_reality_check(db: Session, start_date: datetime, end_date: d
             "recommended_action": json.loads(decision.recommended_actions_json)[0] if decision.recommended_actions_json else "N/A",
             "human_response": decision.state if decision.state != "active" else "PENDING",
             "response_rationale": ack.rationale if ack else "",
+            "response_lag_hours": round((ack.timestamp - decision.created_at).total_seconds() / 3600, 1) if ack else "N/A",
             "actual_outcome": decision.actual_outcome or "TBD",
             "outcome_aligned": calculate_alignment(decision),
             "tuning_required": should_tune(decision)
@@ -92,11 +93,12 @@ def save_report_as_markdown(report: Dict, path: str):
         md += f"- **{k.replace('_', ' ').title()}**: {v}\n"
     
     md +=("\n## Decisions Table\n")
-    md += "| ID | Signal | Company | Severity | Response | Alignment | Tune? |\n"
-    md += "|---|---|---|---|---|---|---|\n"
+    md +=("| ID | Signal | Severity | Response | Lag (Hrs) | Rationale | Alignment |\n")
+    md +=("|---|---|---|---|---|---|---|\n")
     
     for row in report['decisions_table']:
-        md += f"| {row['decision_id'][:8]} | {row['signal']} | {row['company']} | {row['severity']} | {row['human_response']} | {row['outcome_aligned']} | {'YES' if row['tuning_required'] else 'No'} |\n"
+        rationale_snippet = (row['response_rationale'][:30] + '...') if len(row['response_rationale']) > 30 else row['response_rationale']
+        md += f"| {row['decision_id'][:8]} | {row['signal']} | {row['severity']} | {row['human_response']} | {row['response_lag_hours']} | {rationale_snippet} | {row['outcome_aligned']} |\n"
         
     with open(path, "w") as f:
         f.write(md)
