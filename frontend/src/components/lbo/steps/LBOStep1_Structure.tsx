@@ -146,7 +146,7 @@ export const LBOStep1_Structure: React.FC<LBOStep1Props> = ({
                     {data.solve_for === 'target_irr' && (
                         <div>
                             <EnhancedFormInput
-                                label={`${t('lbo.entry_ev_ebitda_multiple')} (x)`}
+                                label={t('lbo.entry_ev_ebitda_multiple')}
                                 type="number"
                                 value={data.entry_ev_ebitda_multiple}
                                 onChange={(e) => updateField('entry_ev_ebitda_multiple', parseFloat(e.target.value))}

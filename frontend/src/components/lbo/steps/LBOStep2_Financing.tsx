@@ -231,7 +231,7 @@ export const LBOStep2_Financing: React.FC<LBOStep2Props> = ({
                             </div>
                             <div>
                                 <EnhancedFormInput
-                                    label={`${t('lbo.new_interest_rate_percent')} (%)`}
+                                    label={t('lbo.new_interest_rate_percent')}
                                     type="number"
                                     value={refiParams.newRate * 100}
                                     onChange={(e) => setRefiParams(p => ({ ...p, newRate: parseFloat(e.target.value) / 100 }))}
@@ -241,7 +241,7 @@ export const LBOStep2_Financing: React.FC<LBOStep2Props> = ({
                             </div>
                             <div>
                                 <EnhancedFormInput
-                                    label={`${t('lbo.refinancing_cost_percent')} (%)`}
+                                    label={t('lbo.refinancing_cost_percent')}
                                     type="number"
                                     value={refiParams.costPercent * 100}
                                     onChange={(e) => setRefiParams(p => ({ ...p, costPercent: parseFloat(e.target.value) / 100 }))}
@@ -323,7 +323,7 @@ export const LBOStep2_Financing: React.FC<LBOStep2Props> = ({
                             </div>
                             <div>
                                 <EnhancedFormInput
-                                    label={`${t('lbo.leverage_x_ebitda')} (x)`}
+                                    label={t('lbo.leverage_x_ebitda')}
                                     type="number"
                                     step="0.1"
                                     value={tranche.leverage_multiple}
@@ -346,7 +346,7 @@ export const LBOStep2_Financing: React.FC<LBOStep2Props> = ({
 
                                     return (
                                         <MarketRateInput
-                                            label={`${t('lbo.interest_rate_percent')} (%)`}
+                                            label={t('lbo.interest_rate_percent')}
                                             value={tranche.interest_rate * 100}
                                             onChange={(val) => updateTranche(index, 'interest_rate', val / 100)}
                                             marketRate={applicableRate ? applicableRate * 100 : undefined}
@@ -385,7 +385,7 @@ export const LBOStep2_Financing: React.FC<LBOStep2Props> = ({
                             </div>
                             <div>
                                 <EnhancedFormInput
-                                    label={`${t('lbo.amortization_percent_yr')} (%)`}
+                                    label={t('lbo.amortization_percent_yr')}
                                     type="number"
                                     step="0.5"
                                     value={tranche.amortization_rate * 100}

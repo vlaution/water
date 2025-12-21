@@ -23,7 +23,7 @@ export const LBOStep4_MIP: React.FC<LBOStep4Props> = ({ data, onChange }) => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <EnhancedFormInput
-                            label={t('lbo.option_pool_size')}
+                            label={`${t('lbo.option_pool_size')} (%)`}
                             type="number" step="0.1"
                             value={(data.mip_assumptions?.option_pool_percent || 0.1) * 100}
                             onChange={(e) => {

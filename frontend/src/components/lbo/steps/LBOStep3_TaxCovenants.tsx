@@ -112,7 +112,7 @@ export const LBOStep3_TaxCovenants: React.FC<LBOStep3Props> = ({ data, onChange 
                         <>
                             <div>
                                 <EnhancedFormInput
-                                    label={t('lbo.initial_nol_balance')}
+                                    label={`${t('lbo.initial_nol_balance')} ($M)`}
                                     type="number"
                                     value={data.tax_assumptions.initial_nol_balance}
                                     onChange={(e) => updateField('tax_assumptions', { ...data.tax_assumptions, initial_nol_balance: parseFloat(e.target.value) })}

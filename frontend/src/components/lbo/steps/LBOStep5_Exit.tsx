@@ -29,7 +29,7 @@ export const LBOStep5_Exit: React.FC<LBOStep5Props> = ({ data, onChange }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <EnhancedFormInput
-                        label={`${t('lbo.revenue_growth_rate')} (%)`}
+                        label={t('lbo.revenue_growth_rate')}
                         type="number"
                         step="0.1"
                         value={data.revenue_growth_rate * 100}
@@ -38,7 +38,7 @@ export const LBOStep5_Exit: React.FC<LBOStep5Props> = ({ data, onChange }) => {
                 </div>
                 <div>
                     <EnhancedFormInput
-                        label={`${t('lbo.ebitda_margin')} (%)`}
+                        label={t('lbo.ebitda_margin')}
                         type="number"
                         step="0.1"
                         value={data.ebitda_margin * 100}
@@ -47,7 +47,7 @@ export const LBOStep5_Exit: React.FC<LBOStep5Props> = ({ data, onChange }) => {
                 </div>
                 <div>
                     <EnhancedFormInput
-                        label={`${t('lbo.capex_percent_rev')} (%)`}
+                        label={t('lbo.capex_percent_rev')}
                         type="number"
                         step="0.1"
                         value={data.capex_percentage * 100}
@@ -56,7 +56,7 @@ export const LBOStep5_Exit: React.FC<LBOStep5Props> = ({ data, onChange }) => {
                 </div>
                 <div>
                     <EnhancedFormInput
-                        label={`${t('lbo.nwc_percent_rev')} (%)`}
+                        label={t('lbo.nwc_percent_rev')}
                         type="number"
                         step="0.1"
                         value={data.nwc_percentage * 100}
@@ -69,7 +69,7 @@ export const LBOStep5_Exit: React.FC<LBOStep5Props> = ({ data, onChange }) => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <EnhancedFormInput
-                                label={`${t('lbo.holding_period_years')} (Years)`}
+                                label={t('lbo.holding_period_years')}
                                 type="number"
                                 value={data.holding_period}
                                 onChange={(e) => updateField('holding_period', parseInt(e.target.value))}
@@ -77,7 +77,7 @@ export const LBOStep5_Exit: React.FC<LBOStep5Props> = ({ data, onChange }) => {
                         </div>
                         <div>
                             <EnhancedFormInput
-                                label={`${t('lbo.exit_multiple_x_ebitda')} (x)`}
+                                label={t('lbo.exit_multiple_x_ebitda')}
                                 type="number"
                                 step="0.1"
                                 value={data.exit_ev_ebitda_multiple}

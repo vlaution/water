@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
-from database.models import SessionLocal, SystemMetric, ValuationMetric
+from backend.database.models import SessionLocal, SystemMetric, ValuationMetric
 # from celery_app import celery_app
 
 # @celery_app.task(name='services.metrics.retention.cleanup_old_metrics')
