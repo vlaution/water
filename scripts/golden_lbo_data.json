@@ -1,0 +1,264 @@
+{
+  "input": {
+    "solve_for": "entry_price",
+    "entry_revenue": 100.0,
+    "entry_ebitda": 20.0,
+    "entry_ev_ebitda_multiple": 10.0,
+    "financing": {
+      "tranches": [
+        {
+          "name": "Senior Term Loan",
+          "amount": null,
+          "leverage_multiple": 4.0,
+          "interest_rate": 0.05,
+          "cash_interest": true,
+          "amortization_rate": 0.01,
+          "maturity": 7,
+          "mandatory_cash_sweep_priority": 1
+        },
+        {
+          "name": "Mezzanine",
+          "amount": null,
+          "leverage_multiple": 1.0,
+          "interest_rate": 0.12,
+          "cash_interest": false,
+          "amortization_rate": 0.0,
+          "maturity": 8,
+          "mandatory_cash_sweep_priority": 1
+        }
+      ],
+      "total_leverage_ratio": null,
+      "equity_contribution_percent": null
+    },
+    "assumptions": {
+      "transaction_fees_percent": 0.01,
+      "synergy_benefits": 2.0,
+      "hurdle_rate": 0.08,
+      "carry_percent": 0.2,
+      "catchup_active": true
+    },
+    "revenue_growth_rate": 0.05,
+    "ebitda_margin": 0.2,
+    "capex_percentage": 0.02,
+    "nwc_percentage": 0.1,
+    "tax_rate": 0.25,
+    "holding_period": 5,
+    "exit_ev_ebitda_multiple": 10.0,
+    "target_irr": 0.2,
+    "include_sensitivity": true,
+    "refinancing_config": null,
+    "covenants": [],
+    "mip_assumptions": null,
+    "tax_assumptions": {
+      "enable_nol": true,
+      "initial_nol_balance": 5.0,
+      "nol_annual_limit": 1.0,
+      "interest_deductibility_cap": 0.3,
+      "step_up_percent": 0.0,
+      "depreciation_years": 15
+    }
+  },
+  "output": {
+    "implied_entry_multiple": 9.65,
+    "implied_entry_ev": 192968891.80379322,
+    "irr": 0.2,
+    "moic": 2.49,
+    "holding_period": 5,
+    "schedule": [
+      {
+        "year": 1,
+        "revenue": 105.0,
+        "ebitda": 23.0,
+        "fcf_debt": 13.69,
+        "interest_expense": 6.4,
+        "total_debt_balance": 88.71,
+        "tranches": [
+          {
+            "name": "Senior Term Loan",
+            "beginning_balance": 80.0,
+            "interest": 4.0,
+            "is_pik": false
+          },
+          {
+            "name": "Mezzanine",
+            "beginning_balance": 20.0,
+            "interest": 2.4,
+            "is_pik": true
+          }
+        ],
+        "refinancing_fee": 0.0,
+        "covenant_status": "ok",
+        "breaches": []
+      },
+      {
+        "year": 2,
+        "revenue": 110.25,
+        "ebitda": 24.05,
+        "fcf_debt": 13.65,
+        "interest_expense": 6.0,
+        "total_debt_balance": 77.75,
+        "tranches": [
+          {
+            "name": "Senior Term Loan",
+            "beginning_balance": 66.3125,
+            "interest": 3.3156250000000003,
+            "is_pik": false
+          },
+          {
+            "name": "Mezzanine",
+            "beginning_balance": 22.4,
+            "interest": 2.6879999999999997,
+            "is_pik": true
+          }
+        ],
+        "refinancing_fee": 0.0,
+        "covenant_status": "ok",
+        "breaches": []
+      },
+      {
+        "year": 3,
+        "revenue": 115.76,
+        "ebitda": 25.15,
+        "fcf_debt": 14.89,
+        "interest_expense": 5.64,
+        "total_debt_balance": 65.87,
+        "tranches": [
+          {
+            "name": "Senior Term Loan",
+            "beginning_balance": 52.66484375,
+            "interest": 2.6332421875000005,
+            "is_pik": false
+          },
+          {
+            "name": "Mezzanine",
+            "beginning_balance": 25.087999999999997,
+            "interest": 3.0105599999999995,
+            "is_pik": true
+          }
+        ],
+        "refinancing_fee": 0.0,
+        "covenant_status": "ok",
+        "breaches": []
+      },
+      {
+        "year": 4,
+        "revenue": 121.55,
+        "ebitda": 26.31,
+        "fcf_debt": 16.22,
+        "interest_expense": 5.26,
+        "total_debt_balance": 53.03,
+        "tranches": [
+          {
+            "name": "Senior Term Loan",
+            "beginning_balance": 37.773681640625,
+            "interest": 1.88868408203125,
+            "is_pik": false
+          },
+          {
+            "name": "Mezzanine",
+            "beginning_balance": 28.098559999999996,
+            "interest": 3.3718271999999994,
+            "is_pik": true
+          }
+        ],
+        "refinancing_fee": 0.0,
+        "covenant_status": "ok",
+        "breaches": []
+      },
+      {
+        "year": 5,
+        "revenue": 127.63,
+        "ebitda": 27.53,
+        "fcf_debt": 17.63,
+        "interest_expense": 4.85,
+        "total_debt_balance": 39.17,
+        "tranches": [
+          {
+            "name": "Senior Term Loan",
+            "beginning_balance": 21.555796264648443,
+            "interest": 1.0777898132324222,
+            "is_pik": false
+          },
+          {
+            "name": "Mezzanine",
+            "beginning_balance": 31.470387199999994,
+            "interest": 3.7764464639999993,
+            "is_pik": true
+          }
+        ],
+        "refinancing_fee": 0.0,
+        "covenant_status": "ok",
+        "breaches": []
+      }
+    ],
+    "waterfall": {
+      "entry_equity": 94.89858072183114,
+      "exit_equity": 236.13014607080225,
+      "total_debt_paydown": 60.83014607080225,
+      "final_debt": 39.16985392919775
+    },
+    "sources": {
+      "Total Equity": 94.89858072183114,
+      "Total Debt": 100.0,
+      "Senior Term Loan": 80.0,
+      "Mezzanine": 20.0
+    },
+    "uses": {
+      "Purchase Price": 192.9688918037932,
+      "Transaction Fees": 1.9296889180379322,
+      "Refinancing": 0.0
+    },
+    "returns_analysis": {
+      "moic": 2.49,
+      "irr": 0.2,
+      "entry_equity": 94.89858072183114,
+      "exit_equity": 236.13014607080225,
+      "invested_capital": 94.89858072183114,
+      "profit": 141.23156534897112,
+      "gp_carry": 28.25,
+      "lp_profit": 112.99,
+      "lp_moic": 2.19,
+      "hurdle_rate": 0.08,
+      "dist_capital": 94.9,
+      "dist_pref": 44.54,
+      "gp_catchup": 11.13,
+      "dist_carry": 17.11,
+      "mip_value": 0.0,
+      "mip_tranches": [],
+      "mip_pool_percent": 0.0
+    },
+    "sensitivity_matrix": {
+      "entry_multiples": [
+        9.1,
+        9.6,
+        10.1
+      ],
+      "rows": [
+        {
+          "exit_multiple": 9.5,
+          "irrs": [
+            0.2127,
+            0.1857,
+            0.1619
+          ]
+        },
+        {
+          "exit_multiple": 10.0,
+          "irrs": [
+            0.2273,
+            0.2,
+            0.176
+          ]
+        },
+        {
+          "exit_multiple": 10.5,
+          "irrs": [
+            0.2413,
+            0.2137,
+            0.1894
+          ]
+        }
+      ]
+    }
+  }
+}

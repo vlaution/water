@@ -1,0 +1,2075 @@
+{
+  "simulation_summary": {
+    "period_analyzed": "1998-2012",
+    "total_datapoints": 39589,
+    "total_decisions_fired": 13582,
+    "breakdown_by_severity": {
+      "CRITICAL": 8,
+      "HIGH": 13558,
+      "MEDIUM": 16,
+      "LOW": 0
+    },
+    "signal_breakdown": {
+      "forecast_miss": 13528,
+      "risk_concentration": 46,
+      "cash_runway": 8
+    }
+  },
+  "key_findings": [
+    {
+      "year": 1983,
+      "exporter": "BOL",
+      "signal": "cash_runway",
+      "insight": "BOL hit with cash_runway in 1983.",
+      "actions": [
+        "ANALYSIS: 13-week cash flow forecast",
+        "ACTION: Activate revolving credit facility",
+        "NEGOTIATE: Extend payables, accelerate receivables",
+        "MEETING: Emergency Board meeting within 48 hours",
+        "ANALYSIS: Options: Distressed financing or sale process"
+      ]
+    },
+    {
+      "year": 1985,
+      "exporter": "BOL",
+      "signal": "cash_runway",
+      "insight": "BOL hit with cash_runway in 1985.",
+      "actions": [
+        "ANALYSIS: 13-week cash flow forecast",
+        "ACTION: Activate revolving credit facility",
+        "NEGOTIATE: Extend payables, accelerate receivables",
+        "MEETING: Emergency Board meeting within 48 hours",
+        "ANALYSIS: Options: Distressed financing or sale process"
+      ]
+    },
+    {
+      "year": 1986,
+      "exporter": "BOL",
+      "signal": "cash_runway",
+      "insight": "BOL hit with cash_runway in 1986.",
+      "actions": [
+        "ANALYSIS: 13-week cash flow forecast",
+        "ACTION: Activate revolving credit facility",
+        "NEGOTIATE: Extend payables, accelerate receivables",
+        "MEETING: Emergency Board meeting within 48 hours",
+        "ANALYSIS: Options: Distressed financing or sale process"
+      ]
+    },
+    {
+      "year": 1987,
+      "exporter": "BOL",
+      "signal": "cash_runway",
+      "insight": "BOL hit with cash_runway in 1987.",
+      "actions": [
+        "ANALYSIS: 13-week cash flow forecast",
+        "ACTION: Activate revolving credit facility",
+        "NEGOTIATE: Extend payables, accelerate receivables",
+        "MEETING: Emergency Board meeting within 48 hours",
+        "ANALYSIS: Options: Distressed financing or sale process"
+      ]
+    },
+    {
+      "year": 2000,
+      "exporter": "NGA",
+      "signal": "cash_runway",
+      "insight": "NGA hit with cash_runway in 2000.",
+      "actions": [
+        "ANALYSIS: 13-week cash flow forecast",
+        "ACTION: Activate revolving credit facility",
+        "NEGOTIATE: Extend payables, accelerate receivables",
+        "MEETING: Emergency Board meeting within 48 hours",
+        "ANALYSIS: Options: Distressed financing or sale process"
+      ]
+    },
+    {
+      "year": 1995,
+      "exporter": "NPL",
+      "signal": "cash_runway",
+      "insight": "NPL hit with cash_runway in 1995.",
+      "actions": [
+        "ANALYSIS: 13-week cash flow forecast",
+        "ACTION: Activate revolving credit facility",
+        "NEGOTIATE: Extend payables, accelerate receivables",
+        "MEETING: Emergency Board meeting within 48 hours",
+        "ANALYSIS: Options: Distressed financing or sale process"
+      ]
+    },
+    {
+      "year": 1986,
+      "exporter": "PNG",
+      "signal": "cash_runway",
+      "insight": "PNG hit with cash_runway in 1986.",
+      "actions": [
+        "ANALYSIS: 13-week cash flow forecast",
+        "ACTION: Activate revolving credit facility",
+        "NEGOTIATE: Extend payables, accelerate receivables",
+        "MEETING: Emergency Board meeting within 48 hours",
+        "ANALYSIS: Options: Distressed financing or sale process"
+      ]
+    },
+    {
+      "year": 1989,
+      "exporter": "PNG",
+      "signal": "cash_runway",
+      "insight": "PNG hit with cash_runway in 1989.",
+      "actions": [
+        "ANALYSIS: 13-week cash flow forecast",
+        "ACTION: Activate revolving credit facility",
+        "NEGOTIATE: Extend payables, accelerate receivables",
+        "MEETING: Emergency Board meeting within 48 hours",
+        "ANALYSIS: Options: Distressed financing or sale process"
+      ]
+    }
+  ],
+  "detailed_decisions": [
+    {
+      "decision_id": "c7bf5622-50a2-4e82-9b5d-26c7f0a77525",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-4 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.641487",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "b97fb4da-d98b-43b5-8577-471ef20f954e",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-21 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.641546",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "921304d3-b228-4dc4-8c70-8f8e5520eb82",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-28 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.641595",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "103a9bfe-e3f3-4f89-bf83-03da5b5c5940",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-36 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.641634",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "60290fb4-f8fa-4ed8-ae8d-3657562db96c",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-5 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.641686",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "ac9cd75c-2ae3-4150-a205-561168e42616",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-15 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.641730",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "039e6908-6c76-4a30-9da2-d136a9c10214",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-1 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.641769",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "82cb224c-b05f-45f7-8312-d99953384d19",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-13 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.641808",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "d9e881e5-181f-485f-856a-5755cd7c38f8",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-5 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.641847",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "5a80b693-25f1-4392-9ad7-488737d8f0ae",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-23 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.641883",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "e52e165f-84e9-48d4-89df-0443ce8df6f8",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-0 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.641922",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "207a8dc8-4420-4d7c-8620-a5371b74d4ba",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-4 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.641953",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "89224287-302d-4365-a4f4-db1a0b6ef97f",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-74 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.641981",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "4189ecef-b9ec-414e-ba7f-989af83b58b7",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-1 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642011",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "cb17677a-06da-4b84-be7c-fea591ecef12",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-10 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642045",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "12feff0b-d2d2-4eee-b638-4ab6e3cd4c5f",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-109 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642075",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "db3a37d7-7127-47fa-b4c0-9c4837ee79ec",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-1 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642102",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "8a737385-f4a0-4bb5-8a6f-6fc50299992d",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-33 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642129",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "bd5ad348-2efb-4e05-b75e-8440783bf97a",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-9 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642158",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "73e63842-1f73-44ba-bf75-91a4b6896a9b",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-62 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642186",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "b96bc949-4bfe-4b3c-bb22-15d70e6dc3c6",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-65 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642217",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "2c73912f-0d1c-4e79-9a04-19d72e19a7f1",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-15 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642252",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "351508e1-db9a-49b9-a801-ba0d2e0f8059",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-13 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642281",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "9e124b6d-685b-44d6-bd1d-1df8bb6e0d06",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-10 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642309",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "1621360f-9bcd-4a6a-98d8-be893bad5719",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-20 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642339",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "b9164d52-e6c9-4996-8cc1-2c7dece2aadd",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-6 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642369",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "6bf54b85-bbb6-4e89-8d6e-a1ff6b4935ed",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-31 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642396",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "96c57702-07ee-4156-975a-5b20da2e6814",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-7 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642429",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "a9f9bf69-cf90-4d7d-a54d-df039406c0b2",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-44 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642456",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "6118dbb5-817e-48d0-a47d-98f9f41aecdf",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-4 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642487",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "4fa17d59-d9e7-4558-a9f0-f3b1f1c90369",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-1 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642516",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "1adbaeec-a8ba-4abe-9117-3b7cb01f10a9",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-19 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642543",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "09087ff6-79bf-4f49-831f-b7efd94b7bde",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-9 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642572",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "720996e2-543f-4c1b-b1fd-1ebcabfd9140",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-11 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642602",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "55150f8e-0833-49f2-b2ff-bd7a83a36122",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-72 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642633",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "b9c55a0c-f398-4ec5-8f3d-a62e38da4324",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-26 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642661",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "42b991c2-6af9-492d-955d-021d3430cfaa",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-22 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642689",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "ddd0a673-e5ac-4fd3-b8c8-01477ddb09bd",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-22 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642720",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "b32153e7-4792-4cfc-8bd0-5391b2dd79cc",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-7 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642750",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "e0d0e4ed-b60e-4d37-851e-ad4abebec328",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-18 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642779",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "16e7844e-ef72-42d9-a086-56b0e26db101",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-16 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642811",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "95b461ab-5864-4c0b-9c27-a0174ccf41c6",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-83 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642839",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "b61df64b-7e74-4e6a-817e-b25e614e560d",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-60 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642866",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "c53b59f3-e791-4707-a123-95f3b09d9233",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-32 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642901",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "1ba95fbd-99d1-4b9b-ac00-b3eb08d3df61",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-41 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642933",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "617adcbb-c02f-4dfd-80c9-068ef847cfc9",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-19 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.642960",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "0b9c5cfb-e3c0-4c2b-b3de-aff0d5a7523c",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-2 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.643001",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "a1179e02-032b-46b5-a8bf-68b1be35f199",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-8 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.643031",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "956db1ea-db60-4f76-a5d2-a4c5caa86ca3",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-7 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.643060",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "170ae9e1-dcdf-4c05-b1de-45e0e17085f4",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-11 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.643093",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "1fd1a893-47df-4fd9-a443-f57a38b1a2b7",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-3 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.643120",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "2f5fc372-e001-4dc6-85cf-b56eff487d6d",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-35 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.643148",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "bd98fedb-b750-481d-8018-34ef30bce7bf",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-5 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.643176",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "f96e253a-19cb-4bec-a902-aa31a125d819",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-60 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.643203",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "a6521993-40e8-4d5b-b119-02f5af37ad9b",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-27 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.643321",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "d1c28146-c897-4f90-83f3-95df1d000dda",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-1 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.643350",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "8c42a372-4d61-4b36-b805-d929bbe854f7",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-5 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.643379",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "6a0107c7-a86c-497d-9b33-a6ea40f38a19",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-6 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.643413",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "0249c2cf-2353-47fa-b18b-bf4fc9ba41f7",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-40 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.643440",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "229dfd9e-94ed-4d87-8597-f82c0e0f6bb2",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-16 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.643479",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "24af6a3e-d7c8-4d15-9c6a-c9060f551fe6",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-12 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.643507",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "642b4808-f996-496e-92aa-70175db9e743",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-39 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.643533",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "1cb7f161-765d-42df-b515-7e5ddd17a92e",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-12 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.643560",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "1f27a5be-f23e-4c83-9b35-6a21233abefc",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-3 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.643590",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "ae82ae9c-3214-4ee0-a96c-1b2300302fff",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-16 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.643620",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "62b57ea2-8e28-44d7-9e22-7b053a0653e5",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-88 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.643657",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "fadce232-5dae-43df-a1bb-d6365dfa6ff1",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-13 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.643687",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "71a7a257-e6d0-4ca9-a18d-dc9c0babdb1c",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-2 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.643725",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "1dadf7b5-42bd-43cb-9444-b4633e5a21a6",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-32 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.643752",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "dc1f607c-8401-4fe4-b08f-f47eaa773a6d",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-7 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.643779",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "09773da8-af12-4982-9abb-b235bb29cd5b",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-10 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.643811",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "332e6057-fd0d-4d20-9a93-8c0b660237c6",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-153 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.643840",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "9a85c870-bdc2-4a4c-b368-9f9b6b85ecc3",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-54 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.643868",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "882bde48-cb53-4dbd-9ad9-62255358f071",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-118 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.643895",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "6de6f87e-c449-4fcd-8ecf-0b2f152c901e",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-22 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.643926",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "9763598c-7224-44f2-8c76-66fcbc98ff45",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-13 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.643955",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "629a325d-c111-4521-b1c2-351d2eb00447",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-75 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.643986",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "080684b8-f8a1-4df0-a890-9ce8a8312e14",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-19 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.644015",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "c39cad8e-e94b-4e20-827d-9d1efd6ea0bc",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-60 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.644043",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "3afac0ac-ee9b-491c-bb7e-88da32089963",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-15 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.644072",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "1f9dd3c7-5689-4fd9-8266-04f4c1d48853",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-6 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.644099",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "ee904934-dfdd-4d5d-8f0c-e3a2d044b5e3",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-34 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.644127",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "3c042bb9-a08e-45fc-8492-99bf7c29ba76",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-11 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.644156",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "a9347512-921d-4b4b-9a97-9c6b51729816",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-27 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.644184",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "70a222fb-fc12-4d57-9782-b14a58f95938",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-58 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.644216",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "9d203263-53a9-4388-81d3-147c4c8cfe54",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-23 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.644248",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "56a27c4f-bf0c-476b-8ab5-05511c604970",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-27 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.644275",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "d3ae55be-36b6-4082-9c18-36f1bd6cba53",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-26 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.644313",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "0b410cfd-e9b7-48ac-9dee-82e22c51e7a5",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-4 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.644340",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "dee8a0c9-18ac-49b4-a08a-bdc51b705116",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-2 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.644368",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "822bca0c-b010-4a23-948f-fe73957a90c3",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-4 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.644395",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "35066800-b4dc-4966-bd5d-043b46aa523f",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-19 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.644425",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "974fe84d-298a-4b11-9384-d17cc4e1f2ae",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-46 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.644452",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "6fe73f36-4e95-4329-81bb-2281179258d5",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-53 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.644481",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "0976a66a-1fa6-43a1-a259-d793ff552157",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-12 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.644510",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "6178c7dd-f28c-4199-9e7a-c343d42eb217",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-2 vs Forecast: $0"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.644544",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "c8fc1e99-c7aa-4cdb-bf0a-e1340e07db77",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-15 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.644572",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "614f103e-1560-40e2-b655-7adbafab4dd8",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-12 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.644603",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "d3d987b7-d973-4e90-8ec6-95642d1a6a76",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-26 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.644629",
+      "counterfactual": null
+    },
+    {
+      "decision_id": "c43a74b5-17b0-4ff8-aae1-44dd85f4be2c",
+      "signal": "forecast_miss",
+      "severity": "high",
+      "why_now": [
+        "EXPORTS miss: -100.0% vs forecast",
+        "Actual: $-28 vs Forecast: $0",
+        "Consecutive misses: 1 quarters"
+      ],
+      "actions": [
+        "ANALYSIS: Deep dive on operational breakdown",
+        "MEETING: Emergency management review",
+        "ADJUST: Portfolio valuation marks -15%",
+        "UPDATE: Investor quarterly letter with explanation",
+        "ACTION: Consider management changes if pattern continues"
+      ],
+      "confidence": 0.69,
+      "timestamp": "2025-12-21T11:05:29.644655",
+      "counterfactual": null
+    }
+  ]
+}

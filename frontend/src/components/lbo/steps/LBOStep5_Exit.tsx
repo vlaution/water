@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { EnhancedFormInput } from '../../common/EnhancedFormInput';
 import type { LBOInputState } from '../../../types/lbo';
 
@@ -8,6 +9,7 @@ interface LBOStep5Props {
 }
 
 export const LBOStep5_Exit: React.FC<LBOStep5Props> = ({ data, onChange }) => {
+    const { t } = useTranslation();
 
     const updateField = (field: keyof LBOInputState, value: any) => {
         onChange({ ...data, [field]: value });
@@ -22,12 +24,12 @@ export const LBOStep5_Exit: React.FC<LBOStep5Props> = ({ data, onChange }) => {
 
     return (
         <div className="space-y-6 animate-fade-in">
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 border-b border-gray-100 dark:border-white/10 pb-2">Step 5: Assumptions & Exit</h3>
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 border-b border-gray-100 dark:border-white/10 pb-2">{t('lbo.step5_title')}</h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <EnhancedFormInput
-                        label="Revenue Growth Rate (%)"
+                        label={`${t('lbo.revenue_growth_rate')} (%)`}
                         type="number"
                         step="0.1"
                         value={data.revenue_growth_rate * 100}
@@ -36,7 +38,7 @@ export const LBOStep5_Exit: React.FC<LBOStep5Props> = ({ data, onChange }) => {
                 </div>
                 <div>
                     <EnhancedFormInput
-                        label="EBITDA Margin (%)"
+                        label={`${t('lbo.ebitda_margin')} (%)`}
                         type="number"
                         step="0.1"
                         value={data.ebitda_margin * 100}
@@ -45,7 +47,7 @@ export const LBOStep5_Exit: React.FC<LBOStep5Props> = ({ data, onChange }) => {
                 </div>
                 <div>
                     <EnhancedFormInput
-                        label="CapEx (% of Rev)"
+                        label={`${t('lbo.capex_percent_rev')} (%)`}
                         type="number"
                         step="0.1"
                         value={data.capex_percentage * 100}
@@ -54,7 +56,7 @@ export const LBOStep5_Exit: React.FC<LBOStep5Props> = ({ data, onChange }) => {
                 </div>
                 <div>
                     <EnhancedFormInput
-                        label="NWC (% of Rev)"
+                        label={`${t('lbo.nwc_percent_rev')} (%)`}
                         type="number"
                         step="0.1"
                         value={data.nwc_percentage * 100}
@@ -63,11 +65,11 @@ export const LBOStep5_Exit: React.FC<LBOStep5Props> = ({ data, onChange }) => {
                 </div>
 
                 <div className="md:col-span-2 pt-4 border-t border-gray-100 dark:border-white/10">
-                    <h4 className="text-md font-semibold text-gray-700 dark:text-gray-200 mb-4">Exit Assumptions</h4>
+                    <h4 className="text-md font-semibold text-gray-700 dark:text-gray-200 mb-4">{t('lbo.exit_assumptions')}</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <EnhancedFormInput
-                                label="Holding Period (Years)"
+                                label={`${t('lbo.holding_period_years')} (Years)`}
                                 type="number"
                                 value={data.holding_period}
                                 onChange={(e) => updateField('holding_period', parseInt(e.target.value))}
@@ -75,7 +77,7 @@ export const LBOStep5_Exit: React.FC<LBOStep5Props> = ({ data, onChange }) => {
                         </div>
                         <div>
                             <EnhancedFormInput
-                                label="Exit Multiple (x EBITDA)"
+                                label={`${t('lbo.exit_multiple_x_ebitda')} (x)`}
                                 type="number"
                                 step="0.1"
                                 value={data.exit_ev_ebitda_multiple}
@@ -84,11 +86,11 @@ export const LBOStep5_Exit: React.FC<LBOStep5Props> = ({ data, onChange }) => {
                         </div>
 
                         <div className="md:col-span-2 pt-4 border-t border-gray-100 dark:border-white/10">
-                            <h4 className="text-md font-semibold text-gray-700 dark:text-gray-200 mb-2">Waterfall Distribution</h4>
+                            <h4 className="text-md font-semibold text-gray-700 dark:text-gray-200 mb-2">{t('lbo.waterfall')}</h4>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <div>
                                     <EnhancedFormInput
-                                        label="Hurdle Rate (%)"
+                                        label={`${t('lbo.hurdle_rate_percent')} (%)`}
                                         type="number" step="0.5"
                                         value={(data.assumptions.hurdle_rate || 0.08) * 100}
                                         onChange={(e) => updateAssumption('hurdle_rate', parseFloat(e.target.value) / 100)}
@@ -96,7 +98,7 @@ export const LBOStep5_Exit: React.FC<LBOStep5Props> = ({ data, onChange }) => {
                                 </div>
                                 <div>
                                     <EnhancedFormInput
-                                        label="Carry %"
+                                        label={`${t('lbo.carry_percent')} (%)`}
                                         type="number" step="1"
                                         value={(data.assumptions.carry_percent || 0.20) * 100}
                                         onChange={(e) => updateAssumption('carry_percent', parseFloat(e.target.value) / 100)}
@@ -110,7 +112,7 @@ export const LBOStep5_Exit: React.FC<LBOStep5Props> = ({ data, onChange }) => {
                                             onChange={(e) => onChange({ ...data, assumptions: { ...data.assumptions, catchup_active: e.target.checked } })}
                                             className="rounded text-system-blue focus:ring-system-blue"
                                         />
-                                        GP Catch-up Active
+                                        {t('lbo.gp_catchup_active')}
                                     </label>
                                 </div>
                             </div>

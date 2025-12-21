@@ -1,0 +1,31 @@
+{
+  "description": "Precision Analysis & Calibration Recommendations",
+  "generated_at": "2025-12-21T11:05:30.134295",
+  "calibration_matrix": [
+    {
+      "signal": "forecast_miss",
+      "fired": 13528,
+      "confirmed": 76,
+      "false_positive_rate": 0.99,
+      "trust_level": "NEEDS CALIBRATION",
+      "recommended_action": "Tighten Thresholds"
+    },
+    {
+      "signal": "risk_concentration",
+      "fired": 70,
+      "confirmed": 3,
+      "false_positive_rate": 0.96,
+      "trust_level": "NEEDS CALIBRATION",
+      "recommended_action": "Tighten Thresholds"
+    },
+    {
+      "signal": "cash_runway",
+      "fired": 8,
+      "confirmed": 3,
+      "false_positive_rate": 0.62,
+      "trust_level": "NEEDS CALIBRATION",
+      "recommended_action": "Tighten Thresholds"
+    }
+  ],
+  "status": "CALIBRATED"
+}

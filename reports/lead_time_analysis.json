@@ -1,0 +1,106 @@
+{
+  "description": "Lead Time Analysis vs Real-World Events",
+  "generated_at": "2025-12-21T11:05:30.133489",
+  "top_lead_times": [
+    {
+      "decision_id": "16d839bb-a4ec-43a5-8497-d9b9d1dd3034",
+      "signal": "forecast_miss",
+      "entity": "NGA",
+      "first_fired": "2000-06-01",
+      "real_world_event": "Debt Restructuring Agreement",
+      "event_date": "2000-12-13",
+      "lead_time_days": 195,
+      "severity": "HIGH"
+    },
+    {
+      "decision_id": "8a81ceb6-1249-4f28-a2ed-848acc2b9c59",
+      "signal": "forecast_miss",
+      "entity": "NGA",
+      "first_fired": "2000-06-01",
+      "real_world_event": "Debt Restructuring Agreement",
+      "event_date": "2000-12-13",
+      "lead_time_days": 195,
+      "severity": "HIGH"
+    },
+    {
+      "decision_id": "c8993893-31df-4a52-88d9-e215c25e211f",
+      "signal": "forecast_miss",
+      "entity": "NGA",
+      "first_fired": "2000-06-01",
+      "real_world_event": "Debt Restructuring Agreement",
+      "event_date": "2000-12-13",
+      "lead_time_days": 195,
+      "severity": "HIGH"
+    },
+    {
+      "decision_id": "3d5f291d-5310-4aff-8f9c-8308f4a8f4fd",
+      "signal": "forecast_miss",
+      "entity": "NGA",
+      "first_fired": "2000-06-01",
+      "real_world_event": "Debt Restructuring Agreement",
+      "event_date": "2000-12-13",
+      "lead_time_days": 195,
+      "severity": "HIGH"
+    },
+    {
+      "decision_id": "503bc989-72dc-4ef6-a41a-7fe457f2570a",
+      "signal": "forecast_miss",
+      "entity": "NGA",
+      "first_fired": "2000-06-01",
+      "real_world_event": "Debt Restructuring Agreement",
+      "event_date": "2000-12-13",
+      "lead_time_days": 195,
+      "severity": "HIGH"
+    },
+    {
+      "decision_id": "e95b3f14-e142-43af-9c09-2c5fafad9a67",
+      "signal": "forecast_miss",
+      "entity": "NGA",
+      "first_fired": "2000-06-01",
+      "real_world_event": "Debt Restructuring Agreement",
+      "event_date": "2000-12-13",
+      "lead_time_days": 195,
+      "severity": "HIGH"
+    },
+    {
+      "decision_id": "2491c852-6d00-4aaf-88c5-a7f9250e7145",
+      "signal": "forecast_miss",
+      "entity": "NGA",
+      "first_fired": "2000-06-01",
+      "real_world_event": "Debt Restructuring Agreement",
+      "event_date": "2000-12-13",
+      "lead_time_days": 195,
+      "severity": "HIGH"
+    },
+    {
+      "decision_id": "f1d70ac1-b39f-432c-a93e-2d85624e60b6",
+      "signal": "forecast_miss",
+      "entity": "NGA",
+      "first_fired": "2000-06-01",
+      "real_world_event": "Debt Restructuring Agreement",
+      "event_date": "2000-12-13",
+      "lead_time_days": 195,
+      "severity": "HIGH"
+    },
+    {
+      "decision_id": "c32dcb3e-b2d1-4c52-b835-b4db789ec832",
+      "signal": "forecast_miss",
+      "entity": "NGA",
+      "first_fired": "2000-06-01",
+      "real_world_event": "Debt Restructuring Agreement",
+      "event_date": "2000-12-13",
+      "lead_time_days": 195,
+      "severity": "HIGH"
+    },
+    {
+      "decision_id": "1b237d7e-a686-4747-8450-d8a6912d8eda",
+      "signal": "forecast_miss",
+      "entity": "NGA",
+      "first_fired": "2000-06-01",
+      "real_world_event": "Debt Restructuring Agreement",
+      "event_date": "2000-12-13",
+      "lead_time_days": 195,
+      "severity": "HIGH"
+    }
+  ]
+}

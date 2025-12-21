@@ -1,6 +1,144 @@
 use wasm_bindgen::prelude::*;
 use serde::{Serialize, Deserialize};
 
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
+#[serde(rename_all = "snake_case")]
+pub enum LBOSolverMode {
+    EntryPrice,
+    TargetIrr,
+    ExitMultiple,
+    Moic,
+    OptimalRefinancing,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
+#[serde(rename_all = "snake_case")]
+pub enum DebtType {
+    Senior,
+    Mezzanine,
+    Exchangeable,
+    PreferredEquity,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct DebtTranche {
+    pub name: String,
+    pub amount: Option<f64>,
+    pub leverage_multiple: Option<f64>,
+    pub interest_rate: f64,
+    pub cash_interest: bool,
+    pub amortization_rate: f64,
+    pub maturity: i32,
+    pub mandatory_cash_sweep_priority: i32,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct RefinancingConfig {
+    pub enabled: bool,
+    pub refinance_year: i32,
+    pub new_interest_rate: f64,
+    pub refinance_amount_pct: f64,
+    pub penalty_fee_percent: f64,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
+#[serde(rename_all = "snake_case")]
+pub enum CovenantType {
+    MaxDebtEbitda,
+    MinInterestCoverage,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct CovenantRule {
+    pub covenant_type: CovenantType,
+    pub limit: f64,
+    pub start_year: i32,
+    pub end_year: i32,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct MIPTranche {
+    pub name: String,
+    pub allocation_percent: f64,
+    pub vesting_type: String,
+    pub vesting_period_years: f64,
+    pub cliff_years: f64,
+    pub performance_target_moic: Option<f64>,
+    pub strike_price: f64,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct MIPConfig {
+    pub option_pool_percent: f64,
+    pub strike_price_discount: f64,
+    pub vesting_period: i32,
+    pub cliff_years: i32,
+    #[serde(default)]
+    pub tranches: Vec<MIPTranche>,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct TaxConfig {
+    pub enable_nol: bool,
+    pub initial_nol_balance: f64,
+    pub nol_annual_limit: f64,
+    pub interest_deductibility_cap: f64,
+    pub step_up_percent: f64,
+    pub depreciation_years: i32,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct LBOFinancing {
+    pub tranches: Vec<DebtTranche>,
+    pub total_leverage_ratio: Option<f64>,
+    pub equity_contribution_percent: Option<f64>,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct LBOAssumptions {
+    pub transaction_fees_percent: f64,
+    pub synergy_benefits: f64,
+    pub hurdle_rate: f64,
+    pub carry_percent: f64,
+    pub catchup_active: bool,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct LBOInput {
+    pub solve_for: LBOSolverMode,
+    pub entry_revenue: f64,
+    pub entry_ebitda: f64,
+    pub entry_ev_ebitda_multiple: Option<f64>,
+    pub financing: LBOFinancing,
+    pub assumptions: LBOAssumptions,
+    pub revenue_growth_rate: f64,
+    pub ebitda_margin: f64,
+    pub capex_percentage: f64,
+    pub nwc_percentage: f64,
+    pub tax_rate: f64,
+    pub holding_period: i32,
+    pub exit_ev_ebitda_multiple: Option<f64>,
+    pub target_irr: Option<f64>,
+    #[serde(default)]
+    pub include_sensitivity: bool,
+    pub refinancing_config: Option<RefinancingConfig>,
+    #[serde(default)]
+    pub covenants: Vec<CovenantRule>,
+    pub mip_assumptions: Option<MIPConfig>,
+    pub tax_assumptions: Option<TaxConfig>,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct LBOResult {
+    pub irr: f64,
+    pub moic: f64,
+    pub entry_valuation: f64,
+    pub exit_valuation: f64,
+    pub equity_check: f64,
+    pub created_at_ms: f64, 
+    pub error: Option<String>,
+}
+
 #[derive(Serialize, Deserialize)]
 pub struct FundModel {
     pub name: String,
@@ -289,4 +427,293 @@ fn calculate_irr(cash_flows: &[f64]) -> f64 {
         guess = new_guess;
     }
     guess
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct SensitivityInput {
+    pub variable_1: String,
+    pub range_1: Vec<f64>,
+    pub variable_2: String,
+    pub range_2: Vec<f64>,
+}
+
+#[wasm_bindgen]
+pub fn calculate_lbo(input_val: JsValue) -> Result<JsValue, JsValue> {
+    let input: LBOInput = serde_wasm_bindgen::from_value(input_val)?;
+    
+    let result = match input.solve_for {
+        LBOSolverMode::EntryPrice => solve_for_entry_multiple(&input),
+        LBOSolverMode::ExitMultiple => solve_for_exit_multiple(&input),
+        _ => evaluate_lbo(&input, input.entry_ev_ebitda_multiple.unwrap_or(10.0)),
+    };
+    
+    Ok(serde_wasm_bindgen::to_value(&result)?)
+}
+
+#[wasm_bindgen]
+pub fn calculate_sensitivity(lbo_input_val: JsValue, sens_input_val: JsValue) -> Result<JsValue, JsValue> {
+    let base_input: LBOInput = serde_wasm_bindgen::from_value(lbo_input_val)?;
+    let sens: SensitivityInput = serde_wasm_bindgen::from_value(sens_input_val)?;
+    
+    // Matrix of results (Returns IRR for now)
+    let mut matrix: Vec<Vec<f64>> = Vec::new();
+    
+    for v1 in &sens.range_1 {
+        let mut row: Vec<f64> = Vec::new();
+        for v2 in &sens.range_2 {
+            let mut run_input = base_input.clone();
+            apply_override(&mut run_input, &sens.variable_1, *v1);
+            apply_override(&mut run_input, &sens.variable_2, *v2);
+            
+            let res = evaluate_lbo(&run_input, run_input.entry_ev_ebitda_multiple.unwrap_or(10.0));
+            row.push(res.irr);
+        }
+        matrix.push(row);
+    }
+    
+    Ok(serde_wasm_bindgen::to_value(&matrix)?)
+}
+fn apply_override(input: &mut LBOInput, var: &str, val: f64) {
+    match var {
+        "entry_multiple" | "entry_ev_ebitda_multiple" => input.entry_ev_ebitda_multiple = Some(val),
+        "exit_multiple" | "exit_ev_ebitda_multiple" => input.exit_ev_ebitda_multiple = Some(val),
+        "leverage" | "total_leverage_ratio" => input.financing.total_leverage_ratio = Some(val),
+        "revenue_growth" | "revenue_growth_rate" => input.revenue_growth_rate = val,
+        "ebitda_margin" => input.ebitda_margin = val,
+        "revenue" | "entry_revenue" => input.entry_revenue = val,
+        _ => {}
+    }
+}
+
+fn solve_for_entry_multiple(input: &LBOInput) -> LBOResult {
+    let target_irr = input.target_irr.unwrap_or(0.20);
+    
+    // Secant Method
+    let mut x0 = 8.0;
+    let mut x1 = 12.0;
+    
+    let res0 = evaluate_lbo(input, x0);
+    let mut f0 = res0.irr - target_irr;
+    
+    let res1 = evaluate_lbo(input, x1);
+    let mut f1 = res1.irr - target_irr;
+    
+    let mut final_mult = x1;
+    
+    for _ in 0..10 {
+        if f1.abs() < 0.0001 {
+            final_mult = x1;
+            break;
+        }
+        
+        let denominator = f1 - f0;
+        if denominator.abs() < 1e-9 { break; }
+        
+        let x2 = x1 - f1 * (x1 - x0) / denominator;
+        let x2 = x2.max(1.0).min(50.0);
+        
+        x0 = x1;
+        f0 = f1;
+        x1 = x2;
+        
+        let res2 = evaluate_lbo(input, x1);
+        f1 = res2.irr - target_irr;
+        final_mult = x1;
+    }
+    
+    evaluate_lbo(input, final_mult)
+}
+
+fn solve_for_exit_multiple(input: &LBOInput) -> LBOResult {
+    let target_irr = input.target_irr.unwrap_or(0.20);
+    
+    // Secant Method for exit multiple
+    let mut x0 = 8.0;
+    let mut x1 = 12.0;
+    
+    let res0 = evaluate_lbo_with_exit(input, x0);
+    let mut f0 = res0.irr - target_irr;
+    
+    let res1 = evaluate_lbo_with_exit(input, x1);
+    let mut f1 = res1.irr - target_irr;
+    
+    let mut final_mult = x1;
+    
+    for _ in 0..10 {
+        if f1.abs() < 0.0001 {
+            final_mult = x1;
+            break;
+        }
+        
+        let denominator = f1 - f0;
+        if denominator.abs() < 1e-9 { break; }
+        
+        let x2 = x1 - f1 * (x1 - x0) / denominator;
+        let x2 = x2.max(1.0).min(50.0);
+        
+        x0 = x1;
+        f0 = f1;
+        x1 = x2;
+        
+        let res2 = evaluate_lbo_with_exit(input, x1);
+        f1 = res2.irr - target_irr;
+        final_mult = x1;
+    }
+    
+    evaluate_lbo_with_exit(input, final_mult)
+}
+
+fn evaluate_lbo_with_exit(input: &LBOInput, exit_multiple: f64) -> LBOResult {
+    let mut modified_input = input.clone();
+    modified_input.exit_ev_ebitda_multiple = Some(exit_multiple);
+    evaluate_lbo(&modified_input, modified_input.entry_ev_ebitda_multiple.unwrap_or(10.0))
+}
+
+fn evaluate_lbo(input: &LBOInput, entry_multiple: f64) -> LBOResult {
+    // 1. Setup Deal Structure
+    let entry_ev = input.entry_ebitda * entry_multiple;
+    
+    let mut total_debt = 0.0;
+    let mut tranches: Vec<DebtTranche> = input.financing.tranches.clone();
+    let mut tranche_balances: Vec<f64> = Vec::new();
+    
+    for t in &tranches {
+        let amount = if let Some(a) = t.amount { a }
+                     else if let Some(m) = t.leverage_multiple { m * input.entry_ebitda }
+                     else { 0.0 };
+        total_debt += amount;
+        tranche_balances.push(amount);
+    }
+    
+    let fees = entry_ev * input.assumptions.transaction_fees_percent;
+    let initial_equity = entry_ev - total_debt + fees;
+    
+    // 2. Projection Loop
+    let mut current_revenue = input.entry_revenue;
+    let mut current_nol = if let Some(ref tax) = input.tax_assumptions {
+        if tax.enable_nol { tax.initial_nol_balance } else { 0.0 }
+    } else { 0.0 };
+
+    let mut final_ebitda = input.entry_ebitda;
+
+    for _year in 1..=input.holding_period {
+        // Growth & Synergies
+        current_revenue *= 1.0 + input.revenue_growth_rate;
+        let synergy = input.assumptions.synergy_benefits;
+        let yr_ebitda = current_revenue * input.ebitda_margin + synergy;
+        final_ebitda = yr_ebitda;
+        
+        // Operations (3% D&A placeholder to match Python)
+        let da = current_revenue * 0.03;
+        let ebit = yr_ebitda - da;
+        
+        // Interest
+        let mut total_cash_interest = 0.0;
+        for i in 0..tranches.len() {
+            let interest = tranche_balances[i] * tranches[i].interest_rate;
+            if tranches[i].cash_interest {
+                total_cash_interest += interest;
+            } else {
+                // PIK Accrual (Matches Python line 297)
+                tranche_balances[i] += interest;
+            }
+        }
+
+        // Tax Logic (Matches Python simplification: only cash interest is deductible)
+        let mut deductible_interest = total_cash_interest;
+        if let Some(ref tax) = input.tax_assumptions {
+            if tax.interest_deductibility_cap > 0.0 {
+                let cap = yr_ebitda * tax.interest_deductibility_cap;
+                deductible_interest = total_cash_interest.min(cap);
+            }
+        }
+
+        let pre_tax_income = ebit - deductible_interest;
+        
+        // Step-up (simplified)
+        let mut step_up_deduction = 0.0;
+        if let Some(ref tax) = input.tax_assumptions {
+            if tax.step_up_percent > 0.0 {
+                let basis = entry_ev * tax.step_up_percent;
+                step_up_deduction = basis / (tax.depreciation_years as f64).max(1.0);
+            }
+        }
+
+        let mut taxable_income = pre_tax_income - step_up_deduction;
+        
+        // NOLs
+        if let Some(ref tax) = input.tax_assumptions {
+            if tax.enable_nol && current_nol > 0.0 {
+                let max_usage = (taxable_income * tax.nol_annual_limit).max(0.0);
+                let actual_usage = current_nol.min(max_usage).min(taxable_income.max(0.0));
+                taxable_income -= actual_usage;
+                current_nol -= actual_usage;
+            } else if pre_tax_income < 0.0 && tax.enable_nol {
+                current_nol += pre_tax_income.abs();
+                taxable_income = 0.0;
+            }
+        }
+
+        let taxes = (taxable_income.max(0.0)) * input.tax_rate;
+        
+        // FCF available for debt (Matches Python line 341)
+        let capex = current_revenue * input.capex_percentage;
+        let prev_rev = current_revenue / (1.0 + input.revenue_growth_rate);
+        let change_nwc = (current_revenue - prev_rev) * input.nwc_percentage;
+        
+        let fcf = yr_ebitda - taxes - capex - change_nwc - total_cash_interest;
+        
+        // Debt Payments
+        let mut remaining_fcf = fcf.max(0.0);
+        
+        // 1. Mandatory Amortization
+        for i in 0..tranches.len() {
+            if tranches[i].amortization_rate > 0.0 {
+                let original_amount = if let Some(a) = tranches[i].amount { a }
+                                      else { tranches[i].leverage_multiple.unwrap_or(0.0) * input.entry_ebitda };
+                let amort = original_amount * tranches[i].amortization_rate;
+                let actual_amort = remaining_fcf.min(amort).min(tranche_balances[i]);
+                tranche_balances[i] -= actual_amort;
+                remaining_fcf -= actual_amort;
+            }
+        }
+
+        // 2. Cash Sweep (Matches Python priority-based sweep)
+        let mut sweep_indices: Vec<usize> = (0..tranches.len()).collect();
+        sweep_indices.sort_by_key(|&i| tranches[i].mandatory_cash_sweep_priority);
+
+        for &i in &sweep_indices {
+            if tranches[i].cash_interest { // Usually only sweep cash tranches in this model
+                let paydown = remaining_fcf.min(tranche_balances[i]);
+                tranche_balances[i] -= paydown;
+                remaining_fcf -= paydown;
+            }
+        }
+    }
+    
+    // 3. Exit
+    let exit_multiple = input.exit_ev_ebitda_multiple.unwrap_or(entry_multiple);
+    let exit_ev = final_ebitda * exit_multiple;
+    let ending_debt: f64 = tranche_balances.iter().sum();
+    let exit_equity = exit_ev - ending_debt;
+    
+    // 4. Returns (CAGR for Parity with simplified Python model)
+    let moic = if initial_equity > 0.0 { exit_equity / initial_equity } else { 0.0 };
+    let irr = if initial_equity > 0.0 && exit_equity > 0.0 {
+        (exit_equity / initial_equity).powf(1.0 / input.holding_period as f64) - 1.0
+    } else if exit_equity <= 0.0 {
+        -1.0
+    } else {
+        0.0
+    };
+    
+    LBOResult {
+        irr,
+        moic,
+        entry_valuation: entry_ev,
+        exit_valuation: exit_ev,
+        equity_check: initial_equity,
+        created_at_ms: 0.0,
+        error: None,
+    }
 }

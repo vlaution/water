@@ -284,11 +284,25 @@ async def save_valuation_data(
         rev_val = None
         ebitda_val = None
         if data.financials:
-             # Sort by year just in case
-             sorted_fin = sorted(data.financials, key=lambda x: x.year)
-             if sorted_fin:
-                 rev_val = sorted_fin[0].revenue # First available year (2024)
-                 ebitda_val = sorted_fin[0].ebitda
+             # Find LTM if available (Year "LTM")
+             ltm_data = next((f for f in data.financials if str(f.year).upper() == "LTM"), None)
+             
+             if ltm_data:
+                 rev_val = ltm_data.revenue
+                 ebitda_val = ltm_data.ebitda
+             else:
+                 # Fallback: Sort by year just in case and take first (usually Current/LTM or FY+1)
+                 # If years are integers, sort ascending. If strings, might be tricky.
+                 # Let's filter for ints for sorting
+                 int_years = [f for f in data.financials if isinstance(f.year, int)]
+                 if int_years:
+                     sorted_fin = sorted(int_years, key=lambda x: x.year)
+                     rev_val = sorted_fin[0].revenue # First available year 
+                     ebitda_val = sorted_fin[0].ebitda
+                 elif data.financials:
+                     # Just take the first one if only strings (e.g. "FY24")
+                     rev_val = data.financials[0].revenue
+                     ebitda_val = data.financials[0].ebitda
         
         wacc_val = None
         if data.wacc_metrics:

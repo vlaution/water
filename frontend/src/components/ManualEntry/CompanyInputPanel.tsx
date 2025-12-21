@@ -40,6 +40,23 @@ export const CompanyInputPanel: React.FC<CompanyInputPanelProps> = ({ formData, 
                                             beta: data.beta || prev.beta,
                                             cost_of_debt: data.cost_of_debt || prev.cost_of_debt,
                                             tax_rate: data.tax_rate || prev.tax_rate,
+                                            dcf_input: {
+                                                ...prev.dcf_input,
+                                                historical: {
+                                                    ...prev.dcf_input.historical,
+                                                    // Convert raw values to Millions ($M)
+                                                    revenue: (data.revenue || []).map((v: number) => v / 1000000),
+                                                    ebitda: (data.ebitda || []).map((v: number) => v / 1000000),
+                                                    ebit: (data.ebit || []).map((v: number) => v / 1000000),
+                                                    net_income: (data.net_income || []).map((v: number) => v / 1000000),
+                                                    capex: (data.capex || []).map((v: number) => v / 1000000),
+                                                    nwc: (data.nwc || []).map((v: number) => v / 1000000),
+                                                    years: data.years || prev.dcf_input.historical.years
+                                                },
+                                                net_debt: (data.net_debt || 0) / 1000000,
+                                                shares_outstanding: (data.shares_outstanding || 0) / 1000000 // Shares also in Millions usually? Or kept raw? Let's stick to M for consistency or explicit label.
+                                                // Actually shares are usually in Millions too for EPS. Let's assume M.
+                                            }
                                         }));
                                     }
                                 } catch (e) {

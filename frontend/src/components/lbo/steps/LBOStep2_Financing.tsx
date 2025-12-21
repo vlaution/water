@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { EnhancedFormInput } from '../../common/EnhancedFormInput';
 import { MarketRateInput } from '../../common/MarketRateInput';
 import { History, Zap, RefreshCw, BarChart2, TrendingUp, Plus, Trash2 } from 'lucide-react';
@@ -37,6 +38,7 @@ export const LBOStep2_Financing: React.FC<LBOStep2Props> = ({
     fetchAdvisory, isFetchingAdvice, advisoryData, setAdvisoryData, applyAdvisory,
     marketRates
 }) => {
+    const { t } = useTranslation();
     // Local State for Refi Optimizer UI
     const [showRefiOptimizer, setShowRefiOptimizer] = useState(false);
     const [refiParams, setRefiParams] = useState({ newRate: 0.06, costPercent: 0.01 });
@@ -115,17 +117,17 @@ export const LBOStep2_Financing: React.FC<LBOStep2Props> = ({
 
     return (
         <div className="space-y-6 animate-fade-in">
-            <div className="flex justify-between items-center border-b border-gray-100 pb-2">
-                <h3 className="text-lg font-semibold text-gray-800">Step 2: Financing Structure</h3>
+            <div className="flex justify-between items-center border-b border-gray-100 dark:border-white/10 pb-2">
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">{t('lbo.step2_title')}</h3>
                 <div className="flex gap-2 items-center">
                     {isHistoricalMode ? (
                         <div className="flex items-center gap-2 animate-fade-in">
                             <select
                                 value={selectedSnapshotId}
                                 onChange={onSnapshotSelect}
-                                className="text-sm border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 py-1"
+                                className="text-sm border-gray-300 dark:border-white/20 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 py-1 bg-white dark:bg-white/10 dark:text-gray-200"
                             >
-                                <option value="">Select Date...</option>
+                                <option value="">{t('lbo.select_date')}</option>
                                 {snapshots.map(s => (
                                     <option key={s.id} value={s.id}>
                                         {new Date(s.date).toLocaleDateString()}
@@ -134,9 +136,9 @@ export const LBOStep2_Financing: React.FC<LBOStep2Props> = ({
                             </select>
                             <button
                                 onClick={toggleHistoricalMode}
-                                className="text-xs text-gray-500 hover:text-gray-700 underline"
+                                className="text-xs text-gray-500 hover:text-gray-700 underline dark:text-gray-400 dark:hover:text-gray-200"
                             >
-                                Switch to Live
+                                {t('lbo.switch_to_live')}
                             </button>
                         </div>
                     ) : (
@@ -157,7 +159,7 @@ export const LBOStep2_Financing: React.FC<LBOStep2Props> = ({
                                 title="Fetch live interest rates from FRED"
                             >
                                 {isFetchingMarketData ? <RefreshCw className="animate-spin" size={14} /> : <Zap size={14} />}
-                                Live Rates
+                                {t('lbo.live_rates')}
                             </button>
                         </>
                     )}
@@ -171,7 +173,7 @@ export const LBOStep2_Financing: React.FC<LBOStep2Props> = ({
                             title={`Fetch typical leverage for ${data.sector}`}
                         >
                             <BarChart2 size={14} />
-                            Sector Leverage
+                            {t('lbo.sector_leverage')}
                         </button>
                     )}
 
@@ -184,12 +186,12 @@ export const LBOStep2_Financing: React.FC<LBOStep2Props> = ({
                             title="Get AI Debt Structure Recommendation"
                         >
                             {isFetchingAdvice ? <RefreshCw className="animate-spin" size={14} /> : <Zap size={14} />}
-                            AI Advice
+                            {t('lbo.ai_advice')}
                         </button>
                     )}
 
                     <button type="button" onClick={addTranche} className="text-sm bg-system-blue text-white font-medium flex items-center gap-1 hover:bg-blue-600 px-3 py-1.5 rounded-lg shadow-md hover:shadow-lg transition-all">
-                        <Plus size={16} /> Add Tranche
+                        <Plus size={16} /> {t('lbo.add_tranche')}
                     </button>
                     <button
                         type="button"
@@ -197,13 +199,13 @@ export const LBOStep2_Financing: React.FC<LBOStep2Props> = ({
                         className="text-sm bg-green-500/10 text-green-600 dark:text-green-400 font-medium flex items-center gap-1 hover:bg-green-500/20 px-3 py-1.5 rounded-lg border border-green-500/20 transition-all"
                     >
                         <TrendingUp size={14} />
-                        Refi Optimizer
+                        {t('lbo.refi_optimizer')}
                     </button>
                 </div>
             </div>
 
             {showRefiOptimizer && (
-                <div className="bg-green-50 dark:bg-green-900/10 p-6 rounded-xl border border-green-100 dark:border-green-500/20 mb-6 animate-fade-in relative">
+                <div className="bg-green-50 dark:bg-green-900/10 p-6 rounded-xl border border-green-100 dark:border-green-500/20 mb-6 animate-fade-in relative shadow-sm">
                     <button
                         onClick={() => setShowRefiOptimizer(false)}
                         className="absolute top-4 right-4 text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-200"
@@ -212,12 +214,12 @@ export const LBOStep2_Financing: React.FC<LBOStep2Props> = ({
                     </button>
                     <h4 className="text-lg font-bold text-green-900 dark:text-green-100 mb-4 flex items-center gap-2">
                         <TrendingUp size={20} />
-                        Refinancing Optimizer
+                        {t('lbo.refinancing_optimizer_title')}
                     </h4>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div className="space-y-4">
                             <div>
-                                <label className="block text-xs font-medium text-green-800 dark:text-green-300 mb-1">Current W.A. Interest Rate</label>
+                                <label className="block text-xs font-medium text-green-800 dark:text-green-300 mb-1">{t('lbo.current_wa_rate')}</label>
                                 <div className="text-xl font-bold text-green-900 dark:text-green-100">
                                     {(() => {
                                         const totalDebt = data.financing.tranches.reduce((sum, t) => sum + (t.amount || (t.leverage_multiple || 0) * data.entry_ebitda), 0);
@@ -229,7 +231,7 @@ export const LBOStep2_Financing: React.FC<LBOStep2Props> = ({
                             </div>
                             <div>
                                 <EnhancedFormInput
-                                    label="New Interest Rate (%)"
+                                    label={`${t('lbo.new_interest_rate_percent')} (%)`}
                                     type="number"
                                     value={refiParams.newRate * 100}
                                     onChange={(e) => setRefiParams(p => ({ ...p, newRate: parseFloat(e.target.value) / 100 }))}
@@ -239,7 +241,7 @@ export const LBOStep2_Financing: React.FC<LBOStep2Props> = ({
                             </div>
                             <div>
                                 <EnhancedFormInput
-                                    label="Refinancing Cost (%)"
+                                    label={`${t('lbo.refinancing_cost_percent')} (%)`}
                                     type="number"
                                     value={refiParams.costPercent * 100}
                                     onChange={(e) => setRefiParams(p => ({ ...p, costPercent: parseFloat(e.target.value) / 100 }))}
@@ -249,9 +251,9 @@ export const LBOStep2_Financing: React.FC<LBOStep2Props> = ({
                             </div>
                             <button
                                 onClick={calculateRefi}
-                                className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
+                                className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors text-sm font-medium shadow-sm"
                             >
-                                Analyze Savings
+                                {t('lbo.analyze_savings')}
                             </button>
                         </div>
 
@@ -259,13 +261,13 @@ export const LBOStep2_Financing: React.FC<LBOStep2Props> = ({
                             <div className="col-span-2 bg-white/60 dark:bg-white/5 p-4 rounded-xl border border-green-200 dark:border-green-500/20">
                                 <div className="flex justify-between items-start mb-4">
                                     <div>
-                                        <div className="text-sm text-green-800 dark:text-green-300 font-medium">Recommendation</div>
+                                        <div className="text-sm text-green-800 dark:text-green-300 font-medium">{t('lbo.recommendation')}</div>
                                         <div className={`text-xl font-bold ${refiResult.net_present_value > 0 ? 'text-green-700 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                                             {refiResult.recommendation}
                                         </div>
                                     </div>
                                     <div className="text-right">
-                                        <div className="text-sm text-green-800 dark:text-green-300 font-medium">Net Present Value (NPV)</div>
+                                        <div className="text-sm text-green-800 dark:text-green-300 font-medium">{t('lbo.npv')}</div>
                                         <div className={`text-xl font-bold ${refiResult.net_present_value > 0 ? 'text-green-700 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                                             ${refiResult.net_present_value.toLocaleString()}
                                         </div>
@@ -274,22 +276,22 @@ export const LBOStep2_Financing: React.FC<LBOStep2Props> = ({
 
                                 <div className="grid grid-cols-3 gap-4 pt-4 border-t border-green-200 dark:border-green-900/50">
                                     <div>
-                                        <div className="text-xs text-green-700 dark:text-green-400">Annual Savings (After-Tax)</div>
+                                        <div className="text-xs text-green-700 dark:text-green-400">{t('lbo.annual_savings_after_tax')}</div>
                                         <div className="font-semibold text-green-900 dark:text-green-100">${refiResult.annual_interest_savings.toLocaleString()}</div>
                                     </div>
                                     <div>
-                                        <div className="text-xs text-green-700 dark:text-green-400">Upfront Cost</div>
+                                        <div className="text-xs text-green-700 dark:text-green-400">{t('lbo.upfront_cost')}</div>
                                         <div className="font-semibold text-green-900 dark:text-green-100">${refiResult.upfront_cost.toLocaleString()}</div>
                                     </div>
                                     <div>
-                                        <div className="text-xs text-green-700 dark:text-green-400">Break-Even</div>
-                                        <div className="font-semibold text-green-900 dark:text-green-100">{refiResult.break_even_years} Years</div>
+                                        <div className="text-xs text-green-700 dark:text-green-400">{t('lbo.break_even')}</div>
+                                        <div className="font-semibold text-green-900 dark:text-green-100">{refiResult.break_even_years} {t('lbo.years')}</div>
                                     </div>
                                 </div>
                             </div>
                         ) : (
                             <div className="col-span-2 flex items-center justify-center text-green-700/50 dark:text-green-400/50 text-sm italic border-2 border-dashed border-green-200 dark:border-green-500/20 rounded-xl">
-                                Enter parameters and click Analyze to see results
+                                {t('lbo.enter_params_analyze')}
                             </div>
                         )}
                     </div>
@@ -298,22 +300,21 @@ export const LBOStep2_Financing: React.FC<LBOStep2Props> = ({
 
             {advisoryData && (
                 <div className="bg-blue-50 dark:bg-blue-500/10 p-4 rounded-xl border border-blue-100 dark:border-blue-500/20 mb-6 animate-fade-in shadow-sm relative">
-                    {/* ... (Kept Advisory UI simple for brevity, logic copied from main file) ... */}
-                    <button onClick={() => setAdvisoryData(null)} className="absolute top-2 right-2 text-blue-400 hover:text-blue-600"> <Trash2 size={14} /> </button>
-                    <p className="text-sm text-blue-800 dark:text-blue-200">AI Recommendation Available</p>
-                    <button onClick={() => applyAdvisory(advisoryData)} className="text-xs bg-blue-600 text-white px-3 py-1.5 rounded-lg mt-2">Apply</button>
+                    <button onClick={() => setAdvisoryData(null)} className="absolute top-2 right-2 text-blue-400 hover:text-blue-600 transition-colors"> <Trash2 size={14} /> </button>
+                    <p className="text-sm text-blue-800 dark:text-blue-200 font-medium">{t('lbo.ai_recommendation_available')}</p>
+                    <button onClick={() => applyAdvisory(advisoryData)} className="text-xs bg-blue-600 text-white px-3 py-1.5 rounded-lg mt-2 font-medium hover:bg-blue-700 transition-colors shadow-sm">{t('lbo.apply')}</button>
                 </div>
             )}
 
             <div className="space-y-4">
                 {data.financing.tranches.map((tranche, index) => (
-                    <div key={index} className="bg-white/50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl p-4 relative group">
+                    <div key={index} className="bg-white/50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl p-4 relative group hover:shadow-sm transition-all">
                         <button type="button" onClick={() => removeTranche(index)} className="absolute top-4 right-4 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
                             <Trash2 size={16} />
                         </button>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div className="col-span-1 md:col-span-3">
-                                <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1 block">Tranche Name</label>
+                                <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1 block">{t('lbo.tranche_name')}</label>
                                 <input
                                     className="glass-input w-full md:w-1/2"
                                     value={tranche.name}
@@ -322,7 +323,7 @@ export const LBOStep2_Financing: React.FC<LBOStep2Props> = ({
                             </div>
                             <div>
                                 <EnhancedFormInput
-                                    label="Leverage (x EBITDA)"
+                                    label={`${t('lbo.leverage_x_ebitda')} (x)`}
                                     type="number"
                                     step="0.1"
                                     value={tranche.leverage_multiple}
@@ -345,7 +346,7 @@ export const LBOStep2_Financing: React.FC<LBOStep2Props> = ({
 
                                     return (
                                         <MarketRateInput
-                                            label="Interest Rate (%)"
+                                            label={`${t('lbo.interest_rate_percent')} (%)`}
                                             value={tranche.interest_rate * 100}
                                             onChange={(val) => updateTranche(index, 'interest_rate', val / 100)}
                                             marketRate={applicableRate ? applicableRate * 100 : undefined}
@@ -379,12 +380,12 @@ export const LBOStep2_Financing: React.FC<LBOStep2Props> = ({
                                         onChange={(e) => updateTranche(index, 'cash_interest', e.target.checked)}
                                         className="rounded text-system-blue focus:ring-system-blue"
                                     />
-                                    Cash Interest (vs PIK)
+                                    {t('lbo.cash_interest_vs_pik')}
                                 </label>
                             </div>
                             <div>
                                 <EnhancedFormInput
-                                    label="Amortization (%/yr)"
+                                    label={`${t('lbo.amortization_percent_yr')} (%)`}
                                     type="number"
                                     step="0.5"
                                     value={tranche.amortization_rate * 100}
@@ -392,7 +393,7 @@ export const LBOStep2_Financing: React.FC<LBOStep2Props> = ({
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Sweep Priority</label>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('lbo.sweep_priority')}</label>
                                 <input
                                     type="number"
                                     className="glass-input w-full"
@@ -406,23 +407,24 @@ export const LBOStep2_Financing: React.FC<LBOStep2Props> = ({
 
                 {data.financing.tranches.length === 0 && (
                     <div className="text-center p-8 bg-gray-50 dark:bg-white/5 rounded-xl border border-dashed border-gray-300 dark:border-white/10">
-                        <p className="text-gray-500 dark:text-gray-400">No debt tranches defined. Add one to get started.</p>
+                        <p className="text-gray-500 dark:text-gray-400">{t('lbo.no_tranches_defined')}</p>
                     </div>
                 )}
 
                 {/* REFINANCING SECTION */}
                 <div className="pt-6 border-t border-gray-100 dark:border-white/10">
                     <div className="flex justify-between items-center mb-4">
-                        <h4 className="text-md font-semibold text-gray-700 dark:text-gray-200">Refinancing Strategy</h4>
+                        <h4 className="text-md font-semibold text-gray-700 dark:text-gray-200">{t('lbo.refinancing_strategy')}</h4>
                         <div className="flex items-center gap-4">
                             <button
                                 type="button"
                                 onClick={() => updateField('solve_for', data.solve_for === 'optimal_refinancing' ? 'entry_price' : 'optimal_refinancing')}
-                                className={`text-xs px-2 py-1 rounded border ${data.solve_for === 'optimal_refinancing' ? 'bg-purple-100 dark:bg-purple-500/20 border-purple-300 dark:border-purple-500/30 text-purple-700 dark:text-purple-300' : 'border-gray-300 dark:border-white/20 text-gray-500 dark:text-gray-400'}`}
+                                className={`text-xs px-2 py-1 rounded border transition-all ${data.solve_for === 'optimal_refinancing' ? 'bg-purple-100 dark:bg-purple-500/20 border-purple-300 dark:border-purple-500/30 text-purple-700 dark:text-purple-300 font-bold' : 'border-gray-300 dark:border-white/20 text-gray-500 dark:text-gray-400 font-medium'}`}
+                                title={t('lbo.auto_optimize_timing')}
                             >
-                                {data.solve_for === 'optimal_refinancing' ? 'Optimization Active' : 'Auto-Optimize Timing'}
+                                {data.solve_for === 'optimal_refinancing' ? t('lbo.optimization_active') : t('lbo.auto_optimize_timing')}
                             </button>
-                            <label className="flex items-center gap-2 cursor-pointer text-sm font-medium text-system-blue">
+                            <label className="flex items-center gap-2 cursor-pointer text-sm font-medium text-system-blue transition-all">
                                 <input
                                     type="checkbox"
                                     checked={data.refinancing_config?.enabled || false}
@@ -435,18 +437,16 @@ export const LBOStep2_Financing: React.FC<LBOStep2Props> = ({
                                     } : { ...data.refinancing_config, enabled: false })}
                                     className="rounded text-system-blue focus:ring-system-blue"
                                 />
-                                Enable Refinancing
+                                {t('lbo.enable_refinancing')}
                             </label>
                         </div>
                     </div>
 
                     {data.refinancing_config?.enabled && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-blue-50/50 dark:bg-blue-500/5 p-4 rounded-xl border border-blue-100 dark:border-white/10">
-                            {/* ... Fields ... */}
-                            {/* Simplified for brevity, same logic as Step 1 but for refinancing config */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-blue-50/50 dark:bg-blue-500/5 p-4 rounded-xl border border-blue-100 dark:border-white/10 shadow-inner">
                             <div>
                                 <EnhancedFormInput
-                                    label="Refinance Year"
+                                    label={t('lbo.refinance_year')}
                                     type="number"
                                     value={data.refinancing_config.refinance_year}
                                     onChange={(e) => updateField('refinancing_config', { ...data.refinancing_config, refinance_year: parseInt(e.target.value) })}
@@ -454,7 +454,7 @@ export const LBOStep2_Financing: React.FC<LBOStep2Props> = ({
                             </div>
                             <div>
                                 <EnhancedFormInput
-                                    label="New Interest Rate (%)"
+                                    label={t('lbo.new_interest_rate_percent')}
                                     type="number" step="0.1"
                                     value={data.refinancing_config.new_interest_rate * 100}
                                     onChange={(e) => updateField('refinancing_config', { ...data.refinancing_config, new_interest_rate: parseFloat(e.target.value) / 100 })}

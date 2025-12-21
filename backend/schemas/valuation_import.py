@@ -3,7 +3,7 @@ from typing import Dict, List, Optional, Any, Union
 from datetime import datetime
 
 class FinancialYear(BaseModel):
-    year: int
+    year: Union[int, str]
     revenue: float
     gross_profit: float
     ebitda: float

@@ -88,16 +88,22 @@ class ValuationExcelParser:
         financials = []
         for col_idx in range(7, 13): 
             year_val = sheet.cell(row=20, column=col_idx).value
-            if not isinstance(year_val, int):
+            
+            # ALLOW "LTM" string or Integer years
+            if not isinstance(year_val, int) and str(year_val).lower() != "ltm":
                 continue
-                
+            
+            # Normalize year_val for storage (keep "LTM" as string or use special int?)
+            # Schema allows Union[int, str], but downstream logic often expects int for sorting.
+            # Ideally, we keep it as is if schema allows.
+            
             rev = sheet.cell(row=21, column=col_idx).value
             gp = sheet.cell(row=22, column=col_idx).value
             ebitda = sheet.cell(row=23, column=col_idx).value
             ni = sheet.cell(row=24, column=col_idx).value
             
             financials.append({
-                "year": year_val,
+                "year": year_val, # Can be "LTM" or 2024
                 "revenue": float(rev or 0),
                 "gross_profit": float(gp or 0),
                 "ebitda": float(ebitda or 0),
@@ -261,25 +267,45 @@ class ValuationExcelParser:
         sheet = self.wb["Back_end_links"]
         results = []
         
-        # Table appears to be at top of sheet based on deep scan (Rows 0-100 dump).
-        # Excel Row 2: Headers (Method, EV, Weights).
-        # Excel Row 3: First data row ("Market Approach", "GPC Method"...)
+        # Dynamic Search for Table Start
+        start_row = 3
+        found_header = False
+        for r in range(1, 20):
+            val = str(sheet.cell(row=r, column=1).value or "").lower()
+            if "valuation approach" in val:
+                start_row = r + 1 # Data starts after header?
+                # Actually in the dump:
+                # Row 2 (Index 1): Valuation Approach | Method | EV
+                # Row 3 (Index 2): Market Approach | GPC | ...
+                
+                # If we found "valuation approach" at Row 2, data starts at 3.
+                # If distinct "Method" header is present, use that.
+                start_row = r + 1
+                found_header = True
+                break
         
-        # Iterate Rows 3 to 12
-        for row in range(3, 15):
+        # Fallback if not found (keep original logic or warn)
+        if not found_header:
+            start_row = 3
+
+        # Iterate Rows from Start
+        for row in range(start_row, start_row + 15):
             approach = sheet.cell(row=row, column=1).value
             method = sheet.cell(row=row, column=2).value
             val = sheet.cell(row=row, column=3).value
             weight = sheet.cell(row=row, column=4).value
             
-            # Stop if no method name, but be careful of empty rows
-            if not method: 
+            # Stop condition: Empty method AND approach (end of table)
+            if not method and not approach: 
                 continue
-                
-            # If line is valid data
+            
+            # Skip header row just in case we landed on it
+            if str(method).lower() == "method":
+                continue
+
             results.append({
-                "approach": str(approach),
-                "method": str(method),
+                "approach": str(approach or "Other"),
+                "method": str(method or "Unknown"),
                 "enterprise_value": float(val or 0),
                 "weight": float(weight or 0)
             })

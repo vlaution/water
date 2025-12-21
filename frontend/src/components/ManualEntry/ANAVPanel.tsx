@@ -56,7 +56,7 @@ export const ANAVPanel: React.FC<ANAVPanelProps> = ({ data, onChange }) => {
                                         <li key={name} className="flex justify-between items-center text-sm p-2 hover:bg-white/50 dark:hover:bg-white/10 rounded-lg group">
                                             <span className="text-gray-700 dark:text-gray-300 font-medium">{name}</span>
                                             <div className="flex items-center gap-3">
-                                                <span className="font-mono text-gray-900 dark:text-gray-100">${(value as number).toLocaleString()}</span>
+                                                <span className="font-mono text-gray-900 dark:text-gray-100">${(value as number).toLocaleString()}M</span>
                                                 <button
                                                     onClick={() => handleRemoveItem(category, name)}
                                                     className="text-red-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"

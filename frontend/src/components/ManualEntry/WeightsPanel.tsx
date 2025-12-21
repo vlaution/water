@@ -17,7 +17,7 @@ export const WeightsPanel: React.FC<WeightsPanelProps> = ({ weights, onChange })
                 {Object.entries(weights).map(([method, weight]) => (
                     <div key={method} className="bg-white/40 dark:bg-white/5 backdrop-blur-sm p-6 rounded-2xl border border-white/50 dark:border-white/10 shadow-sm">
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-4 capitalize flex justify-between">
-                            <span>{method.replace('_', ' ').toUpperCase()} Weight</span>
+                            <span>{method.replace('_', ' ').toUpperCase()} Weight (%)</span>
                             <span className="text-system-blue font-bold">{(Number(weight) * 100).toFixed(0)}%</span>
                         </label>
                         <input

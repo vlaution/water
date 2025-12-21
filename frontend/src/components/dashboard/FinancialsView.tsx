@@ -2,7 +2,7 @@ import React from 'react';
 import { Download, FileText, TrendingUp, DollarSign } from 'lucide-react';
 
 interface FinancialYear {
-    year: number;
+    year: number | string;
     revenue: number;
     ebitda: number;
     ebit?: number;
@@ -90,7 +90,7 @@ export const FinancialsView: React.FC<FinancialsViewProps> = ({ data }) => {
                                 </th>
                                 {data.map((item) => (
                                     <th key={item.year} className="px-6 py-4 text-center text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider">
-                                        FY {item.year}
+                                        {typeof item.year === 'number' ? `FY ${item.year}` : item.year}
                                     </th>
                                 ))}
                             </tr>

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
 import { api } from './config/api';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
@@ -9,7 +10,10 @@ import { AssociateDashboard } from './pages/AssociateDashboard';
 import { ManagerDashboard } from './pages/ManagerDashboard';
 import { PartnerDashboard } from './pages/PartnerDashboard';
 import { ComplianceDashboard } from './pages/ComplianceDashboard';
+import { MarketingPage } from './pages/MarketingPage';
 import { AdminDashboard } from './pages/AdminDashboard';
+import { HistoricalSimulationPage } from './pages/HistoricalSimulationPage';
+import { PartnerCommandCenter } from './pages/PartnerCommandCenter';
 import { FileUpload } from './components/FileUpload';
 import { SheetMapping } from './components/SheetMapping';
 import { InputReview } from './components/InputReview';
@@ -27,6 +31,7 @@ import { DebtMarketDashboard } from './components/analytics/DebtMarketDashboard'
 import { PermissionGuard } from './components/common/PermissionGuard';
 import { RequirePermission } from './components/common/RequirePermission';
 import { ThemeToggle } from './components/common/ThemeToggle';
+import { LanguageSwitcher } from './components/common/LanguageSwitcher';
 import { Permissions } from './config/permissions';
 import { GlobalAssumptionsPanel } from './components/dashboard/GlobalAssumptionsPanel';
 import { Globe, Menu, ChevronLeft } from 'lucide-react';
@@ -39,7 +44,7 @@ import { RealTimeProvider } from './context/RealTimeContext';
 import { RealTimeAlerts } from './components/common/RealTimeAlerts';
 import { ComparisonPage } from './pages/ComparisonPage';
 import { SensitivityPage } from './pages/SensitivityPage';
-
+import ParityVerifier from './scratch/ParityVerifier';
 
 import { CommandController } from './components/CommandPalette/CommandController';
 import { BackendSearchController } from './components/CommandPalette/BackendSearchController';
@@ -52,9 +57,10 @@ interface ProtectedAppProps {
 }
 
 const ProtectedApp = ({ isSidebarOpen, setIsSidebarOpen }: ProtectedAppProps) => {
+  const { t } = useTranslation();
   const { user, loading, token, logout } = useAuth();
   const { showToast } = useToast();
-  const [step, setStep] = useState<'mode-selection' | 'upload' | 'mapping' | 'excel-review' | 'manual-entry' | 'dashboard' | 'portfolio-home' | 'risk-dashboard' | 'fund-simulator' | 'deal-sourcing' | 'debt-markets'>('mode-selection');
+  const [step, setStep] = useState<'mode-selection' | 'upload' | 'mapping' | 'excel-review' | 'manual-entry' | 'dashboard' | 'portfolio-home' | 'risk-dashboard' | 'fund-simulator' | 'deal-sourcing' | 'debt-markets' | 'parity-check'>('mode-selection');
   const [workbookData, setWorkbookData] = useState<any>(null);
   const [results, setResults] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -277,8 +283,9 @@ const ProtectedApp = ({ isSidebarOpen, setIsSidebarOpen }: ProtectedAppProps) =>
               </button>
             </div>
 
-            <div className="px-6 mb-4">
+            <div className="px-6 mb-4 flex gap-2">
               <ThemeToggle />
+              <LanguageSwitcher />
             </div>
 
             <div className="flex flex-col gap-2 px-6 flex-1 overflow-y-auto">
@@ -295,35 +302,35 @@ const ProtectedApp = ({ isSidebarOpen, setIsSidebarOpen }: ProtectedAppProps) =>
                 onClick={() => setStep('portfolio-home')}
                 className={`glass-button w-full flex items-center justify-center gap-2 text-sm ${step === 'portfolio-home' ? 'nav-item-active' : ''}`}
               >
-                Valuation Portfolio
+                {t('nav.portfolio')}
               </button>
 
               <button
                 onClick={() => setStep('risk-dashboard')}
                 className={`glass-button w-full flex items-center justify-center gap-2 text-sm ${step === 'risk-dashboard' ? 'nav-item-active' : ''}`}
               >
-                Risk Management
+                {t('nav.risk_mgmt')}
               </button>
 
               <button
                 onClick={() => setStep('fund-simulator')}
                 className={`glass-button w-full flex items-center justify-center gap-2 text-sm ${step === 'fund-simulator' ? 'nav-item-active' : ''}`}
               >
-                Fund Simulator
+                {t('nav.fund_sim')}
               </button>
 
               <button
                 onClick={() => setStep('deal-sourcing')}
                 className={`glass-button w-full flex items-center justify-center gap-2 text-sm ${step === 'deal-sourcing' ? 'nav-item-active' : ''}`}
               >
-                Deal Sourcing
+                {t('nav.deal_sourcing')}
               </button>
 
               <button
                 onClick={() => setStep('debt-markets')}
                 className={`glass-button w-full flex items-center justify-center gap-2 text-sm ${step === 'debt-markets' ? 'nav-item-active' : ''}`}
               >
-                Debt Markets
+                {t('nav.debt_markets')}
               </button>
 
               <PermissionGuard permission={Permissions.VIEW_ANALYTICS}>
@@ -331,7 +338,7 @@ const ProtectedApp = ({ isSidebarOpen, setIsSidebarOpen }: ProtectedAppProps) =>
                   onClick={() => window.location.href = '/admin/performance'}
                   className="glass-button w-full flex items-center justify-center gap-2 text-sm"
                 >
-                  Performance
+                  {t('nav.performance')}
                 </button>
               </PermissionGuard>
 
@@ -340,7 +347,7 @@ const ProtectedApp = ({ isSidebarOpen, setIsSidebarOpen }: ProtectedAppProps) =>
                   onClick={() => window.location.href = '/admin/audit'}
                   className="glass-button w-full flex items-center justify-center gap-2 text-sm"
                 >
-                  Audit Logs
+                  {t('nav.audit_logs')}
                 </button>
               </PermissionGuard>
 
@@ -349,12 +356,16 @@ const ProtectedApp = ({ isSidebarOpen, setIsSidebarOpen }: ProtectedAppProps) =>
                   onClick={() => window.location.href = '/admin/health'}
                   className="glass-button w-full flex items-center justify-center gap-2 text-sm"
                 >
-                  System Health
+                  {t('nav.system_health')}
                 </button>
               </PermissionGuard>
 
-
-
+              <button
+                onClick={() => setStep('parity-check')}
+                className={`glass-button w-full flex items-center justify-center gap-2 text-sm ${step === 'parity-check' ? 'nav-item-active' : ''}`}
+              >
+                {t('nav.parity_check')}
+              </button>
             </div>
 
             <div className="mt-6 border-t border-gray-200/50 pt-6 px-6">
@@ -363,14 +374,14 @@ const ProtectedApp = ({ isSidebarOpen, setIsSidebarOpen }: ProtectedAppProps) =>
                 className="glass-button w-full flex items-center justify-center gap-2 text-sm text-gray-600 hover:text-system-blue transition-colors"
               >
                 <Globe size={16} />
-                Global Assumptions
+                {t('nav.global_assumptions')}
               </button>
               <button
                 onClick={() => setIsSecretsModalOpen(true)}
                 className="glass-button w-full flex items-center justify-center gap-2 text-sm text-gray-600 hover:text-system-blue transition-colors mt-2"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                API Vault
+                {t('nav.api_vault')}
               </button>
 
               <div className="h-px bg-gray-200/50 dark:bg-gray-700/50 my-4" />
@@ -379,7 +390,7 @@ const ProtectedApp = ({ isSidebarOpen, setIsSidebarOpen }: ProtectedAppProps) =>
                 onClick={logout}
                 className="glass-button w-full flex items-center justify-center gap-2 text-sm bg-red-50 hover:bg-red-100 dark:bg-red-500/10 dark:hover:bg-red-500/20 text-red-600 dark:text-red-400"
               >
-                Logout ({user.name})
+                {t('common.logout')} ({user.name})
               </button>
             </div>
 
@@ -406,9 +417,10 @@ const ProtectedApp = ({ isSidebarOpen, setIsSidebarOpen }: ProtectedAppProps) =>
                   onClick={logout}
                   className="glass-button text-sm"
                 >
-                  Logout ({user.name})
+                  {t('common.logout')} ({user.name})
                 </button>
                 <ThemeToggle />
+                <LanguageSwitcher />
               </div>
             </header>
           )}
@@ -420,13 +432,13 @@ const ProtectedApp = ({ isSidebarOpen, setIsSidebarOpen }: ProtectedAppProps) =>
               <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-bold">Review Valuation Import</h2>
                 <div className="flex gap-4">
-                  <button onClick={() => setStep('upload')} className="glass-button">Back</button>
+                  <button onClick={() => setStep('upload')} className="glass-button">{t('common.back')}</button>
                   <button
                     onClick={() => handleExcelSave(workbookData)}
                     disabled={isLoading}
                     className="glass-button bg-system-blue text-white hover:bg-blue-600 shadow-lg shadow-blue-400/20"
                   >
-                    {isLoading ? 'Saving...' : 'Confirm & Save to Portfolio'}
+                    {isLoading ? t('common.saving') : t('common.confirm_save')}
                   </button>
                 </div>
               </div>
@@ -472,6 +484,7 @@ const ProtectedApp = ({ isSidebarOpen, setIsSidebarOpen }: ProtectedAppProps) =>
           {step === 'fund-simulator' && <FundSimulator />}
           {step === 'deal-sourcing' && <DealSourcingDashboard />}
           {step === 'debt-markets' && <DebtMarketDashboard />}
+          {step === 'parity-check' && <ParityVerifier />}
         </main>
         <GlobalAssumptionsPanel isOpen={isGlobalSettingsOpen} onClose={() => setIsGlobalSettingsOpen(false)} />
         <SecretsModal isOpen={isSecretsModalOpen} onClose={() => setIsSecretsModalOpen(false)} /> {/* Render User Modal */}
@@ -512,12 +525,17 @@ function App() {
                         <AuditLogViewer />
                       </RequirePermission>
                     } />
-                    <Route path="/admin/health" element={
+                    <Route path="/marketing" element={<MarketingPage />} />
+ <Route path="/admin/health" element={
                       <RequirePermission permission={Permissions.CONFIGURE_SYSTEM}>
                         <SystemHealthDashboard />
                       </RequirePermission>
                     } />
+                    <Route path="/simulation" element={<HistoricalSimulationPage />} />
+                    <Route path="/partner" element={<PartnerCommandCenter />} />
+                    
                     <Route path="/*" element={<ProtectedApp isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />} />
+
                   </Routes>
                 </CommandRegistryProvider>
               </GlobalConfigProvider>

@@ -11,7 +11,7 @@ from backend.services.system.health_monitor import health_monitor_service
 env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'backend', '.env')
 if not os.path.exists(env_path):
     env_path = os.path.join(os.path.dirname(__file__), '.env')
-load_dotenv(env_path)
+load_dotenv(env_path, override=True)
 
 from backend.api import routes
 from backend.api import auth_routes
@@ -144,6 +144,10 @@ async def search_companies(q: str):
     service = PeerFindingService()
     results = service.search_companies(q)
     return {"results": results}
+
+# Decision Engine Routes
+from backend.api import decision_routes
+app.include_router(decision_routes.router)
 
 @app.middleware("http")
 async def monitor_requests(request: Request, call_next):

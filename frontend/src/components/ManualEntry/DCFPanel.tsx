@@ -26,7 +26,21 @@ export const DCFPanel: React.FC<DCFPanelProps> = ({ mode, data, onChange, onUpda
                 <div className="space-y-4">
                     <h4 className="font-semibold text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-white/10 pb-2">Growth & Margins</h4>
                     <EnhancedFormInput
-                        label="Revenue Growth (Year 1)"
+                        label="Base Revenue (Current Year) ($M)"
+                        type="number"
+                        value={data.historical?.revenue?.[data.historical.revenue.length - 1] || 0}
+                        onChange={(e) => {
+                            const val = parseFloat(e.target.value);
+                            const currentRev = [...(data.historical?.revenue || [])];
+                            if (currentRev.length > 0) {
+                                currentRev[currentRev.length - 1] = val;
+                                onChange('historical', { ...data.historical, revenue: currentRev });
+                            }
+                        }}
+                        showBadge={false}
+                    />
+                    <EnhancedFormInput
+                        label="Revenue Growth (Year 1) (%)"
                         type="number"
                         step="0.01"
                         value={data.projections.revenue_growth_start}
@@ -34,7 +48,7 @@ export const DCFPanel: React.FC<DCFPanelProps> = ({ mode, data, onChange, onUpda
                         showBadge={false}
                     />
                     <EnhancedFormInput
-                        label="Revenue Growth (Terminal)"
+                        label="Revenue Growth (Terminal) (%)"
                         type="number"
                         step="0.01"
                         value={data.projections.revenue_growth_end}
@@ -42,7 +56,7 @@ export const DCFPanel: React.FC<DCFPanelProps> = ({ mode, data, onChange, onUpda
                         showBadge={false}
                     />
                     <EnhancedFormInput
-                        label="EBITDA Margin (Year 1)"
+                        label="EBITDA Margin (Year 1) (%)"
                         type="number"
                         step="0.01"
                         value={data.projections.ebitda_margin_start}
@@ -50,7 +64,7 @@ export const DCFPanel: React.FC<DCFPanelProps> = ({ mode, data, onChange, onUpda
                         showBadge={false}
                     />
                     <EnhancedFormInput
-                        label="EBITDA Margin (Terminal)"
+                        label="EBITDA Margin (Terminal) (%)"
                         type="number"
                         step="0.01"
                         value={data.projections.ebitda_margin_end}
@@ -62,7 +76,7 @@ export const DCFPanel: React.FC<DCFPanelProps> = ({ mode, data, onChange, onUpda
                 <div className="space-y-4">
                     <h4 className="font-semibold text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-white/10 pb-2">Discount & Tax</h4>
                     <EnhancedFormInput
-                        label={mode === 'dcf' ? "WACC / Discount Rate" : "Cost of Equity (Ke)"}
+                        label={mode === 'dcf' ? "WACC / Discount Rate (%)" : "Cost of Equity (Ke) (%)"}
                         type="number"
                         step="0.01"
                         value={mode === 'dcf' ? data.projections.discount_rate : data.cost_of_equity}
@@ -72,7 +86,7 @@ export const DCFPanel: React.FC<DCFPanelProps> = ({ mode, data, onChange, onUpda
                         showBadge={true}
                     />
                     <EnhancedFormInput
-                        label="Tax Rate"
+                        label="Tax Rate (%)"
                         type="number"
                         step="0.01"
                         value={data.projections.tax_rate}
@@ -80,7 +94,7 @@ export const DCFPanel: React.FC<DCFPanelProps> = ({ mode, data, onChange, onUpda
                         showBadge={false}
                     />
                     <EnhancedFormInput
-                        label="Terminal Growth Rate (g)"
+                        label="Terminal Growth Rate (g) (%)"
                         type="number"
                         step="0.01"
                         value={data.projections.terminal_growth_rate || data.terminal_growth_rate}
@@ -94,7 +108,7 @@ export const DCFPanel: React.FC<DCFPanelProps> = ({ mode, data, onChange, onUpda
                 <div className="space-y-4">
                     <h4 className="font-semibold text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-white/10 pb-2">Capital Structure</h4>
                     <EnhancedFormInput
-                        label="Shares Outstanding"
+                        label="Shares Outstanding (#)"
                         type="number"
                         value={data.shares_outstanding}
                         onChange={(e) => onChange('shares_outstanding', parseFloat(e.target.value))}
@@ -102,7 +116,7 @@ export const DCFPanel: React.FC<DCFPanelProps> = ({ mode, data, onChange, onUpda
                     />
                     {mode === 'dcf' && (
                         <EnhancedFormInput
-                            label="Net Debt"
+                            label="Net Debt ($M)"
                             type="number"
                             value={data.net_debt}
                             onChange={(e) => onChange('net_debt', parseFloat(e.target.value))}
@@ -121,10 +135,10 @@ export const DCFPanel: React.FC<DCFPanelProps> = ({ mode, data, onChange, onUpda
                             <thead>
                                 <tr>
                                     <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Year</th>
-                                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Begin Debt</th>
-                                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">New Borrowing</th>
-                                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Repayment</th>
-                                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Interest Rate</th>
+                                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Begin Debt ($M)</th>
+                                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">New Borrowing ($M)</th>
+                                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Repayment ($M)</th>
+                                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Interest Rate (%)</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200 dark:divide-white/10">

@@ -1,5 +1,6 @@
 import asyncio
 import random
+import os
 from backend.services.realtime.realtime_service import manager
 
 # Mock initial data
@@ -23,7 +24,9 @@ async def simulate_market_data():
         updates = []
         for ticker in tickers_to_update:
             # Fluctuate price by -0.5% to +0.5%
-            change_pct = random.uniform(-0.005, 0.005)
+            # Fluctuate price based on configured volatility
+            volatility = float(os.getenv("MARKET_VOLATILITY", "0.005"))
+            change_pct = random.uniform(-volatility, volatility)
             current_price = mock_prices[ticker]
             new_price = current_price * (1 + change_pct)
             mock_prices[ticker] = new_price
@@ -60,4 +63,7 @@ async def simulate_market_data():
             await manager.broadcast(alert_msg)
         
         # Wait 2-5 seconds before next update
-        await asyncio.sleep(random.uniform(2, 5))
+        # Wait based on configured interval
+        min_interval = float(os.getenv("MARKET_SIMULATION_MIN_INTERVAL", "2.0"))
+        max_interval = float(os.getenv("MARKET_SIMULATION_MAX_INTERVAL", "5.0"))
+        await asyncio.sleep(random.uniform(min_interval, max_interval))

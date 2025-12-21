@@ -132,7 +132,7 @@ class ReportService:
         template = self.registry.get_template(template_name)
         return template.render(context)
         
-    def generate_report(self, config: ReportConfig, data: Dict[str, Any]) -> io.BytesIO:
+    async def generate_report(self, config: ReportConfig, data: Dict[str, Any]) -> io.BytesIO:
         """
         Orchestrates the report generation pipeline.
         1. Create Context
@@ -172,7 +172,7 @@ class ReportService:
                 
                 # 3. Enrich Content (Narrative & Charts)
                 if not section.data.get("text"):
-                    section.data["summary_text"] = self.narrative_engine.generate_section_narrative(
+                    section.data["summary_text"] = await self.narrative_engine.generate_section_narrative(
                         registry_key, context.data.get("outputs", {}), "executive"
                     )
                 
@@ -199,7 +199,6 @@ class ReportService:
         elif config.format == "excel":
            return ExcelAdapter().render(content)
         elif config.format == "docx":
-            # Fallback to PDF for now or Implement DocxAdapter
-            return PDFAdapter().render(content) 
+            return DocxAdapter().render(content)
             
         raise ValueError("Unsupported format")

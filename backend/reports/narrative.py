@@ -1,32 +1,30 @@
 from typing import Dict, Any
-import requests
-# Placeholder for real AI service integration
-# In real prod, this would import from backend.services.ai...
+from backend.services.ai_report_service import AIReportService
 
 class AINarrativeEngine:
     """
     Generates narrative text for report sections based on audience context.
-    Strategies:
-    - Executive: High-level, bottom-line focused.
-    - Analyst: Technical, assumption-focused.
-    - Board: Strategic, risk-focused.
     """
     
-    def generate_section_narrative(self, section_type: str, data: Dict[str, Any], audience: str = "executive") -> str:
+    async def generate_section_narrative(self, section_type: str, data: Dict[str, Any], audience: str = "executive") -> str:
         """
-        Generates text for a section.
+        Generates text for a section using AIReportService.
         """
-        # Mocking the AI Logic for MVP/Architecture
+        service = AIReportService()
+        
+        # Determine the company name if available
+        company_name = data.get("company_name", "Target Company")
         
         if section_type == "executive_summary":
-            if audience == "board":
-                return "The strategic valuation indicates significant upside potential, heavily contingent on maintaining current EBITDA margins."
-            elif audience == "analyst":
-                return f"Model implies {data.get('implied_multiple', '12x')} EV/EBITDA based on {data.get('wacc', '10%')} WACC. Sensitivity analysis suggests range of +/- 15%."
-            else: # Executive/Default
-                return f"The estimated Enterprise Value is ${data.get('enterprise_value', 0):,.0f}. Key drivers include revenue growth and margin stability."
+            return await service.generate_executive_summary(data, company_name)
         
-        elif section_type == "dcf_analysis":
-             return "The DCF analysis assumes a terminal growth rate aligned with long-term inflation expectations."
+        elif section_type == "dcf_analysis" or section_type == "lbo_analysis":
+            insights = await service.generate_detailed_insights(data, company_name)
+            # Combine insights into a narrative block
+            text = "### Strategic Assessment\n"
+            text += "\n".join([f"- {i}" for i in insights.get("strategic_assessment", [])])
+            text += "\n\n### Key Risks\n"
+            text += "\n".join([f"- {i}" for i in insights.get("risk_factors", [])])
+            return text
 
         return "Narrative generation unavailable for this section."

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ChevronRight, ChevronLeft, Calculator, Activity, Check, BookOpen, Layers, RefreshCw } from 'lucide-react';
 const MonteCarloModal = React.lazy(() => import('../modals/MonteCarloModal').then(module => ({ default: module.MonteCarloModal })));
 import { TutorialOverlay } from '../common/TutorialOverlay';
@@ -19,6 +20,7 @@ interface LBOWizardProps {
 }
 
 export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
+    const { t } = useTranslation();
     const [step, setStep] = useState(1);
     const [showMonteCarlo, setShowMonteCarlo] = useState(false);
     const [showTutorial, setShowTutorial] = useState(false);
@@ -199,12 +201,12 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
     };
 
     const tutorialSteps = [
-        { title: "Define Entry & Structure", content: "Start by setting the purchase price, solving for either Entry Price or Target IRR. Use 'Quick Start' templates for standard setups." },
-        { title: "Configure Financing", content: "Add debt tranches (Senior, Mezzanine) with interest rates and covenants. Toggle 'Refinancing' to optimize capital structure later." },
-        { title: "Advanced Tax & Covenants", content: "Set financial covenants (e.g. Max Leverage) and enable Tax Shields (NOLs, Step-Up) to optimize returns." },
-        { title: "Management Incentive Plan", content: "Configure an option pool for management to align incentives with equity holders." },
-        { title: "Exit & Waterfall", content: "Define the exit multiple and holding period. The waterfall calculates returns for LPs and GP (Carry, Catch-up)." },
-        { title: "Risk Analysis", content: "Run a Monte Carlo simulation to see the probability of achieving your Target IRR under different scenarios." }
+        { title: t('lbo.tutorial_step1_title'), content: t('lbo.tutorial_step1_content') },
+        { title: t('lbo.tutorial_step2_title'), content: t('lbo.tutorial_step2_content') },
+        { title: t('lbo.tutorial_step3_title'), content: t('lbo.tutorial_step3_content') },
+        { title: t('lbo.tutorial_step4_title'), content: t('lbo.tutorial_step4_content') },
+        { title: t('lbo.tutorial_step5_title'), content: t('lbo.tutorial_step5_content') },
+        { title: t('lbo.tutorial_step6_title'), content: t('lbo.tutorial_step6_content') }
     ];
 
     const fetchBenchmarks = async (_sector: string) => {
@@ -234,8 +236,8 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
             <div className="bg-gray-50 dark:bg-white/5 border-b border-gray-200 dark:border-white/10 p-6">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">LBO Analysis Wizard</h2>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Configure your Leverage Buyout model in 6 steps</p>
+                        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('lbo.wizard_title')}</h2>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{t('lbo.wizard_desc')}</p>
                     </div>
                     <div className="flex items-center gap-2">
                         <button
@@ -314,13 +316,13 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                 {step === 6 && (
                     <div className="space-y-6 animate-fade-in">
                         <div className="flex justify-between items-center border-b border-gray-100 dark:border-white/10 pb-2">
-                            <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">Step 6: Sensitivity Analysis (Phase 4)</h3>
+                            <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">{t('lbo.step6_title')}</h3>
                         </div>
 
                         <div className="bg-blue-50/50 dark:bg-blue-500/10 p-4 rounded-xl border border-blue-100 dark:border-blue-500/20 mb-4">
                             <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
                                 <Activity className="inline w-4 h-4 mr-1 text-blue-500" />
-                                Run sensitivity scenarios to understand how changes in key variables impact your returns (IRR).
+                                {t('lbo.sensitivity_desc')}
                             </p>
                         </div>
                         <SensitivityAnalysis lboData={data} />
@@ -339,7 +341,7 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                         : 'text-gray-600 dark:text-gray-300 bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/10 shadow-sm'
                         }`}
                 >
-                    <ChevronLeft size={16} /> Back
+                    <ChevronLeft size={16} /> {t('lbo.back')}
                 </button>
 
                 {step < 5 ? (
@@ -348,7 +350,7 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                         onClick={nextStep}
                         className="flex items-center gap-2 px-6 py-2 rounded-xl text-sm font-medium text-white bg-system-blue hover:bg-blue-600 shadow-md hover:shadow-lg transition-all"
                     >
-                        Next Step <ChevronRight size={16} />
+                        {t('lbo.next')} <ChevronRight size={16} />
                     </button>
                 ) : step === 5 ? (
                     <div className="flex gap-2">
@@ -357,7 +359,7 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                             onClick={nextStep}
                             className="flex items-center gap-2 px-6 py-2 rounded-xl text-sm font-medium text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-500/20 hover:bg-blue-200 dark:hover:bg-blue-500/30 shadow-sm transition-all"
                         >
-                            Sensitivity <Layers size={16} />
+                            {t('lbo.sensitivity')} <Layers size={16} />
                         </button>
                         <button
                             type="button"
@@ -366,7 +368,7 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                             className="flex items-center gap-2 px-6 py-2 rounded-xl text-sm font-medium text-white bg-gradient-to-r from-system-blue to-blue-600 hover:from-blue-600 hover:to-blue-700 shadow-md hover:shadow-lg transition-all disabled:opacity-75 disabled:cursor-not-allowed"
                         >
                             {isCalculating ? <RefreshCw className="animate-spin" size={16} /> : <Calculator size={16} />}
-                            Calculate Valuation
+                            {t('lbo.calculate')}
                         </button>
                     </div>
                 ) : (
@@ -377,7 +379,7 @@ export const LBOWizard: React.FC<LBOWizardProps> = ({ data, onChange }) => {
                         className="flex items-center gap-2 px-6 py-2 rounded-xl text-sm font-medium text-white bg-gradient-to-r from-system-blue to-blue-600 hover:from-blue-600 hover:to-blue-700 shadow-md hover:shadow-lg transition-all disabled:opacity-75 disabled:cursor-not-allowed"
                     >
                         {isCalculating ? <RefreshCw className="animate-spin" size={16} /> : <Calculator size={16} />}
-                        Recalculate
+                        {t('lbo.recalculate')}
                     </button>
                 )}
             </div>

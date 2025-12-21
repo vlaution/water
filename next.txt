@@ -1,30 +1,30 @@
-GPC & Find Peers Implementation
-Goal
-Implement the "Find Peers" functionality in GPC to:
+Create BusinessAlerts: Stop alerting on "High Latency" and start alerting on "Valuation dropped > 10%".
+Structure the Verdict: Change 
+AIReportService
+ to output a structured field: recommendation: "BUY" | "SELL" | "HOLD", and display this as a giant badge on the UI.
+Confidence Score: Show the "85% Confidence" score right next to the valuation number, calculated from your 
+SuggestionService
+.
+---
+No, this is not happening in your project yet.
 
-Actually save the found peers to the form.
-Calculate median multiples from peers.
-Auto-populate "Applied Multiples" fields in the form (new fields).
-Have the backend use these applied multiples for valuation.
-Backend Changes
-[MODIFY] 
-backend/calculations/models.py
-Add optional 
-ev_revenue_multiple
- and 
-ev_ebitda_multiple
- to 
-GPCInput
-.
-[MODIFY] 
-backend/services/valuation/formulas/gpc.py
-Update logic to use provided multiples if available, otherwise fallback to internal calculation.
-Frontend Changes
-[MODIFY] 
-frontend/src/components/ManualEntryForm.tsx
-Update "Find Peers" handler to:
-Update gpc_input.peer_tickers with found tickers.
-Calculate medians and update gpc_input.ev_revenue_multiple and 
-ev_ebitda_multiple
-.
-add Input fields for these multiples so user can see/edit them.
+Your current 
+AlertService
+ in 
+backend/services/alerting/service.py
+ is extremely basic. It is a "System Monitor," not a "Business Intelligence Engine."
+
+1. What You Have vs. What You Need
+Feature	Current Reality (
+alerting/service.py
+)	What You Asked For
+Logic	"Is latency > 500ms?" (DevOps check)	"Did Portfolio Value drop > 10%?" (Partner check)
+Thresholds	Hardcoded global env vars (ALERT_P95...)	Per-Partner Thresholds (e.g., "Partner A cares about 5% drop, Partner B cares about 15%")
+Delivery	Prints to Console (print())	Suppression & Cooldown ("Don't email me 50 times an hour")
+Memory	None. Fire and forget.	Acknowledge Loop ("I saw this, I fixed it, don't alert again").
+2. The Missing "institutional memory"
+You do not have an Alerts table in your database, nor do you have an API to "Acknowledge" or "Resolve" them.
+
+Current State: If the system detects an error, it prints it. If it happens again 1 second later, it prints it again.
+Desired State: Alert functionality needs to be a Workflow, not just a notification.
+3. Immediate Action Plan

@@ -15,10 +15,9 @@ email-validator
 numpy>=1.24.0
 slowapi
 requests
-redis
 alembic
 cryptography
-celery
+
 matplotlib
 pytest
 pytest-asyncio
@@ -34,3 +33,4 @@ psutil
 apscheduler
 sqlmodel
 seaborn
+gunicorn

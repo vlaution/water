@@ -86,7 +86,7 @@ export const PrecedentTransactionsPanel: React.FC<PrecedentTransactionsPanelProp
                 <table className="min-w-full divide-y divide-gray-200/50 dark:divide-white/10">
                     <thead className="bg-gray-50/50 dark:bg-white/5">
                         <tr>
-                            {['Target', 'Acquirer', 'Date', 'Deal Value', 'Revenue', 'EBITDA', 'EV/Rev', 'EV/EBITDA', ''].map(h => (
+                            {['Target', 'Acquirer', 'Date', 'Deal Value ($M)', 'Revenue ($M)', 'EBITDA ($M)', 'EV/Rev (x)', 'EV/EBITDA (x)', ''].map(h => (
                                 <th key={h} className="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                     {h}
                                 </th>

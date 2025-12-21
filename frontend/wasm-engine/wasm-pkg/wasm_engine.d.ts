@@ -1,6 +1,10 @@
 /* tslint:disable */
 /* eslint-disable */
 
+export function calculate_lbo(input_val: any): any;
+
+export function calculate_sensitivity(lbo_input_val: any, sens_input_val: any): any;
+
 export function run_fund_simulation(fund_val: any, strategy_val: any): any;
 
 export function run_monte_carlo(params_val: any): any;
@@ -9,6 +13,8 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
+  readonly calculate_lbo: (a: any) => [number, number, number];
+  readonly calculate_sensitivity: (a: any, b: any) => [number, number, number];
   readonly run_fund_simulation: (a: any, b: any) => any;
   readonly run_monte_carlo: (a: any) => any;
   readonly __wbindgen_malloc: (a: number, b: number) => number;
@@ -16,6 +22,7 @@ export interface InitOutput {
   readonly __wbindgen_exn_store: (a: number) => void;
   readonly __externref_table_alloc: () => number;
   readonly __wbindgen_externrefs: WebAssembly.Table;
+  readonly __externref_table_dealloc: (a: number) => void;
   readonly __wbindgen_start: () => void;
 }
 

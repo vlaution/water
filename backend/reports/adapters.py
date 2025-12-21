@@ -68,3 +68,23 @@ class ExcelAdapter(FormatAdapter):
                 
         buffer.seek(0)
         return buffer
+
+class DocxAdapter(FormatAdapter):
+    def render(self, content: ReportContent) -> io.BytesIO:
+        doc = Document()
+        doc.add_heading(f"Valuation Report: {content.company_name}", 0)
+        
+        doc.add_paragraph(f"Date: {content.valuation_date}")
+        
+        for section in content.sections:
+            doc.add_heading(section.title, level=1)
+            
+            if "summary_text" in section.data:
+                doc.add_paragraph(section.data["summary_text"])
+            
+            # Add more data rendering logic here if needed
+            
+        buffer = io.BytesIO()
+        doc.save(buffer)
+        buffer.seek(0)
+        return buffer

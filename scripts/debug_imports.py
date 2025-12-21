@@ -1,16 +1,29 @@
 import sys
-print("Importing models...")
-try:
-    from backend.calculations.models import MIPConfig, MIPTrancheInput
-    print("Models imported successfully.")
-except Exception as e:
-    print(f"Error importing models: {e}")
-    sys.exit(1)
+import os
 
-print("Importing lbo...")
+root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(root_path)
+print(f"Added to path: {root_path}")
+
 try:
-    from backend.services.valuation.formulas.lbo import EnhancedLBOCalculator
-    print("LBO imported successfully.")
+    import backend
+    print(f"Imported backend: {backend}")
+    
+    import backend.calculations
+    print(f"Imported backend.calculations: {backend.calculations}")
+    
+    import backend.calculations.models
+    print(f"Imported backend.calculations.models: {backend.calculations.models}")
+    
+    print("Attributes in models:")
+    print(dir(backend.calculations.models))
+    
+    print("LBOInput" in dir(backend.calculations.models))
+    
+    from backend.calculations.models import LBOInput
+    print("Successfully imported LBOInput")
+    
 except Exception as e:
-    print(f"Error importing lbo: {e}")
-    sys.exit(1)
+    print(f"Error: {e}")
+    import traceback
+    traceback.print_exc()

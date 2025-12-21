@@ -45,9 +45,31 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = os.getenv("DATABASE_URL", "sqlite:///./valuation_v2.db")
+    raw_url = os.getenv("DATABASE_URL", "sqlite:///./valuation_v2.db")
+    
+    # Sanitization Logic (Mirrored from models.py)
+    if raw_url:
+        raw_url = raw_url.strip().strip('"').strip("'")
+        if raw_url.startswith("prisma+postgres://"):
+            raw_url = "postgresql+psycopg2://" + raw_url[len("prisma+postgres://"):]
+        elif raw_url.startswith("prisma.postgres://"):
+            raw_url = "postgresql+psycopg2://" + raw_url[len("prisma.postgres://"):]
+        elif raw_url.startswith("postgres://"):
+            raw_url = "postgresql+psycopg2://" + raw_url[len("postgres://"):]
+            
+        if "?" in raw_url:
+            from urllib.parse import urlparse, parse_qs, urlunparse, urlencode
+            parsed = urlparse(raw_url)
+            query_params = parse_qs(parsed.query)
+            params_to_remove = ['api_key'] 
+            for param in params_to_remove:
+                if param in query_params:
+                    del query_params[param]
+            new_query = urlencode(query_params, doseq=True)
+            raw_url = urlunparse(parsed._replace(query=new_query))
+
     context.configure(
-        url=url,
+        url=raw_url,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
@@ -65,8 +87,30 @@ def run_migrations_online() -> None:
 
     """
     from sqlalchemy import create_engine
-    url = os.getenv("DATABASE_URL", "sqlite:///./valuation_v2.db")
-    connectable = create_engine(url)
+    
+    raw_url = os.getenv("DATABASE_URL", "sqlite:///./valuation_v2.db")
+    # Sanitization Logic (Mirrored from models.py)
+    if raw_url:
+        raw_url = raw_url.strip().strip('"').strip("'")
+        if raw_url.startswith("prisma+postgres://"):
+            raw_url = "postgresql+psycopg2://" + raw_url[len("prisma+postgres://"):]
+        elif raw_url.startswith("prisma.postgres://"):
+            raw_url = "postgresql+psycopg2://" + raw_url[len("prisma.postgres://"):]
+        elif raw_url.startswith("postgres://"):
+            raw_url = "postgresql+psycopg2://" + raw_url[len("postgres://"):]
+            
+        if "?" in raw_url:
+            from urllib.parse import urlparse, parse_qs, urlunparse, urlencode
+            parsed = urlparse(raw_url)
+            query_params = parse_qs(parsed.query)
+            params_to_remove = ['api_key'] 
+            for param in params_to_remove:
+                if param in query_params:
+                    del query_params[param]
+            new_query = urlencode(query_params, doseq=True)
+            raw_url = urlunparse(parsed._replace(query=new_query))
+
+    connectable = create_engine(raw_url)
 
     with connectable.connect() as connection:
         context.configure(

@@ -6,6 +6,7 @@ from backend.database.models import User, get_db
 from backend.auth.dependencies import get_current_user
 from sqlalchemy.orm import Session
 from backend.services.auth.sso_service import SSOService
+from backend.config.shadow_mode import ShadowModeConfig
 import os
 import json
 
@@ -33,7 +34,14 @@ async def get_global_settings():
     return load_config()
 
 @router.post("/global", response_model=GlobalConfig)
-async def update_global_settings(config: GlobalConfig):
+async def update_global_settings(
+    config: GlobalConfig,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    # ABSOLUTE RULE: No tuning mid-week
+    ShadowModeConfig.enforce_freeze(current_user.id, "Global Config Update", db)
+    
     save_config(config)
     return config
 
@@ -57,6 +65,9 @@ async def update_secrets(
     """
     Save API keys to the current user's profile, encrypted.
     """
+    # ABSOLUTE RULE: No tuning mid-week
+    ShadowModeConfig.enforce_freeze(current_user.id, "Secrets Update", db)
+
     # Use SSOService for encryption helper
     sso_service = SSOService() 
     

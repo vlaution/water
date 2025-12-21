@@ -45,7 +45,7 @@ async def generate_report(
     # 2. Generate Report
     service = ReportService()
     try:
-        file_buffer = service.generate_report(config, data)
+        file_buffer = await service.generate_report(config, data)
     except Exception as e:
         import traceback
         traceback.print_exc()
@@ -81,3 +81,42 @@ async def generate_report(
         media_type=media_types.get(config.format, "application/octet-stream"),
         headers={"Content-Disposition": f"attachment; filename={filename}"}
     )
+
+@router.get("/historical-simulation")
+async def get_historical_simulation():
+    """
+    Serve the pre-generated historical simulation results.
+    """
+    import os
+    # Assuming reports are at the root or specific path relative to backend
+    file_path = "reports/historical_insights.json"
+    
+    if not os.path.exists(file_path):
+        # Fallback for dev environment where CWD might vary
+        file_path = "../reports/historical_insights.json"
+        
+    if not os.path.exists(file_path):
+        # Last resort absolute path check (based on known structure)
+        file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "reports", "historical_insights.json")
+
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="Simulation report not found. Run the simulation script first.")
+
+    with open(file_path, "r") as f:
+        data = json.load(f)
+
+    # Load Lead Time Analysis if available
+    lead_time_path = file_path.replace("historical_insights.json", "lead_time_analysis.json")
+    if os.path.exists(lead_time_path):
+        with open(lead_time_path, "r") as f:
+            lead_time_data = json.load(f)
+            data["lead_time_analysis"] = lead_time_data
+
+    # Load Precision Analysis if available
+    precision_path = file_path.replace("historical_insights.json", "precision_analysis.json")
+    if os.path.exists(precision_path):
+        with open(precision_path, "r") as f:
+            precision_data = json.load(f)
+            data["precision_analysis"] = precision_data
+    
+    return data

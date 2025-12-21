@@ -295,6 +295,58 @@ class RegulatoryAlert(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     is_read = Column(Boolean, default=False)
 
+class AcknowledgementRecord(Base):
+    __tablename__ = 'acknowledgement_records'
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    decision_id = Column(String(36), ForeignKey('decision_records.decision_id'), nullable=False, index=True)
+    user_id = Column(String(50), nullable=False) # ID or Email
+    user_role = Column(String(50), nullable=False)
+    action = Column(String(50), nullable=False) # ACKNOWLEDGED, OVERRIDDEN, etc.
+    rationale = Column(Text, nullable=False)
+    timestamp = Column(DateTime, default=datetime.utcnow)
+    signature_hash = Column(String(64), nullable=False) # SHA-256
+    evidence_links_json = Column(Text, nullable=True)
+
+class DecisionSignature(Base):
+    __tablename__ = 'decision_signatures'
+    
+    journal_id = Column(String(36), ForeignKey('decision_records.decision_id'), primary_key=True) # Mapping decision_id to journal_id concept
+    signature_hash = Column(String(64), primary_key=True) # SHA-256
+    signed_by = Column(String(50), nullable=False) # User ID/UUID
+    signed_at = Column(DateTime, default=datetime.utcnow)
+
+
+
+class DecisionRecord(Base):
+    __tablename__ = 'decision_records'
+    
+    decision_id = Column(String(36), primary_key=True, index=True)
+    company_id = Column(String(20), ForeignKey('companies.ticker'), index=True, nullable=False)
+    
+    signal = Column(String(50), nullable=False)
+    severity = Column(String(20), nullable=False, index=True) # low, medium, high, critical
+    confidence = Column(Float, nullable=False)
+    
+    # JSON Blobs for structured data
+    recommended_actions_json = Column(Text, nullable=False) # List[str] or List[ActionStep]
+    why_now_json = Column(Text, nullable=True) # List[str]
+    context_json = Column(Text, nullable=True)
+    metadata_json = Column(Text, nullable=True) # Assessment breakdown, warnings
+    
+    # State & Accountability
+    state = Column(String(50), default="active") # active, acknowledged, resolved
+    acknowledgement_hash = Column(String(64), nullable=True)
+
+    triggered_by = Column(String(100), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, index=True)
+
+    # Outcome Tracking (Journal)
+    actual_outcome = Column(String(50), nullable=True)
+    outcome_notes = Column(Text, nullable=True)
+    outcome_recorded_at = Column(DateTime, nullable=True)
+
+
 # Database setup
 # Database setup
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./valuation_v2.db")

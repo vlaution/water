@@ -21,6 +21,38 @@ export const AnalystDashboard: React.FC<AnalystDashboardProps> = ({ onCreateValu
     const [valuations, setValuations] = useState<ValuationRun[]>([]);
     const [loading, setLoading] = useState(true);
 
+    const handleExport = async (runId: string, companyName: string) => {
+        try {
+            const response = await fetch(api.url('/reports/generate'), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    valuation_id: runId,
+                    company_name: companyName,
+                    format: 'pdf',
+                    sections: ["Executive Summary", "Detailed Analysis", "LBO Analysis"],
+                    branding: true
+                })
+            });
+
+            if (response.ok) {
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${companyName}_Valuation_Report.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            }
+        } catch (error) {
+            console.error('Export failed:', error);
+        }
+    };
+
     useEffect(() => {
         const fetchRuns = async () => {
             try {
@@ -97,11 +129,14 @@ export const AnalystDashboard: React.FC<AnalystDashboardProps> = ({ onCreateValu
                         </div>
                         <span className="font-medium text-sm text-gray-900 dark:text-gray-100">Validate</span>
                     </button>
-                    <button className="flex flex-col items-center justify-center p-4 rounded-xl bg-orange-50 hover:bg-orange-100 text-orange-600 transition-colors group border border-orange-100 dark:bg-orange-900/20 dark:border-orange-800 dark:text-orange-300 dark:hover:bg-orange-900/30">
+                    <button 
+                        onClick={() => valuations.length > 0 && handleExport(valuations[0].id, valuations[0].name)}
+                        className="flex flex-col items-center justify-center p-4 rounded-xl bg-orange-50 hover:bg-orange-100 text-orange-600 transition-colors group border border-orange-100 dark:bg-orange-900/20 dark:border-orange-800 dark:text-orange-300 dark:hover:bg-orange-900/30"
+                    >
                         <div className="w-10 h-10 rounded-full bg-white dark:bg-orange-800 flex items-center justify-center mb-2 shadow-sm group-hover:scale-110 transition-transform">
                             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                         </div>
-                        <span className="font-medium text-sm text-gray-900 dark:text-gray-100">Export</span>
+                        <span className="font-medium text-sm text-gray-900 dark:text-gray-100">Quick Export</span>
                     </button>
                 </div>
             </div>
@@ -139,6 +174,16 @@ export const AnalystDashboard: React.FC<AnalystDashboardProps> = ({ onCreateValu
                                                 <div className="h-full bg-system-blue rounded-full" style={{ width: `${val.progress}%` }}></div>
                                             </div>
                                         </div>
+                                        <button 
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleExport(val.id, val.name);
+                                            }}
+                                            className="p-2 hover:bg-blue-50 dark:hover:bg-blue-500/10 rounded-lg text-gray-400 hover:text-system-blue transition-colors"
+                                            title="Export PDF"
+                                        >
+                                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                                        </button>
                                         <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
                                             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
                                         </button>

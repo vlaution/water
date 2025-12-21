@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { EnhancedFormInput } from '../../common/EnhancedFormInput';
 import { SectorMultiplesHeatmap } from '../../common/SectorMultiplesHeatmap';
 import type { LBOInputState, BenchmarkData } from '../../../types/lbo';
@@ -17,6 +18,7 @@ interface LBOStep1Props {
 export const LBOStep1_Structure: React.FC<LBOStep1Props> = ({
     data, onChange, benchmarks, scenarios, selectedScenario, onSelectScenario, onSelectSector
 }) => {
+    const { t } = useTranslation();
 
     const updateField = (field: keyof LBOInputState, value: any) => {
         onChange({ ...data, [field]: value });
@@ -32,11 +34,11 @@ export const LBOStep1_Structure: React.FC<LBOStep1Props> = ({
     return (
         <div className="space-y-6 animate-fade-in">
             <div className="flex justify-between items-center border-b border-gray-100 dark:border-white/10 pb-2">
-                <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">Step 1: Deal Structure & Entry</h3>
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">{t('lbo.step1_title')}</h3>
                 <div className="flex items-center gap-4">
                     {scenarios && (
                         <div className="flex items-center gap-2">
-                            <span className="text-sm text-gray-500 dark:text-gray-400 font-medium">Market Scenario:</span>
+                            <span className="text-sm text-gray-500 dark:text-gray-400 font-medium">{t('lbo.market_scenario')}:</span>
                             <div className="flex bg-gray-100 dark:bg-white/10 rounded-lg p-1">
                                 {Object.keys(scenarios).map(key => (
                                     <button
@@ -56,7 +58,7 @@ export const LBOStep1_Structure: React.FC<LBOStep1Props> = ({
                     )}
 
                     <div className="flex items-center gap-2">
-                        <span className="text-sm text-gray-500 dark:text-gray-400">Quick Start:</span>
+                        <span className="text-sm text-gray-500 dark:text-gray-400">{t('lbo.quick_start')}:</span>
                         <select
                             className="text-sm border border-gray-300 dark:border-white/20 rounded-lg px-2 py-1 bg-white dark:bg-white/10 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 outline-none"
                             onChange={(e) => {
@@ -89,11 +91,11 @@ export const LBOStep1_Structure: React.FC<LBOStep1Props> = ({
                                 onChange(base);
                             }}
                         >
-                            <option value="">Select Template...</option>
-                            <option value="standard">Standard LBO</option>
-                            <option value="aggressive">Aggressive Growth</option>
-                            <option value="conservative">Conservative / Downside</option>
-                            <option value="distressed">Distressed Turnaround</option>
+                            <option value="">{t('lbo.select_template')}</option>
+                            <option value="standard">{t('lbo.standard_lbo')}</option>
+                            <option value="aggressive">{t('lbo.aggressive_growth')}</option>
+                            <option value="conservative">{t('lbo.conservative_downside')}</option>
+                            <option value="distressed">{t('lbo.distressed_turnaround')}</option>
                         </select>
                     </div>
                 </div>
@@ -112,15 +114,15 @@ export const LBOStep1_Structure: React.FC<LBOStep1Props> = ({
                     {benchmarks && (
                         <div className="mt-2 p-3 bg-blue-50 dark:bg-blue-500/10 rounded-lg text-sm border border-blue-100 dark:border-blue-500/20 grid grid-cols-3 gap-2">
                             <div className="text-center">
-                                <div className="text-xs text-gray-500 dark:text-gray-400">Avg EV/EBITDA</div>
+                                <div className="text-xs text-gray-500 dark:text-gray-400">{t('lbo.avg_ev_ebitda')}</div>
                                 <div className="font-bold text-blue-700 dark:text-blue-300">{benchmarks.ev_ebitda.mean.toFixed(1)}x</div>
                             </div>
                             <div className="text-center">
-                                <div className="text-xs text-gray-500 dark:text-gray-400">Max Leverage</div>
+                                <div className="text-xs text-gray-500 dark:text-gray-400">{t('lbo.max_leverage')}</div>
                                 <div className="font-bold text-blue-700 dark:text-blue-300">{benchmarks.leverage.max.toFixed(1)}x</div>
                             </div>
                             <div className="text-center">
-                                <div className="text-xs text-gray-500 dark:text-gray-400">Success Rate</div>
+                                <div className="text-xs text-gray-500 dark:text-gray-400">{t('lbo.success_rate')}</div>
                                 <div className="font-bold text-blue-700 dark:text-blue-300">{(benchmarks.success_rate * 100).toFixed(0)}%</div>
                             </div>
                         </div>
@@ -130,21 +132,21 @@ export const LBOStep1_Structure: React.FC<LBOStep1Props> = ({
                 {/* Inputs continued */}
                 <div className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Solve For</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('lbo.solve_for')}</label>
                         <select
                             value={data.solve_for}
                             onChange={(e) => updateField('solve_for', e.target.value)}
                             className="glass-input w-full"
                         >
-                            <option value="entry_price">Entry Price (Given Target IRR)</option>
-                            <option value="target_irr">Target IRR (Given Entry Price)</option>
+                            <option value="entry_price">{t('lbo.solve_for_entry_price')}</option>
+                            <option value="target_irr">{t('lbo.solve_for_target_irr')}</option>
                         </select>
                     </div>
 
                     {data.solve_for === 'target_irr' && (
                         <div>
                             <EnhancedFormInput
-                                label="Entry EV/EBITDA Multiple"
+                                label={`${t('lbo.entry_ev_ebitda_multiple')} (x)`}
                                 type="number"
                                 value={data.entry_ev_ebitda_multiple}
                                 onChange={(e) => updateField('entry_ev_ebitda_multiple', parseFloat(e.target.value))}
@@ -156,7 +158,7 @@ export const LBOStep1_Structure: React.FC<LBOStep1Props> = ({
                     {data.solve_for === 'entry_price' && (
                         <div>
                             <EnhancedFormInput
-                                label="Target IRR (%)"
+                                label={`${t('lbo.target_irr_percent')} (%)`}
                                 type="number"
                                 value={data.target_irr ? data.target_irr * 100 : 20}
                                 onChange={(e) => updateField('target_irr', parseFloat(e.target.value) / 100)}
@@ -167,7 +169,7 @@ export const LBOStep1_Structure: React.FC<LBOStep1Props> = ({
 
                     <div>
                         <EnhancedFormInput
-                            label="LTM Revenue ($)"
+                            label={`${t('lbo.ltm_revenue')} ($M)`}
                             type="number"
                             value={data.entry_revenue}
                             onChange={(e) => updateField('entry_revenue', parseFloat(e.target.value))}
@@ -175,7 +177,7 @@ export const LBOStep1_Structure: React.FC<LBOStep1Props> = ({
                     </div>
                     <div>
                         <EnhancedFormInput
-                            label="LTM EBITDA ($)"
+                            label={`${t('lbo.ltm_ebitda')} ($M)`}
                             type="number"
                             value={data.entry_ebitda}
                             onChange={(e) => updateField('entry_ebitda', parseFloat(e.target.value))}
@@ -183,7 +185,7 @@ export const LBOStep1_Structure: React.FC<LBOStep1Props> = ({
                     </div>
                     <div>
                         <EnhancedFormInput
-                            label="Transaction Fees (% of EV)"
+                            label={`${t('lbo.transaction_fees_percent')} (%)`}
                             type="number"
                             value={data.assumptions.transaction_fees_percent * 100}
                             onChange={(e) => updateAssumption('transaction_fees_percent', parseFloat(e.target.value) / 100)}

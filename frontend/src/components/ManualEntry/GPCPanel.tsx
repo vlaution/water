@@ -133,13 +133,13 @@ export const GPCPanel: React.FC<GPCPanelProps> = ({ data, onChange, onFindPeers 
                 <h4 className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">Applied Multiples</h4>
                 <div className="flex gap-4">
                     <div className="flex-1 p-4 bg-blue-50/50 dark:bg-blue-900/10 rounded-xl border border-blue-100 dark:border-blue-500/10">
-                        <span className="block text-xs font-semibold text-blue-600 dark:text-blue-400 mb-1">EV / Revenue</span>
+                        <span className="block text-xs font-semibold text-blue-600 dark:text-blue-400 mb-1">EV / Revenue (x)</span>
                         <div className="text-2xl font-bold text-gray-900 dark:text-gray-100 font-mono">
                             {data.ev_revenue_multiple ? `${data.ev_revenue_multiple.toFixed(2)}x` : '-'}
                         </div>
                     </div>
                     <div className="flex-1 p-4 bg-purple-50/50 dark:bg-purple-900/10 rounded-xl border border-purple-100 dark:border-purple-500/10">
-                        <span className="block text-xs font-semibold text-purple-600 dark:text-purple-400 mb-1">EV / EBITDA</span>
+                        <span className="block text-xs font-semibold text-purple-600 dark:text-purple-400 mb-1">EV / EBITDA (x)</span>
                         <div className="text-2xl font-bold text-gray-900 dark:text-gray-100 font-mono">
                             {data.ev_ebitda_multiple ? `${data.ev_ebitda_multiple.toFixed(2)}x` : '-'}
                         </div>
